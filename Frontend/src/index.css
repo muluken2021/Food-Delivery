@@ -1,0 +1,27 @@
+@import "tailwindcss";
+
+.homehomeHeader {
+  background-image: url(assets/header_img.png);
+}
+
+.cart {
+  position: relative;
+  display: inline-block;
+}
+
+.dot {
+  min-width: 21px;
+  height: 21px;
+  background-color: orangered;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  text-align: center;
+  line-height: 16px;
+  border-radius: 50%;
+  position: absolute;
+  top: -8px;
+  right: -16px;
+  padding: 0 4px;
+  border: 2px solid white; /* optional for better contrast */
+}
