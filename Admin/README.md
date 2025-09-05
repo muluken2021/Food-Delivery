@@ -1,12 +1,49 @@
-# React + Vite
+# Admin Page 
+The Admin Page is the central management dashboard for the Food Delivery Website. It allows administrators to efficiently manage users, restaurants, menu items, and orders, ensuring smooth operations of the platform.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Features
+1. Dashboard
 
-Currently, two official plugins are available:
+Displays a summary of total orders, active users, registered restaurants, and revenue.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Visual charts for order trends, sales statistics, and popular dishes.
 
-## Expanding the ESLint configuration
+2. User Management
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+View all registered users.
+
+Edit or delete user accounts.
+
+Search and filter users by name, email, or registration date.
+
+3. Restaurant Management
+
+Add new restaurants to the platform.
+
+Edit or remove existing restaurants.
+
+Manage restaurant information, including name, address, contact details, and status (active/inactive).
+
+4. Menu Management
+
+Add, edit, or remove menu items for each restaurant.
+
+Upload images and set prices for dishes.
+
+Categorize menu items (e.g., appetizers, main course, desserts).
+
+5. Order Management
+
+View all orders placed by users.
+
+Track order status (pending, preparing, delivered, canceled).
+
+Search orders by user, restaurant, or order ID.
+
+Update order status as needed.
+
+6. Admin Settings
+
+Manage admin account credentials.
+
+Configure website settings, including delivery fees, payment methods, and notification preferences.
