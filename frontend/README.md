@@ -29,16 +29,3 @@ This project connects to the backend API to provide a full food delivery experie
 
 ---
 
-## Project Structure
-
-frontend/
-├── public/ // Public assets (index.html, favicon, etc.)
-├── src/
-│ ├── assets/ // Images, icons, logos
-│ ├── components/ // Reusable React components (buttons, cards, etc.)
-│ ├── context/ // React Context API for global state
-│ ├── pages/ // App pages/screens (Home, Login, Cart, etc.)
-│ ├── App.jsx // Main App component
-│ └── index.jsx // React entry point
-├── package.json // Project dependencies and scripts
-└── tailwind.config.js // Tailwind CSS configuration
