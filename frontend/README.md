@@ -6,10 +6,10 @@ This project connects to the backend API to provide a full food delivery experie
 
 ---
 
-## 🚀 Features
+## Features
 
 - User authentication (login & signup)
-- Browse restaurants and food items
+- Browse food items with category
 - Search for food items
 - Add items to cart
 - Place orders and view order history
@@ -18,7 +18,7 @@ This project connects to the backend API to provide a full food delivery experie
 
 ---
 
-## 🛠️ Technologies Used
+## Technologies Used
 
 - **React.js** – Frontend framework
 - **Tailwind CSS** – Styling and responsive design
@@ -29,7 +29,7 @@ This project connects to the backend API to provide a full food delivery experie
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
 frontend/
 ├── public/ # Public assets
