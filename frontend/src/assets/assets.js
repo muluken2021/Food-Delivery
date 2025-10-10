@@ -15,7 +15,7 @@ import parsel from './parcel_icon.png'
 
 
 import menu_1 from './burger_sandwitch.jpg'
-import menu_2 from './Pizza.jpg'
+// import menu_2 from './Pizza.jpg'
 import menu_3 from './Pasta.jpg'
 import menu_4 from './fried.jpg'
 import menu_5 from './dessert.jpg'
@@ -40,7 +40,7 @@ export const menu_list = [
   {
     value: "pizza",
     menu_name: "Pizza",
-    menu_image: menu_2,
+    menu_image: menu_1,
   },
   {
     value: "pasta_noodles",
