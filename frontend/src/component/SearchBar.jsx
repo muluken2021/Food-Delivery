@@ -2,7 +2,7 @@
 import React from "react";
 import { FiSearch } from "react-icons/fi";
 
-const SearchBar = ({ value, onChange, placeholder = "Search..." }) => {
+const Searchbar = ({ value, onChange, placeholder = "Search..." }) => {
   return (
     <div className="flex items-center w-full sm:w-100 bg-white rounded-full shadow-sm px-3 py-1 border border-gray-200">
       <FiSearch className="text-gray-400 text-xl mr-2" />
@@ -23,4 +23,4 @@ const SearchBar = ({ value, onChange, placeholder = "Search..." }) => {
   );
 };
 
-export default SearchBar;
+export default Searchbar;
