@@ -15,8 +15,8 @@ import parsel from './parcel_icon.png'
 
 
 import menu_1 from './burger_sandwitch.jpg'
-// import menu_2 from './Pizza.jpg'
-import menu_3 from './Pasta.jpg'
+import menu_2 from './pizza.jpg'
+import menu_3 from './pasta.jpg'
 import menu_4 from './fried.jpg'
 import menu_5 from './dessert.jpg'
 
