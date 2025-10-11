@@ -5,6 +5,8 @@ import { StoreContext } from "../context/StoreContext";
 const Fooditems = ({ category, searchQuery }) => {
   const { foodList, cartItems, addtocart, removeFromCart } = useContext(StoreContext);
 
+  const url = import.meta.env.VITE_APP_API_URL;
+
   if (!Array.isArray(foodList)) {
     return <p className="text-center text-gray-500">Loading...</p>;
   }
@@ -29,7 +31,7 @@ const Fooditems = ({ category, searchQuery }) => {
             {/* Image */}
             <div className="relative">
               <img
-                src={food.image ? `http://localhost:4000${food.image}` : assets.upload}
+                src={food.image ? `${url}${food.image}` : assets.upload}
                 alt={food.name}
                 className="w-full h-48 object-cover"
               />

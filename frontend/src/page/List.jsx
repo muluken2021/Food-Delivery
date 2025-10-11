@@ -98,7 +98,7 @@ const List = () => {
             <p>
               <img
                 className="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded"
-                src={food.image ? `http://localhost:4000${food.image}` : assets.upload}
+                src={food.image ? `${url}${food.image}` : assets.upload}
                 alt={food.name}
               />
             </p>

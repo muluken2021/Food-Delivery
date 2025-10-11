@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 
 const Cart = () => {
   const { cartItems, removeFromCart, TotalCartPrice, foodList } = useContext(StoreContext);
+  const url = import.meta.env.VITE_APP_API_URL;
   const DeliveryFee = 2;
   const navigate = useNavigate();
 
@@ -50,7 +51,7 @@ const Cart = () => {
                 <p>
                   <img 
                     className="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded" 
-                    src={food.image ? `http://localhost:4000${food.image}` : assets.upload}
+                    src={food.image ? `${url}${food.image}` : assets.upload}
                     alt={food.name} 
                   />
                 </p>

@@ -110,7 +110,7 @@ const Edit = () => {
                 image instanceof File
                   ? URL.createObjectURL(image)
                   : image
-                  ? `http://localhost:4000/images/${image}`
+                  ? `${url}/images/${image}`
                   : assets.upload
               }
               className={`cursor-pointer w-40 h-32 border-2 rounded-lg object-cover transition ${
