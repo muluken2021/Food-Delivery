@@ -79,14 +79,14 @@ const PopularDishes = () => {
       </div>
 
       {/* Dish Cards */}
-      <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 px-6">
+      <div className=" max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 px-6">
         {popularFoods.length > 0 ? (
           popularFoods.map((dish) => (
             <div
               key={dish._id}
-              className="group text-start sm:text-start text-center transition-transform transform hover:scale-105"
+              className="group  md:text-start text-center transition-transform transform hover:scale-105"
             >
-              <div className="relative flex justify-center sm:justify-start">
+              <div className="relative flex justify-center md:justify-start">
                 <img
                   src={
                     dish.image

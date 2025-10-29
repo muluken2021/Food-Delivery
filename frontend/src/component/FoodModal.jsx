@@ -15,7 +15,8 @@ const FoodModal = ({
 
   const increment = () => setModalQuantity((q) => q + 1);
   const decrement = () => setModalQuantity((q) => (q > 1 ? q - 1 : 1));
-
+  
+  const url = import.meta.env.VITE_APP_API_URL;
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <div
@@ -48,7 +49,7 @@ const FoodModal = ({
         <img
           src={
             selectedFood.image
-              ? `http://localhost:4000${selectedFood.image}`
+              ? `${url}${selectedFood.image}`
               : assets.upload
           }
           alt={selectedFood.name}

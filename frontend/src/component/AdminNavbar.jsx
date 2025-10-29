@@ -29,7 +29,7 @@ const AdminNavbar = ({ menuOpen, setMenuOpen }) => {
       </h1>
 
       {/* Desktop Buttons */}
-      <div className="hidden sm:flex gap-4 items-center">
+      <div className=" flex gap-4 items-center">
         <button
           className={`relative p-2 rounded transition ${
             isDark ? "hover:bg-gray-700" : "hover:bg-gray-200"
@@ -51,7 +51,7 @@ const AdminNavbar = ({ menuOpen, setMenuOpen }) => {
         {token ? (
           <button
             onClick={handleLogout}
-            className={`px-3 py-1 rounded font-semibold transition ${
+            className={`hidden sm:flex px-3 py-1 rounded font-semibold transition ${
               isDark
                 ? "bg-yellow-400 text-gray-900 hover:bg-yellow-500"
                 : "bg-gray-900 text-white hover:bg-gray-800"
@@ -62,7 +62,7 @@ const AdminNavbar = ({ menuOpen, setMenuOpen }) => {
         ) : (
           <button
             onClick={() => navigate("/admin/login")}
-            className={`px-3 py-1 rounded font-semibold transition ${
+            className={`hidden sm:flex px-3 py-1 rounded font-semibold transition ${
               isDark
                 ? "bg-yellow-400 text-gray-900 hover:bg-yellow-500"
                 : "bg-gray-900 text-white hover:bg-gray-800"

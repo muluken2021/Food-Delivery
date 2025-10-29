@@ -95,7 +95,7 @@ const List = () => {
               {/* Image */}
               <div className="flex-shrink-0">
                 <img
-                  src={food.image ? `http://localhost:4000${food.image}` : assets.upload}
+                  src={food.image ? `${url}${food.image}` : assets.upload}
                   alt={food.name}
                   className="w-24 h-24 object-cover rounded-lg"
                 />

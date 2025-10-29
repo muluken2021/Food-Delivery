@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { assets } from '../assets/assets';
+import { ArrowLeft } from 'lucide-react';
 import { ThemeContext2 } from '../context/ThemeContext2';
 
 const Edit = () => {
@@ -102,6 +103,15 @@ const Edit = () => {
         isDark ? 'bg-gray-900 text-gray-100' : 'bg-gray-50 text-gray-900'
       }`}
     >
+     <button
+        onClick={() => navigate('/admin/list')}
+        className={`flex mb-5 items-center space-x-2 text-lg   font-medium ${
+          isDark ? 'text-gray-100' : 'text-gray-900'
+        }`}
+      >
+        <ArrowLeft size={20} /> {/* 20px size, you can adjust */}
+        <span>Back to list</span>
+      </button>
       <form className="space-y-6" onSubmit={handleSubmit}>
 
         {/* Image Upload */}
@@ -113,7 +123,7 @@ const Edit = () => {
                 image instanceof File
                   ? URL.createObjectURL(image)
                   : image
-                  ? `http://localhost:4000/images/${image}`
+                  ? `${url}${image}`
                   : assets.upload
               }
               className={`cursor-pointer w-40 h-32 border-2 rounded-lg object-cover transition ${

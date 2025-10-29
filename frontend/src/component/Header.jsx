@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import heroImage from "../assets/herofood.png";
+import heroImage from "../assets/herofoods.png";
 import { ThemeContext } from "../context/ThemeContext";
 import { Star, ThumbsUp, Truck } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -13,7 +13,7 @@ const Header = ({setLogin}) => {
         theme === "dark" ? "bg-[#0c0c0c]" : "bg-white"
       }`}
     >
-      <div className="container mx-auto px-6 sm:px-12 lg:px-24 py-24 flex flex-col-reverse lg:flex-row items-center gap-0">
+      <div className="container mx-auto px-6 sm:px-12 lg:px-24  flex flex-col-reverse lg:flex-row items-center gap-0">
         
         {/* Text Section */}
         <div className="flex-1 relative z-10 text-center lg:text-left">
@@ -43,40 +43,40 @@ const Header = ({setLogin}) => {
             fresh, and delivered straight to your door in minutes.
           </p>
 
-          <div className="flex justify-center lg:justify-start gap-4">
-            
-            <button 
-             onClick={() => setLogin(true)}
-            className="bg-[#e58d00] hover:bg-yellow-500 text-white font-bold rounded-2xl px-8 sm:px-10 py-4 text-lg sm:text-xl transition-transform transform hover:scale-105">
+          <div className="flex flex-col gap-4 sm:flex-col lg:flex-row justify-center lg:justify-start">
+            <button
+              onClick={() => setLogin(true)}
+              className="bg-[#e58d00] hover:bg-yellow-500 text-white font-bold rounded-2xl px-8 sm:px-10 py-4 text-lg sm:text-xl transition-transform transform hover:scale-105 w-full lg:w-auto"
+            >
               Order Now
             </button>
-            
-            <Link to="/menu">
-            <button
-              
-              className={`border-2 rounded-2xl px-8 sm:px-10 py-4 text-lg sm:text-xl font-bold transition-all duration-300 ${
-                theme === "dark"
-                  ? "border-white text-white hover:bg-white hover:text-black"
-                  : "border-[#e58d00] text-[#e58d00] hover:bg-[#e58d00] hover:text-white"
-              }`}
-            >
-              View Menu
-            </button>
+
+            <Link to="/menu" className="w-full lg:w-auto">
+              <button
+                className={`border-2 rounded-2xl px-8 sm:px-10 py-4 text-lg sm:text-xl font-bold transition-all duration-300 w-full lg:w-auto ${
+                  theme === "dark"
+                    ? "border-white text-white hover:bg-white hover:text-black"
+                    : "border-[#e58d00] text-[#e58d00] hover:bg-[#e58d00] hover:text-white"
+                }`}
+              >
+                View Menu
+              </button>
             </Link>
           </div>
+
         </div>
 
         {/* Image Section with Rectangle Badges */}
-        <div className="flex-1 relative flex justify-center lg:justify-end">
+        <div className="flex-1 relative flex justify-center  lg:justify-end">
           <div className="relative">
             <img
               src={heroImage}
               alt="Delicious food"
-              className="w-xl max-w-sm sm:max-w-md lg:max-w-7xl h-auto object-cover drop-shadow-xl rounded-3xl"
+              className="w-xl max-w-sm sm:max-w-md lg:max-w-7xl h-auto object-cover drop-shadow-xl rounded-xl"
             />
 
             {/* ⭐ Rating Badge */}
-            <div className="absolute top-4 left-3 sm:top-6 sm:left-6 bg-white/95 backdrop-blur-lg shadow-xl px-3 py-2 sm:px-5 sm:py-3 rounded-xl flex items-center gap-2 sm:gap-3 border border-yellow-200">
+            <div className="absolute top-4 left-3 sm:top-6 sm:left-6 bg-white/95 backdrop-blur-lg shadow-xl px-13 py-2 sm:px-5 sm:py-3 rounded-xl flex items-center gap-2 sm:gap-3 border border-yellow-200">
               <Star className="w-4 h-4 sm:w-6 sm:h-6 text-[#e58d00] fill-[#e58d00]" />
               <div>
                 <h3 className="text-xs sm:text-sm font-bold text-gray-800">
@@ -89,7 +89,7 @@ const Header = ({setLogin}) => {
             </div>
 
             {/* 🚚 Fast Delivery Badge */}
-            <div className="absolute bottom-32 left-0 sm:left-0 bg-[#e58d00]/90 backdrop-blur-lg shadow-xl px-4 py-2 sm:px-6 sm:py-3 rounded-xl flex items-center gap-2 sm:gap-3 border border-white/30">
+            <div className="absolute bottom-32 left-5 sm:left-0 bg-[#e58d00]/90 backdrop-blur-lg shadow-xl px-4 py-2 sm:px-6 sm:py-3 rounded-xl flex items-center gap-2 sm:gap-3 border border-white/30">
               <Truck className="w-4 h-4 sm:w-6 sm:h-6 text-white" />
               <div>
                 <h3 className="text-xs sm:text-sm font-bold text-white">

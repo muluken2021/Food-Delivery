@@ -42,12 +42,12 @@ const Dashboard = () => {
   ];
 
   return (
-    <div className={`p-4 sm:p-6 md:p-8 space-y-8 transition-colors ${isDark ? "bg-gray-900 text-white" : "bg-gray-50 text-gray-900"}`}>
+    <div className={`p-0 sm:p-4 md:p-8 space-y-6 md:space-y-8 transition-colors ${isDark ? "bg-gray-900 text-white" : "bg-gray-50 text-gray-900"}`}>
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {summary.map((item, index) => (
-          <div key={index} className={`shadow-md rounded-2xl p-4 flex justify-between items-center transition-colors ${isDark ? "bg-gray-800" : "bg-white"}`}>
+          <div key={index} className={`shadow-md rounded-2xl p-3 sm:p-4 flex justify-between items-center transition-colors ${isDark ? "bg-gray-800" : "bg-white"}`}>
             <div>
               <h3 className={`text-sm ${isDark ? "text-gray-400" : "text-gray-500"}`}>{item.title}</h3>
               <p className={`text-xl sm:text-2xl font-bold ${isDark ? "text-white" : "text-gray-900"}`}>{item.value}</p>
@@ -61,11 +61,11 @@ const Dashboard = () => {
       </div>
 
       {/* Charts */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="flex flex-col gap-4 w-full">
         {/* Orders Trend */}
-        <div className={`p-4 rounded-2xl shadow-md transition-colors ${isDark ? "bg-gray-800" : "bg-white"}`}>
-          <h2 className={`font-semibold text-lg mb-3 ${isDark ? "text-white" : "text-gray-900"}`}>Orders Trend</h2>
-          <ResponsiveContainer width="100%" height={250}>
+        <div className={`w-full h-64 md:h-72 p-2 md:p-4 rounded-2xl shadow-md transition-colors ${isDark ? "bg-gray-800" : "bg-white"}`}>
+          <h2 className={`font-semibold text-lg mb-2 md:mb-3 ${isDark ? "text-white" : "text-gray-900"}`}>Orders Trend</h2>
+          <ResponsiveContainer width="100%" height="100%">
             <LineChart data={orderTrend}>
               <CartesianGrid strokeDasharray="3 3" stroke={isDark ? "#374151" : "#e5e7eb"} />
               <XAxis dataKey="month" stroke={isDark ? "#9ca3af" : "#6b7280"} />
@@ -77,9 +77,9 @@ const Dashboard = () => {
         </div>
 
         {/* Revenue by Category */}
-        <div className={`p-4 rounded-2xl shadow-md transition-colors ${isDark ? "bg-gray-800" : "bg-white"}`}>
-          <h2 className={`font-semibold text-lg mb-3 ${isDark ? "text-white" : "text-gray-900"}`}>Revenue by Category</h2>
-          <ResponsiveContainer width="100%" height={250}>
+        <div className={`w-full h-64 md:h-72 p-2 md:p-4 rounded-2xl shadow-md transition-colors ${isDark ? "bg-gray-800" : "bg-white"}`}>
+          <h2 className={`font-semibold text-lg mb-2 md:mb-3 ${isDark ? "text-white" : "text-gray-900"}`}>Revenue by Category</h2>
+          <ResponsiveContainer width="100%" height="100%">
             <BarChart data={categoryRevenue}>
               <CartesianGrid strokeDasharray="3 3" stroke={isDark ? "#374151" : "#e5e7eb"} />
               <XAxis dataKey="name" stroke={isDark ? "#9ca3af" : "#6b7280"} />
@@ -91,9 +91,9 @@ const Dashboard = () => {
         </div>
 
         {/* Delivery Status */}
-        <div className={`p-4 rounded-2xl shadow-md transition-colors ${isDark ? "bg-gray-800" : "bg-white"}`}>
-          <h2 className={`font-semibold text-lg mb-3 ${isDark ? "text-white" : "text-gray-900"}`}>Delivery Status</h2>
-          <ResponsiveContainer width="100%" height={250}>
+        <div className={`w-full h-64 md:h-72 p-2 md:p-4 rounded-2xl shadow-md transition-colors ${isDark ? "bg-gray-800" : "bg-white"}`}>
+          <h2 className={`font-semibold text-lg mb-2 md:mb-3 ${isDark ? "text-white" : "text-gray-900"}`}>Delivery Status</h2>
+          <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie data={deliveryStatus} cx="50%" cy="50%" outerRadius={80} fill="#8884d8" dataKey="value" label>
                 {deliveryStatus.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index]} />)}
@@ -105,10 +105,10 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Recent Orders */}
-      <div className={`p-4 rounded-2xl shadow-md overflow-x-auto transition-colors ${isDark ? "bg-gray-800" : "bg-white"}`}>
-        <h2 className={`font-semibold text-lg mb-3 ${isDark ? "text-white" : "text-gray-900"}`}>Recent Orders</h2>
-        <table className="min-w-full text-left border-collapse">
+      {/* Recent Orders Table */}
+      <div className={`w-full p-2 sm:p-4 rounded-2xl shadow-md transition-colors ${isDark ? "bg-gray-800" : "bg-white"} overflow-x-auto`}>
+        <h2 className={`font-semibold text-lg mb-2 md:mb-3 ${isDark ? "text-white" : "text-gray-900"}`}>Recent Orders</h2>
+        <table className="w-full text-left border-collapse">
           <thead>
             <tr className={`border-b ${isDark ? "border-gray-700" : "border-gray-200"}`}>
               <th className="p-2 sm:p-3">Order ID</th>
@@ -137,6 +137,7 @@ const Dashboard = () => {
           </tbody>
         </table>
       </div>
+
     </div>
   );
 };

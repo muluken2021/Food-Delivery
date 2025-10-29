@@ -97,12 +97,12 @@ const Sidebar = ({ menuOpen, setMenuOpen }) => {
               ${isDark ? 'bg-gray-900 text-gray-300' : 'bg-white text-gray-900'}
             `}
           >
-            <button
+            {/* <button
               className="absolute top-4 right-4 text-2xl font-bold"
               onClick={() => setMenuOpen(false)}
             >
               &times;
-            </button>
+            </button> */}
             <div className="flex flex-col gap-2">
               {menuItems.map((item, index) => {
                 const isActive = location.pathname === item.path;

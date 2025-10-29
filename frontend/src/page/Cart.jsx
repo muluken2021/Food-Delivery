@@ -1,16 +1,18 @@
-import React, { useContext } from 'react';
-import { StoreContext } from '../context/StoreContext';
-import { ThemeContext } from '../context/ThemeContext';
-import { useNavigate } from 'react-router-dom';
-import { assets } from '../assets/assets';
-import { toast } from 'react-toastify';
+import React, { useContext } from "react";
+import { StoreContext } from "../context/StoreContext";
+import { ThemeContext } from "../context/ThemeContext";
+import { useNavigate } from "react-router-dom";
+import { assets } from "../assets/assets";
+import { toast } from "react-toastify";
 
 const Cart = () => {
-  const { cartItems, removeFromCart, addtocart, TotalCartPrice, foodList } = useContext(StoreContext);
+  const { cartItems, removeFromCart, addtocart, TotalCartPrice, foodList } =
+    useContext(StoreContext);
   const { theme } = useContext(ThemeContext);
-  
-  const DeliveryFee = 2;
   const navigate = useNavigate();
+  const url = import.meta.env.VITE_APP_API_URL;
+
+  const DeliveryFee = 2;
 
   const handleCheckout = () => {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -18,7 +20,7 @@ const Cart = () => {
       toast.warning("Please login to place an order!");
       return;
     }
-    navigate('/order');
+    navigate("/order");
   };
 
   const handleNofood = () => {
@@ -31,110 +33,186 @@ const Cart = () => {
   const borderColor = theme === "dark" ? "border-gray-700" : "border-gray-300";
 
   return (
-    <div className={`mx-4 sm:mx-8 lg:mx-24 p-4 sm:p-10 ${bgClass} transition-colors duration-300`}>
+    <div
+      className={`mx-2 sm:mx-6 lg:mx-24 p-4 sm:p-10 ${bgClass} min-h-screen transition-colors duration-300`}
+    >
+      <h1 className="text-2xl sm:text-3xl font-bold mb-6 text-yellow-500">
+        Your Cart
+      </h1>
 
-      {/* Table Header */}
-      <div className="title mb-4">
-        <ul className={`grid grid-cols-6 gap-2 font-semibold text-sm sm:text-base ${textSub}`}>
-          <li>Item</li>
-          <li>Name</li>
-          <li>Price</li>
-          <li>Quantity</li>
-          <li>Total</li>
-          <li>Actions</li>
-        </ul>
-        <hr className={`mt-2 sm:mt-4 border-yellow-500`} />
+      {/* Desktop Header */}
+      <div className="hidden sm:grid grid-cols-6 gap-2 font-semibold text-sm sm:text-base mb-2 text-yellow-500">
+        <p>Item</p>
+        <p>Name</p>
+        <p>Price</p>
+        <p>Quantity</p>
+        <p>Total</p>
+        <p>Actions</p>
       </div>
+      <hr className="hidden sm:block border-yellow-500 mb-4" />
 
       {/* Cart Items */}
-      {Object.keys(cartItems).map((id) => {
-        if (cartItems[id] > 0) {
-          const food = foodList.find((f) => String(f._id) === String(id));
-          if (!food) return null;
+      <div className="space-y-4">
+        {Object.keys(cartItems).map((id) => {
+          if (cartItems[id] > 0) {
+            const food = foodList.find((f) => String(f._id) === String(id));
+            if (!food) return null;
 
-          return (
-            <div key={food._id} className="mb-4">
-              <div className={`grid grid-cols-6 gap-2 items-center py-2 text-sm sm:text-base`}>
-                {/* Image */}
-                <p>
-                  <img 
-                    className="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded" 
-                    src={food.image ? `http://localhost:4000${food.image}` : assets.upload}
-                    alt={food.name} 
+            return (
+              <div
+                key={food._id}
+                className={`border-1 border-gray-200 rounded-xl p-4 sm:p-3 flex flex-col sm:grid sm:grid-cols-6 gap-4 sm:gap-2 items-start  bg-white/5`}
+              >
+                {/* Desktop layout */}
+                <div className="hidden sm:contents">
+                  {/* Image */}
+                  <img
+                    className="w-20 h-20 object-cover rounded-md"
+                    src={
+                      food.image
+                        ? `${url}${food.image}`
+                        : assets.upload
+                    }
+                    alt={food.name}
                   />
-                </p>
 
-                {/* Name */}
-                <p className={`${textMain} font-medium`}>{food.name}</p>
+                  {/* Name */}
+                  <p className={`${textMain} font-medium`}>{food.name}</p>
 
-                {/* Price */}
-                <p className={textSub}>${food.price}</p>
+                  {/* Price */}
+                  <p className={`${textSub}`}>${food.price}</p>
 
-                {/* Quantity Controls */}
-                <div className="flex items-center gap-2">
+                  {/* Quantity */}
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => removeFromCart(food._id)}
+                      className="w-8 h-8 flex items-center justify-center rounded-full bg-yellow-500 text-white hover:bg-yellow-600 transition"
+                    >
+                      -
+                    </button>
+                    <span className={`${textMain} font-medium w-6 text-center`}>
+                      {cartItems[id]}
+                    </span>
+                    <button
+                      onClick={() => addtocart(food._id)}
+                      className="w-8 h-8 flex items-center justify-center rounded-full bg-yellow-500 text-white hover:bg-yellow-600 transition"
+                    >
+                      +
+                    </button>
+                  </div>
+
+                  {/* Total */}
+                  <p className={`${textMain} font-semibold`}>
+                    ${(food.price * cartItems[id]).toFixed(2)}
+                  </p>
+
+                  {/* Remove */}
                   <button
-                    onClick={() => removeFromCart(food._id)}
-                    className="cursor-pointer w-8 h-8 flex items-center justify-center rounded-full bg-yellow-500 text-white hover:bg-yellow-600 transition"
+                    onClick={() => removeFromCart(food._id, true)}
+                    className="text-yellow-500 border border-yellow-500 px-3 py-1 rounded hover:bg-yellow-500 hover:text-white transition text-sm"
                   >
-                    -
-                  </button>
-                  <span className={`${textMain} font-medium w-6 text-center`}>{cartItems[id]}</span>
-                  <button
-                    onClick={() => addtocart(food._id)}
-                    className="cursor-pointer w-8 h-8 flex items-center justify-center rounded-full bg-yellow-500 text-white hover:bg-yellow-600 transition"
-                  >
-                    +
+                    Remove
                   </button>
                 </div>
 
-                {/* Total */}
-                <p className={`${textMain} font-semibold`}>${(food.price * cartItems[id]).toFixed(2)}</p>
+                {/* Mobile Layout */}
+                <div className="sm:hidden w-full">
+                  {/* Image */}
+                  <img
+                    className="w-24 h-24 object-cover rounded-md mb-2"
+                    src={
+                      food.image
+                        ? `${url}${food.image}`
+                        : assets.upload
+                    }
+                    alt={food.name}
+                  />
 
-                {/* Remove */}
-                <button
-                  onClick={() => removeFromCart(food._id, true)}
-                  className="text-yellow-500 font-bold text-xl hover:text-yellow-700 transition"
-                >
-                  &times;
-                </button>
+                  {/* Name */}
+                  <p className={`${textMain} font-semibold text-base mb-1`}>
+                    {food.name}
+                  </p>
+
+                  {/* Price + Quantity */}
+                  <div className="flex items-center justify-between mb-1">
+                    <p className={`${textSub}`}>${food.price}</p>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => removeFromCart(food._id)}
+                        className="w-8 h-8 flex items-center justify-center rounded-full bg-yellow-500 text-white hover:bg-yellow-600 transition"
+                      >
+                        -
+                      </button>
+                      <span
+                        className={`${textMain} font-medium w-6 text-center`}
+                      >
+                        {cartItems[id]}
+                      </span>
+                      <button
+                        onClick={() => addtocart(food._id)}
+                        className="w-8 h-8 flex items-center justify-center rounded-full bg-yellow-500 text-white hover:bg-yellow-600 transition"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Total */}
+                  <p className={`${textMain} font-semibold mb-2`}>
+                    Total: ${(food.price * cartItems[id]).toFixed(2)}
+                  </p>
+
+                  {/* Remove Button */}
+                  <button
+                    onClick={() => removeFromCart(food._id, true)}
+                    className="text-yellow-500 border border-yellow-500 px-4 py-2 rounded-md text-sm font-medium hover:bg-yellow-500 hover:text-white transition w-fit"
+                  >
+                    Remove
+                  </button>
+                </div>
               </div>
-              <hr className={`border ${borderColor} mt-2`} />
-            </div>
-          )
-        }
-        return null;
-      })}
+            );
+          }
+          return null;
+        })}
+      </div>
 
       {/* Cart Totals */}
-      <div className='mt-8 sm:mt-12 w-full sm:w-1/2 lg:w-1/3'>
-        <h1 className="text-2xl sm:text-3xl font-bold py-4 text-yellow-500">Cart Totals</h1>
+      <div className="mt-12 sm:mt-16 w-full sm:w-1/2 lg:w-1/3 mx-auto sm:mx-0">
+        <h2 className="text-2xl sm:text-3xl font-bold py-4 text-yellow-500">
+          Cart Totals
+        </h2>
+
         <div className="flex justify-between py-1">
           <p className={textSub}>Subtotal</p>
           <p className="font-medium">{`$${TotalCartPrice()}`}</p>
         </div>
         <hr className={`border ${borderColor} my-2`} />
+
         <div className="flex justify-between py-1">
           <p className={textSub}>Delivery Fee</p>
-          <p className="font-medium">{TotalCartPrice() > 0 ? `$${DeliveryFee}` : '$0'}</p>
-        </div>
-        <hr className={`border ${borderColor} my-2`} />
-        <div className="flex justify-between py-1">
-          <p className={`${textSub} font-medium`}>Total</p>
-          <p className='font-semibold text-yellow-500'>
-            {TotalCartPrice() > 0 ? `$${TotalCartPrice() + DeliveryFee}` : '$0'}
+          <p className="font-medium">
+            {TotalCartPrice() > 0 ? `$${DeliveryFee}` : "$0"}
           </p>
         </div>
         <hr className={`border ${borderColor} my-2`} />
 
+        <div className="flex justify-between py-1">
+          <p className={`${textSub} font-medium`}>Total</p>
+          <p className="font-semibold text-yellow-500">
+            {TotalCartPrice() > 0 ? `$${TotalCartPrice() + DeliveryFee}` : "$0"}
+          </p>
+        </div>
+
         <button
           onClick={TotalCartPrice() > 0 ? handleCheckout : handleNofood}
-          className='w-full sm:w-auto border-2 border-yellow-500 rounded my-3 py-2 px-4 uppercase cursor-pointer text-white bg-yellow-500 hover:bg-yellow-600 transition duration-300'
+          className="w-full mt-5 border-2 border-yellow-500 rounded py-3 uppercase cursor-pointer text-white bg-yellow-500 hover:bg-yellow-600 transition duration-300"
         >
           Proceed To Checkout
-        </button> 
+        </button>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default Cart;

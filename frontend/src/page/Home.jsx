@@ -14,7 +14,7 @@ const Home = ({ setLogin }) => {
  
 
   return (
-    <div className='container'>
+    <div >
       <Header setLogin={setLogin} /> {/* You can still pass scrollToMenu here if you want a button inside header */}
       <PopularDishes />
        <ExploreMenu />
