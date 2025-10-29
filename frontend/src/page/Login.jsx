@@ -1,78 +1,61 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { ThemeContext } from "../context/ThemeContext";
 
 const Login = ({ login, setLogin }) => {
-
-  const [signup, setSignup] = useState(true);
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: ''
-  });
-  const [error, setError] = useState(''); 
+  const { theme } = useContext(ThemeContext);
   const navigate = useNavigate();
 
-  
+  const [signup, setSignup] = useState(true);
+  const [formData, setFormData] = useState({ name: "", email: "", password: "" });
+  const [error, setError] = useState("");
 
   if (!login) return null;
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
-    setError(''); 
+    setError("");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
       const url = import.meta.env.VITE_APP_API_URL;
-      const endpoint = signup ? '/api/user/register' : '/api/user/login';
-      const response = await fetch(`${url}${endpoint}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+      const endpoint = signup ? "/api/user/register" : "/api/user/login";
+      const res = await fetch(`${url}${endpoint}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
       });
-
-      const data = await response.json();
-
+      const data = await res.json();
       if (data.success) {
         setLogin(false);
         localStorage.setItem("token", data.token);
         localStorage.setItem("user", JSON.stringify(data.user));
-
-        // Redirect based on role
-        if (data.user.role === "admin") {
-          navigate("/");
-        } else {
-          navigate("/"); // normal user
-        }
-      } else {
-        setError(data.message);
-      }
-    } catch (err) {
-      console.error(err);
-      setError('Something went wrong. Please try again.');
+        navigate("/"); 
+      } else setError(data.message);
+    } catch {
+      setError("Something went wrong. Please try again.");
     }
   };
 
   return (
-    <div className="bg-[rgba(0,0,0,0.62)] fixed inset-0 flex items-center justify-center z-50">
-      <div className="bg-white p-6 rounded-xl shadow-md w-full max-w-sm space-y-5 relative">
+    <div className="fixed inset-0 flex items-center justify-center z-50 bg-[rgba(0,0,0,0.6)]">
+      <div className={`relative p-6 rounded-xl shadow-md w-full max-w-sm space-y-5 ${theme === "dark" ? "bg-gray-800 text-white" : "bg-white text-gray-900"}`}>
+        {/* Close Icon */}
         <button
           onClick={() => setLogin(false)}
-          className="absolute top-3 right-3 text-gray-500 hover:text-gray-900 text-xl"
+          className="absolute top-3 right-3 text-gray-400 hover:text-gray-900 text-2xl font-bold"
         >
           &times;
         </button>
 
-        <h2 className="text-2xl font-semibold text-center text-yellow-500">
-          {signup ? 'Sign Up' : 'Login'}
-        </h2>
+        <h2 className="text-2xl font-semibold text-center text-yellow-500">{signup ? "Sign Up" : "Login"}</h2>
 
         <form className="space-y-4" onSubmit={handleSubmit}>
           {signup && (
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="name">
+              <label htmlFor="name" className="block text-sm font-medium mb-1">
                 Full Name
               </label>
               <input
@@ -88,7 +71,7 @@ const Login = ({ login, setLogin }) => {
           )}
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="email">
+            <label htmlFor="email" className="block text-sm font-medium mb-1">
               Email
             </label>
             <input
@@ -103,7 +86,7 @@ const Login = ({ login, setLogin }) => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="password">
+            <label htmlFor="password" className="block text-sm font-medium mb-1">
               Password
             </label>
             <input
@@ -117,38 +100,24 @@ const Login = ({ login, setLogin }) => {
             />
           </div>
 
-          {error && (
-            <p className="text-red-500 text-sm text-center">{error}</p>
-          )}
+          {error && <p className="text-red-500 text-sm text-center">{error}</p>}
 
           <button
             type="submit"
-            className="w-full bg-yellow-500 text-white py-2 rounded-lg hover:bg-yellow-600 transition cursor-pointer"
+            className="w-full bg-yellow-500 text-white py-2 rounded-lg hover:bg-yellow-600 transition"
           >
-            {signup ? 'Sign Up' : 'Login'}
+            {signup ? "Sign Up" : "Login"}
           </button>
 
-          {signup ? (
-            <p className="text-sm text-center">
-              Already have an account?{' '}
-              <span
-                onClick={() => setSignup(false)}
-                className="text-yellow-500 hover:text-yellow-600 cursor-pointer"
-              >
-                Login
-              </span>
-            </p>
-          ) : (
-            <p className="text-sm text-center">
-              Create an account?{' '}
-              <span
-                onClick={() => setSignup(true)}
-                className="text-yellow-500 hover:text-yellow-600 cursor-pointer"
-              >
-                Sign Up
-              </span>
-            </p>
-          )}
+          <p className="text-sm text-center">
+            {signup ? "Already have an account? " : "Create an account? "}
+            <span
+              onClick={() => setSignup(!signup)}
+              className="text-yellow-500 hover:text-yellow-600 cursor-pointer"
+            >
+              {signup ? "Login" : "Sign Up"}
+            </span>
+          </p>
         </form>
       </div>
     </div>
