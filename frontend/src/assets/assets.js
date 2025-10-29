@@ -24,6 +24,7 @@ import menu_5 from './dessert.jpg'
 
 export const assets = {
     
+    
     add_icon_green,
     add_icon_yellow,
     cart_icon,

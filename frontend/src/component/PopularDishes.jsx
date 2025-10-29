@@ -6,6 +6,7 @@ import { Star } from "lucide-react";
 import FoodModal from "./FoodModal";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import altimg from '../assets/heropasta.png';
 
 const PopularDishes = () => {
   const { addtocart, foodList } = useContext(StoreContext);
@@ -90,7 +91,7 @@ const PopularDishes = () => {
                   src={
                     dish.image
                       ? `${url}${dish.image}`
-                      : assets.upload
+                      : altimg
                   }
                   alt={dish.name}
                   className="w-60 h-60 object-contain drop-shadow-2xl transition-all duration-300 group-hover:scale-110"
