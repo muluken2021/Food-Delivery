@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import heroImage from "../assets/herofoods.png";
+import heroImage from "../assets/herofood.png";
 import { ThemeContext } from "../context/ThemeContext";
 import { Star, ThumbsUp, Truck } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -13,7 +13,7 @@ const Header = ({setLogin}) => {
         theme === "dark" ? "bg-[#0c0c0c]" : "bg-white"
       }`}
     >
-      <div className="container mx-auto px-6 sm:px-12 lg:px-24  flex flex-col-reverse lg:flex-row items-center gap-0">
+      <div className="container mx-auto px-6 sm:px-12 lg:px-24 lg:py-10 flex flex-col-reverse lg:flex-row items-center gap-0">
         
         {/* Text Section */}
         <div className="flex-1 relative z-10 text-center lg:text-left">

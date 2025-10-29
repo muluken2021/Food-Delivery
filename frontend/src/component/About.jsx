@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { ThemeContext } from "../context/ThemeContext";
-import restaurantImage from "../assets/restorant.jpg"; // your restaurant image
+import restaurantImage from "../assets/restorant.png"; // your restaurant image
 import { Link } from "react-router-dom";
 
 const About = () => {
@@ -17,8 +17,8 @@ const About = () => {
         {/* Text Section */}
         <div className="flex-1 text-center lg:text-left">
           <h2
-            className={`text-3xl sm:text-4xl font-extrabold mb-6 ${
-              theme === "dark" ? "text-white" : "text-gray-900"
+            className={`text-3xl sm:text-5xl font-extrabold mb-6 ${
+              theme === "dark" ? "text-white" : "text-gray-700"
             }`}
           >
             About DashDine Restaurant
