@@ -1,8 +1,6 @@
 import React, { useContext } from "react";
 import { ThemeContext } from "../context/ThemeContext";
-import chef1 from "https://tse1.mm.bing.net/th/id/OIP.fv-hcyyl6do-kQbl7l4sOAHaE8?pid=Api&P=0&h=220"; // transparent images recommended
-import chef2 from "https://tse4.mm.bing.net/th/id/OIP.w9b4jG65_GXsPFFhNDJXaAHaE8?pid=Api&P=0&h=220";
-import chef3 from "https://tse3.mm.bing.net/th/id/OIP.h3YxhIlfMjZfIovIIQL6BwHaE8?pid=Api&P=0&h=220";
+
 
 const MeetOurChefs = () => {
   const { theme } = useContext(ThemeContext);
@@ -13,21 +11,21 @@ const MeetOurChefs = () => {
       name: "Chef Amanuel",
       role: "Head Chef",
       bio: "Specializes in Ethiopian and fusion cuisine, crafting flavors that delight.",
-      image: chef1,
+      image: './chef1.png',
     },
     {
       id: 2,
       name: "Chef Selam",
       role: "Pastry Chef",
       bio: "Expert in desserts and pastries, creating visually stunning and tasty treats.",
-      image: chef2,
+      image: './chef2.jpg',
     },
     {
       id: 3,
       name: "Chef Daniel",
       role: "Sous Chef",
       bio: "Focused on perfecting main courses with fresh ingredients and modern techniques.",
-      image: chef3,
+      image: './chef3.jpg',
     },
   ];
 
