@@ -8,21 +8,21 @@ const MeetOurChefs = () => {
   const chefs = [
     {
       id: 1,
-      name: "Chef Amanuel",
+      name: "Chef Selam",
       role: "Head Chef",
       bio: "Specializes in Ethiopian and fusion cuisine, crafting flavors that delight.",
-      image: './chef1.png',
+      image: './chef3.jpg',
     },
     {
       id: 2,
-      name: "Chef Selam",
+      name: "Chef Amanuel",
       role: "Pastry Chef",
       bio: "Expert in desserts and pastries, creating visually stunning and tasty treats.",
       image: './chef2.jpg',
     },
     {
       id: 3,
-      name: "Chef Daniel",
+      name: "Chef Selam",
       role: "Sous Chef",
       bio: "Focused on perfecting main courses with fresh ingredients and modern techniques.",
       image: './chef3.jpg',
