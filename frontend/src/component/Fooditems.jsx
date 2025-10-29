@@ -13,6 +13,8 @@ const Fooditems = ({ category, searchQuery }) => {
   const [modalQuantity, setModalQuantity] = useState(1);
   const [user, setUser] = useState(null);
 
+  const url = import.meta.env.VITE_APP_API_URL;
+
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) setUser(JSON.parse(storedUser));
@@ -75,7 +77,7 @@ const Fooditems = ({ category, searchQuery }) => {
               <img
                 src={
                   food.image
-                    ? `http://localhost:4000${food.image}`
+                    ? `${url}${food.image}`
                     : assets.upload
                 }
                 alt={food.name}

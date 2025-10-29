@@ -15,6 +15,8 @@ const PopularDishes = () => {
   const [selectedFood, setSelectedFood] = useState(null);
   const [modalQuantity, setModalQuantity] = useState(1);
   const [user, setUser] = useState(null);
+  
+  const url = import.meta.env.VITE_APP_API_URL;
 
   // ✅ Load user from localStorage
   useEffect(() => {
@@ -87,7 +89,7 @@ const PopularDishes = () => {
                 <img
                   src={
                     dish.image
-                      ? `http://localhost:4000${dish.image}`
+                      ? `${url}${dish.image}`
                       : assets.upload
                   }
                   alt={dish.name}

@@ -5,7 +5,7 @@ export const StoreContext = createContext(null);
 const StoreContextProvider = (props) => {
   const [cartItems, setCartItems] = useState({});
   const [foodList, setFoodList] = useState([]); 
-  const url = 'http://localhost:4000'; 
+  const url = import.meta.env.VITE_APP_API_URL;
   
 
   // Fetch food list from backend
