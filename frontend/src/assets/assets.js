@@ -11,6 +11,8 @@ import upload from './upload_area.png'
 import add from './add_icon.png'
 import parsel from './parcel_icon.png'
 
+ 
+
 
 
 

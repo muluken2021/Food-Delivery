@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
 import { ThemeContext } from "../context/ThemeContext";
-import chef1 from "../assets/chef1.png"; // transparent images recommended
-import chef2 from "../assets/chef2.jpg";
-import chef3 from "../assets/chef3.jpg";
+import chef1 from "https://tse1.mm.bing.net/th/id/OIP.fv-hcyyl6do-kQbl7l4sOAHaE8?pid=Api&P=0&h=220"; // transparent images recommended
+import chef2 from "https://tse4.mm.bing.net/th/id/OIP.w9b4jG65_GXsPFFhNDJXaAHaE8?pid=Api&P=0&h=220";
+import chef3 from "https://tse3.mm.bing.net/th/id/OIP.h3YxhIlfMjZfIovIIQL6BwHaE8?pid=Api&P=0&h=220";
 
 const MeetOurChefs = () => {
   const { theme } = useContext(ThemeContext);
