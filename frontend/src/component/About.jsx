@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { ThemeContext } from "../context/ThemeContext";
-import restaurantImage from "../assets/restorant.png"; // your restaurant image
+import restaurantImage from "https://tse3.mm.bing.net/th/id/OIP.bsc9Z3S8ZkpkzHyFp3QXgwHaFO?pid=Api&P=0&h=220"; // your restaurant image
 import { Link } from "react-router-dom";
 
 const About = () => {
