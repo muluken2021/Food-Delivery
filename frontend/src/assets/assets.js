@@ -15,8 +15,8 @@ import parsel from './parcel_icon.png'
 
 
 import menu_1 from './burger_sandwitch.jpg'
-import menu_2 from './pizza.jpg'
-import menu_3 from './pasta.jpg'
+import menu_2 from './Pizza.jpg'
+import menu_3 from './Pasta.jpg'
 import menu_4 from './fried.jpg'
 import menu_5 from './dessert.jpg'
 
@@ -33,6 +33,10 @@ export const assets = {
 
 export const menu_list = [
   {
+    value: "all",
+    menu_name: "All",
+  },
+  {
     value: "burgers_sandwiches",
     menu_name: "Burgers & Sandwiches",
     menu_image: menu_1,
@@ -40,21 +44,21 @@ export const menu_list = [
   {
     value: "pizza",
     menu_name: "Pizza",
-    menu_image: menu_1,
+    menu_image: menu_2,
   },
   {
-    value: "pasta_noodles",
-    menu_name: "Pasta & Noodles",
+    value: "pasta",
+    menu_name: "Pasta",
     menu_image: menu_3,
   },
   {
-    value: "fried_grilled",
-    menu_name: "Fried & Grilled Specials",
+    value: "drinks",
+    menu_name: "Drinks",
     menu_image: menu_4,
   },
   {
-    value: "desserts_drinks",
-    menu_name: "Desserts & Drinks",
+    value: "desserts",
+    menu_name: "Desserts",
     menu_image: menu_5,
   },
 ];

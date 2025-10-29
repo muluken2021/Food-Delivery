@@ -1,193 +1,234 @@
-import React, { useState, useEffect } from 'react'
-import { assets } from '../assets/assets'
-import { toast } from 'react-toastify'
-
+import React, { useState, useEffect, useContext } from "react";
+import { assets } from "../assets/assets";
+import { toast } from "react-toastify";
+import { ThemeContext2 } from "../context/ThemeContext2";
 
 const Add = ({ editId }) => {
-  const [image, setImage] = useState(null)
+  const { isDark } = useContext(ThemeContext2);
+  const [image, setImage] = useState(null);
   const [data, setData] = useState({
-    name: '',
-    description: '',
-    category: '', // use 'category' to match backend
-    price: ''
-  })
-
+    name: "",
+    description: "",
+    category: "",
+    price: "",
+    type: "normal",
+  });
 
   const url = import.meta.env.VITE_APP_API_URL;
 
   useEffect(() => {
     if (editId) {
-      const token = localStorage.getItem('token')
+      const token = localStorage.getItem("token");
       fetch(`${url}/api/food/${editId}`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }
+        method: "GET",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
       })
-        .then(res => res.json())
-        .then(resData => {
+        .then((res) => res.json())
+        .then((resData) => {
           if (resData.success) {
-            const { name, description, category, price, image: img } = resData.food
-            // map backend 'category' to local 'catagory'
-            setData({ name, description, category: category, price })
-            setImage(img)
-          } else if (resData.message === 'Unauthorized') {
-            localStorage.removeItem('user')
-            localStorage.removeItem('token')
-            toast.error('Session expired. Please login again.')
+            const { name, description, category, price, type, image: img } = resData.food;
+            setData({ name, description, category, price, type: type || "normal" });
+            setImage(img);
+          } else if (resData.message === "Unauthorized") {
+            localStorage.removeItem("user");
+            localStorage.removeItem("token");
+            toast.error("Session expired. Please login again.");
           } else {
-            toast.error('Failed to fetch food item')
+            toast.error("Failed to fetch food item");
           }
         })
-        .catch(() => toast.error('Failed to fetch food item'))
+        .catch(() => toast.error("Failed to fetch food item"));
     }
-  }, [editId])
+  }, [editId]);
 
   const onChangeHandler = (e) => {
-    const { name, value } = e.target
-    setData(prev => ({ ...prev, [name]: value }))
-  }
+    const { name, value } = e.target;
+    setData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const onSubmitHandler = async (e) => {
-    e.preventDefault()
-
-    // Require image if adding a new item
+    e.preventDefault();
     if (!editId && !image) {
-      toast.error("Please upload an image before submitting.")
-      return
+      toast.error("Please upload an image.");
+      return;
     }
 
-    const formData = new FormData()
-    formData.append('name', data.name)
-    formData.append('description', data.description)
-    formData.append('category', data.category) // keep backend field consistent
-    formData.append('price', data.price)
-    if (image && typeof image !== 'string') formData.append('image', image)
+    const formData = new FormData();
+    formData.append("name", data.name);
+    formData.append("description", data.description);
+    formData.append("category", data.category);
+    formData.append("price", data.price);
+    formData.append("type", data.type);
+    if (image && typeof image !== "string") formData.append("image", image);
 
     try {
-      const token = localStorage.getItem('token')
+      const token = localStorage.getItem("token");
       const response = await fetch(
         editId ? `${url}/api/food/${editId}` : `${url}/api/food/add`,
         {
-          method: editId ? 'PUT' : 'POST',
+          method: editId ? "PUT" : "POST",
           body: formData,
           headers: { Authorization: `Bearer ${token}` },
         }
-      )
-      const result = await response.json()
+      );
+      const result = await response.json();
       if (result.success) {
-        // reset form only if adding new item
-        if (!editId) setData({ name: '', description: '', catagory: '', price: '' })
-        setImage(null)
-        toast.success(result.message)
+        if (!editId) setData({ name: "", description: "", category: "", price: "", type: "normal" });
+        setImage(null);
+        toast.success(result.message);
       } else if (result.message === "Unauthorized") {
-        localStorage.removeItem('user')
-        localStorage.removeItem('token')
-        toast.error('Session expired. Please login again.')
+        localStorage.removeItem("user");
+        localStorage.removeItem("token");
+        toast.error("Session expired. Please login again.");
       } else {
-        toast.error(result.message)
+        toast.error(result.message);
       }
     } catch (err) {
-      console.error(err)
-      toast.error('Something went wrong!')
+      console.error(err);
+      toast.error("Something went wrong!");
     }
-  }
+  };
 
   return (
-    <div className="p-4 sm:p-6 md:p-10 bg-white rounded-xl shadow-lg max-w-3xl">
-      <form className="space-y-6" onSubmit={onSubmitHandler}>
-
+    <div
+      className={`p-6 rounded-xl shadow-md max-w-7xl mx-auto transition-colors ${
+        isDark ? "bg-gray-900 text-white" : "bg-white text-gray-900"
+      }`}
+    >
+      <form className="space-y-4" onSubmit={onSubmitHandler}>
         {/* Image Upload */}
-        <div className="text-left">
-          <h4 className="py-4 font-bold text-xl text-gray-800">
-            {editId ? 'Edit Food Item' : 'Upload Image'}
-          </h4>
-          <label htmlFor="image" className="block w-fit mx-auto">
+        <div>
+          <label className="block font-bold mb-2">
+            {editId ? "Edit Food Item" : "Food Image"}
+          </label>
+          <label htmlFor="image" className="cursor-pointer inline-block">
             <img
-              src={image ? (typeof image === 'string' ? `${url}/images/${image}` : URL.createObjectURL(image)) : assets.upload}
-              className="cursor-pointer w-44 h-36 mx-auto rounded-lg border-4 border-yellow-400 object-cover hover:opacity-80 transition"
+              src={
+                image
+                  ? typeof image === "string"
+                    ? `${url}/images/${image}`
+                    : URL.createObjectURL(image)
+                  : assets.upload
+              }
               alt="upload"
+              className={`w-40 h-32 rounded-lg border-2 object-cover hover:opacity-80 transition ${
+                isDark ? "border-yellow-400" : "border-gray-400"
+              }`}
             />
           </label>
-          <input
-            onChange={(e) => setImage(e.target.files[0])}
-            id="image"
-            type="file"
-            hidden
-          />
+          <input id="image" type="file" hidden onChange={(e) => setImage(e.target.files[0])} />
         </div>
 
         {/* Name */}
         <div>
-          <h4 className="pb-1 font-semibold text-gray-700">Product Name</h4>
+          <label className="block font-medium mb-1">Name</label>
           <input
-            onChange={onChangeHandler}
-            value={data.name}
-            className="border border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-4 focus:ring-yellow-200 shadow-sm"
             type="text"
             name="name"
-            placeholder="Product name"
+            value={data.name}
+            onChange={onChangeHandler}
+            placeholder="Food name"
             required
+            className={`w-full p-2 border rounded-md focus:ring-2 transition ${
+              isDark
+                ? "border-gray-600 bg-gray-800 text-white focus:ring-yellow-300"
+                : "border-gray-300 bg-white text-gray-900 focus:ring-yellow-200"
+            }`}
           />
         </div>
 
         {/* Description */}
         <div>
-          <h4 className="pb-1 font-semibold text-gray-700">Product Description</h4>
+          <label className="block font-medium mb-1">Description</label>
           <textarea
-            onChange={onChangeHandler}
             name="description"
             value={data.description}
-            className="border border-gray-300 rounded-lg p-3 w-full h-24 focus:outline-none focus:ring-4 focus:ring-yellow-200 shadow-sm"
-            placeholder="Enter product description"
+            onChange={onChangeHandler}
+            placeholder="Food description"
             required
+            className={`w-full p-2 border rounded-md h-20 resize-none focus:ring-2 transition ${
+              isDark
+                ? "border-gray-600 bg-gray-800 text-white focus:ring-yellow-300"
+                : "border-gray-300 bg-white text-gray-900 focus:ring-yellow-200"
+            }`}
           />
         </div>
 
-        {/* Category & Price */}
-        <div className="flex flex-col sm:flex-row sm:gap-6">
+        {/* Category & Type */}
+        <div className="flex flex-col sm:flex-row gap-4">
           <div className="flex-1">
-            <h4 className="pb-1 font-semibold text-gray-700">Food Category</h4>
+            <label className="block font-medium mb-1">Category</label>
             <select
               name="category"
               value={data.category}
               onChange={onChangeHandler}
-              className="border border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-4 focus:ring-yellow-200 shadow-sm"
               required
+              className={`w-full p-2 border rounded-md focus:ring-2 transition ${
+                isDark
+                  ? "border-gray-600 bg-gray-800 text-white focus:ring-yellow-300"
+                  : "border-gray-300 bg-white text-gray-900 focus:ring-yellow-200"
+              }`}
             >
-              <option value="">Select Category</option>
+              <option value="">Select</option>
               <option value="burgers_sandwiches">Burgers & Sandwiches</option>
               <option value="pizza">Pizza</option>
-              <option value="pasta_noodles">Pasta & Noodles</option>
-              <option value="fried_grilled">Fried & Grilled Specials</option>
-              <option value="desserts_drinks">Desserts & Drinks</option>
+              <option value="pasta">Pasta </option>
+              <option value="drinks">Drinks</option>
+              <option value="desserts">Desserts</option>
             </select>
-
           </div>
 
-          <div className="flex-1 mt-4 sm:mt-0">
-            <h4 className="pb-1 font-semibold text-gray-700">Product Price</h4>
-            <input
+          <div className="flex-1">
+            <label className="block font-medium mb-1">Type</label>
+            <select
+              name="type"
+              value={data.type}
               onChange={onChangeHandler}
-              value={data.price}
-              type="number"
-              className="border border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-4 focus:ring-yellow-200 shadow-sm"
-              name="price"
-              placeholder="$20"
               required
-            />
+              className={`w-full p-2 border rounded-md focus:ring-2 transition ${
+                isDark
+                  ? "border-gray-600 bg-gray-800 text-white focus:ring-yellow-300"
+                  : "border-gray-300 bg-white text-gray-900 focus:ring-yellow-200"
+              }`}
+            >
+              <option value="normal">Normal</option>
+              <option value="popular">Popular</option>
+            </select>
           </div>
+        </div>
+
+        {/* Price */}
+        <div>
+          <label className="block font-medium mb-1">Price</label>
+          <input
+            type="number"
+            name="price"
+            value={data.price}
+            onChange={onChangeHandler}
+            placeholder="$20"
+            required
+            className={`w-full p-2 border rounded-md focus:ring-2 transition ${
+              isDark
+                ? "border-gray-600 bg-gray-800 text-white focus:ring-yellow-300"
+                : "border-gray-300 bg-white text-gray-900 focus:ring-yellow-200"
+            }`}
+          />
         </div>
 
         {/* Submit */}
         <button
           type="submit"
-          className="w-full sm:w-60 py-3 px-6 bg-yellow-400 text-gray-800 font-semibold rounded-lg shadow-md hover:bg-yellow-300 transition duration-300 mt-4"
+          className={`mt-2 px-6 py-2 rounded-md shadow-sm font-semibold transition ${
+            isDark
+              ? "bg-yellow-400 text-gray-900 hover:bg-yellow-300"
+              : "bg-gray-900 text-white hover:bg-gray-800"
+          }`}
         >
-          {editId ? 'Update' : 'Add'}
+          {editId ? "Update" : "Add"}
         </button>
-
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default Add
+export default Add;

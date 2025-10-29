@@ -1,5 +1,24 @@
 @import "tailwindcss";
 
+
+/* index.css */
+body.light {
+  --bg-color: #ffffff;
+  --text-color: #000000;
+  --accent-color: #e58d00;
+}
+
+body.dark {
+  --bg-color: #0c0c0c;
+  --text-color: #ffffff;
+  --accent-color: #e58d00;
+}
+
+/* Optional for buttons, cards, etc. */
+.bg-theme { background-color: var(--bg-color); }
+.text-theme { color: var(--text-color); }
+.accent-theme { color: var(--accent-color); }
+
 .homehomeHeader {
   background-image: url(assets/header_img.png);
 }

@@ -1,73 +1,87 @@
-import React from "react";
+import React, { useContext } from "react";
 import { User, ShoppingCart, Truck } from "lucide-react";
+import { ThemeContext } from "../context/ThemeContext";
 
 const steps = [
   {
     icon: User,
     title: "Sign In / Login",
-    description: "Create account to start ordering your favorite food",
-    step: "01"
+    description: "Create an account to start ordering your favorite food",
+    step: "01",
   },
   {
     icon: ShoppingCart,
     title: "Select & Order",
     description: "Pick your favorite dishes and add them to your cart",
-    step: "02"
+    step: "02",
   },
   {
     icon: Truck,
     title: "Fast Delivery",
     description: "Get your fresh, hot food delivered straight to your door",
-    step: "03"
-  }
+    step: "03",
+  },
 ];
 
 const HowItWorks = () => {
+  const { theme } = useContext(ThemeContext);
+
+  const sectionBg = theme === "dark" ? "bg-[#0c0c0c]" : "bg-gray-50";
+  const cardBg = theme === "dark" ? "bg-white/5 backdrop-blur-md" : "bg-white/70 backdrop-blur-sm";
+  const textColor = theme === "dark" ? "text-white" : "text-gray-900";
+  const subTextColor = theme === "dark" ? "text-gray-300" : "text-gray-700";
+
   return (
-    <section className="py-20 bg-gray-50">
-      <div className="container mx-auto px-4">
-        {/* Section Title */}
-        <div className="text-center mb-16">
-          <h2 className="text-3xl lg:text-5xl font-bold text-gray-900 mb-4">
-            How It Works
-          </h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Three simple steps to get your favorite food delivered
-          </p>
-        </div>
+    <section className={`py-20 ${sectionBg} transition-colors duration-300`}>
+      <div className="container mx-auto px-6 text-center">
+        <div className="text-center mb-12">
+  <h2
+    className={`text-3xl sm:text-4xl font-extrabold mb-4 relative inline-block ${
+      theme === "dark" ? "text-white" : "text-gray-700"
+    }`}
+  >
+   How It Works
+  </h2>
+  {/* Decorative lines with circle */}
+  <div className="flex items-center justify-center gap-2 mb-4">
+    <span className={`h-[4px] w-36 ${theme === "dark" ? "bg-[#e58d00]" : "bg-[#e58d00]"}`}></span>
+    <span className={`h-5 w-5 rounded-full ${theme === "dark" ? "bg-[#e58d00]" : "bg-[#e58d00]"}`}></span>
+    <span className={`h-[4px] w-36 ${theme === "dark" ? "bg-[#e58d00]" : "bg-[#e58d00]"}`}></span>
+  </div>
+  <p
+    className={`text-base sm:text-lg ${
+      theme === "dark" ? "text-white/80" : "text-gray-600"
+    }`}
+  >
+     Three simple steps to get your favorite food delivered
+  </p>
+</div>
+       
 
         {/* Steps */}
-        <div className="max-w-5xl mx-auto">
-          <div className="grid md:grid-cols-3 gap-8 md:gap-12">
-            {steps.map((step, index) => (
-              <div key={index} className="text-center relative">
-                {/* Step Number */}
-                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 w-12 h-12 bg-yellow-500 text-white rounded-full flex items-center justify-center font-bold text-lg z-10">
-                  {step.step}
-                </div>
-
-                {/* Connecting Line */}
-                {index < steps.length - 1 && (
-                  <div className="hidden md:block absolute top-2 left-full w-16 h-1 bg-yellow-400/60 transform translate-x-4"></div>
-                )}
-
-                {/* Card Content */}
-                <div className="bg-white rounded-2xl p-8 shadow-md hover:shadow-lg transition-all duration-300 pt-12">
-                  <div className="w-16 h-16 bg-yellow-500 rounded-lg flex items-center justify-center mx-auto mb-6">
-                    <step.icon className="h-8 w-8 text-white" />
-                  </div>
-
-                  <h3 className="text-xl font-bold text-gray-900 mb-4">
-                    {step.title}
-                  </h3>
-
-                  <p className="text-gray-600 leading-relaxed">
-                    {step.description}
-                  </p>
-                </div>
+        <div className="max-w-6xl mx-auto grid sm:grid-cols-1 md:grid-cols-3 gap-8">
+          {steps.map((step, idx) => (
+            <div
+              key={idx}
+              className={`group relative p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-transform transform hover:scale-105 ${cardBg}`}
+            >
+              {/* Icon */}
+              <div className="w-16 h-16 bg-yellow-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <step.icon className="w-8 h-8 text-black" />
               </div>
-            ))}
-          </div>
+
+              {/* Step number */}
+              <div className="text-yellow-400 font-bold mb-2 text-lg">{step.step}</div>
+
+              {/* Title */}
+              <h3 className={`text-xl font-semibold mb-3 ${textColor}`}>{step.title}</h3>
+
+              {/* Description */}
+              <p className={`text-sm sm:text-base leading-relaxed ${subTextColor}`}>
+                {step.description}
+              </p>
+            </div>
+          ))}
         </div>
       </div>
     </section>

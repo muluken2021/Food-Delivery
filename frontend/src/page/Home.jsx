@@ -4,23 +4,27 @@ import Menu from '../component/Menu'
 import Fooditems from '../component/Fooditems'
 import HowItWorks from '../component/HowItWorks'
 import FoodSearch from '../component/FoodSearch'
+import PopularDishes from '../component/PopularDishes'
+import ExploreMenu from '../component/ExploreMenu'
+import Testimonials from '../component/Testimonials'
+import MeetOurChefs from '../component/MeetOurChefs'
+import About from '../component/About'
 
-const Home = ({ menuRef, scrollToMenu }) => {
-  const [category, setcatagory] = useState('All')
-  const [searchQuery, setSearchQuery] = useState("")
+const Home = ({ setLogin }) => {
+ 
 
   return (
     <div className='container'>
-      <Header scrollToMenu={scrollToMenu}/> {/* You can still pass scrollToMenu here if you want a button inside header */}
-      
+      <Header setLogin={setLogin} /> {/* You can still pass scrollToMenu here if you want a button inside header */}
+      <PopularDishes />
+       <ExploreMenu />
       {/* Attach the menuRef here */}
-      <div ref={menuRef}>
-        <Menu category={category} setcatagory={setcatagory} />
-      </div>
-
-      <FoodSearch searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-      <Fooditems category={category} searchQuery={searchQuery} />
+      
+     
+      <MeetOurChefs />
+      
       <HowItWorks />
+      <Testimonials />
     </div>
   )
 }

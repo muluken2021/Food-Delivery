@@ -5,17 +5,17 @@ export const StoreContext = createContext(null);
 const StoreContextProvider = (props) => {
   const [cartItems, setCartItems] = useState({});
   const [foodList, setFoodList] = useState([]); 
-   const url = import.meta.env.VITE_APP_API_URL;
+  const url = 'http://localhost:4000'; 
+  
 
   // Fetch food list from backend
   const fetchFoodList = async () => {
     try {
       const response = await fetch(`${url}/api/food/all`);
       const data = await response.json();
-
+     
       if (data.success && Array.isArray(data.foods)) {
         setFoodList(data.foods);
-        
       } else if (Array.isArray(data)) {
         setFoodList(data);
       } else {
@@ -49,15 +49,17 @@ const StoreContextProvider = (props) => {
     }
   };
 
-  const addtocart = (itemId) => {
+  // Add to cart with optional quantity
+  const addtocart = (itemId, quantity = 1) => {
     const newCart = {
       ...cartItems,
-      [itemId]: (cartItems[itemId] || 0) + 1
+      [itemId]: (cartItems[itemId] || 0) + quantity,
     };
     setCartItems(newCart);
     saveCart(newCart);
   };
 
+  // Remove from cart
   const removeFromCart = (itemId, removeAll = false) => {
     const newCart = { ...cartItems };
     if (removeAll || newCart[itemId] === 1) delete newCart[itemId];
@@ -66,6 +68,7 @@ const StoreContextProvider = (props) => {
     saveCart(newCart);
   };
 
+  // Calculate total price
   const TotalCartPrice = () => {
     let totalPrice = 0;
     for (let item in cartItems) {

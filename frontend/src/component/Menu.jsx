@@ -1,54 +1,68 @@
-import React from "react";
+import React, { useContext } from "react";
 import { menu_list } from "../assets/assets";
+import { ThemeContext } from "../context/ThemeContext";
+import FoodSearch from "./FoodSearch";
 
-const Menu = ({ category, setcatagory }) => {
+const Menu = ({ searchQuery, setSearchQuery, category, setcatagory }) => {
+  const { theme } = useContext(ThemeContext);
+  console.log(category)
   return (
-    <section className="sm:mx-24 my-12">
-      {/* Title */}
-      <div className="text-center max-w-2xl mx-auto">
-        <h1 className="text-3xl lg:text-4xl font-bold text-gray-800">
-          Explore Our Menu
-        </h1>
-        <p className="mt-3 text-gray-600 text-sm sm:text-base">
-          Discover a variety of delicious meals crafted to satisfy every craving. From fresh, healthy options to indulgent treats, our menu offers something for everyone. Browse, choose, and enjoy your favorite dishes delivered right to your door.
-        </p>
-      </div>
+    <section
+      className={`w-full  transition-colors duration-300 ${
+        theme === "dark" ? "bg-[#0c0c0c]" : "bg-white"
+      }`}
+    >
+      {/* Header */}
+      <header
+        className={`w-full py-12 px-6 sm:px-12 lg:px-24 transition-colors duration-300 ${
+          theme === "dark" ? "bg-white/5 backdrop-blur-sm" : "bg-gray-100"
+        }`}
+      >
+        <div className="max-w-3xl">
+          <h1
+            className={`text-4xl sm:text-5xl font-extrabold transition-colors duration-300 ${
+              theme === "dark" ? "text-white" : "text-gray-700"
+            }`}
+          >
+            Explore Our Food
+          </h1>
+          <p
+            className={`mt-3 text-sm sm:text-base transition-colors duration-300 ${
+              theme === "dark" ? "text-white/70" : "text-gray-700"
+            }`}
+          >
+            Discover your favorite dishes from our wide variety of delicious meals. 
+            Fresh, tasty, and crafted just for you!
+          </p>
+          {/* Search bar aligned to start */}
+          <div className="mt-6 w-full max-w-md">
+            <FoodSearch searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+          </div>
+        </div>
+      </header>
 
       {/* Horizontal Scroll Menu */}
-      <div className="mt-10 overflow-x-auto scrollbar-hide">
-        <div className="flex gap-8 justify-center w-max mx-auto pb-4">
-          {menu_list.map((menu, index) => (
-            <div
-              key={index}
-              onClick={() =>
-                setcatagory((prev) =>
-                  prev === menu.value ? "All" : menu.value
-                )
-              }
-              className="flex flex-col items-center cursor-pointer flex-shrink-0 group"
-            >
-              <img
-                src={menu.menu_image}
-                alt={menu.value}
-                className={`w-28 h-28 object-cover rounded-full border-4 transition-transform duration-300 group-hover:scale-105 group-hover:shadow-lg ${
-                  category === menu.value
-                    ? "border-yellow-500 scale-110 shadow-md"
-                    : "border-gray-200"
-                }`}
-              />
-              <h2
-                className={`mt-3 text-sm font-medium ${
-                  category === menu.value
-                    ? "text-yellow-500"
-                    : "text-gray-700"
-                }`}
-              >
-                {menu.menu_name}
-              </h2>
-            </div>
-          ))}
-        </div>
-      </div>
+    <div className="px-4 lg:px-26 overflow-x-auto  scrollbar-hide py-5">
+      <div className="flex gap-4 justify-center w-max pb-4 ">
+        {menu_list.map((menu, index) => (
+          <button
+            key={index}
+            onClick={() => setcatagory(menu.value)} // single click sets the category
+          
+            className={`cursor-pointer flex-shrink-0 px-5 py-2 rounded-full font-medium text-sm sm:text-base transition-all duration-300 ${
+              category === menu.value
+                ? "bg-[#e58d00] text-white shadow-lg scale-105"
+                : theme === "dark"
+                ? "bg-gray-700 text-white hover:bg-gray-600 hover:scale-105"
+                : "bg-gray-200 text-gray-900 hover:bg-gray-300 hover:scale-105"
+            }`}
+          >
+        {menu.menu_name}
+      </button>
+    ))}
+  </div>
+</div>
+
     </section>
   );
 };
