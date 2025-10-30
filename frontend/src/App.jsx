@@ -32,7 +32,7 @@ import AdminPrivateRoute from "./component/PrivateRoute";
 import AdminNavbar from "./component/AdminNavbar";
 import Sidebar from "./component/Sidebar";
 import Dashboard from "./page/Dashboard";
-import ScrollToTop from "./component/scrolltotop";
+import ScrollToTop from "./component/ScrollToTop";
 
 const App = () => {
   const { theme } = useContext(ThemeContext);
