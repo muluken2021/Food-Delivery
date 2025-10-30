@@ -18,7 +18,7 @@ const Footer = () => {
         <div className="py-16 grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Company Info */}
           <div>
-            <h3 className="text-2xl font-bold text-yellow-500 mb-6">Bitedish</h3>
+            <h3 className="text-2xl font-bold text-yellow-500 mb-6">DashDine</h3>
             <p className={`mb-6 leading-relaxed ${subText}`}>
               Your favorite food delivered fresh and fast. Order from the best restaurants in your area.
             </p>
@@ -36,24 +36,24 @@ const Footer = () => {
 
           {/* Quick Links */}
           <div>
-  <h4 className="text-xl font-semibold mb-6 text-yellow-500">Quick Links</h4>
-  <ul className="space-y-3">
-    {[
-      { name: "About Us", path: "/about" },
-      { name: "Menu", path: "/menu" },
-      { name: "Contact Us", path: "/contact" },
-    ].map((link, idx) => (
-      <li key={idx}>
-        <Link
-          to={link.path}
-          className={`hover:text-yellow-500 transition-colors ${subText}`}
-        >
-          {link.name}
-        </Link>
-      </li>
-    ))}
-  </ul>
-</div>
+            <h4 className="text-xl font-semibold mb-6 text-yellow-500">Quick Links</h4>
+            <ul className="space-y-3">
+              {[
+                { name: "About Us", path: "/about" },
+                { name: "Menu", path: "/menu" },
+                { name: "Contact Us", path: "/contact" },
+              ].map((link, idx) => (
+                <li key={idx}>
+                  <Link
+                    to={link.path}
+                    className={`hover:text-yellow-500 transition-colors ${subText}`}
+                  >
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
 
           {/* Contact Info */}
           <div>
@@ -97,7 +97,7 @@ const Footer = () => {
         <div className={`border-t ${theme === "dark" ? "border-gray-700" : "border-gray-300"} py-8`}>
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className={`${subText} text-sm`}>
-              © 2024 Bitedish. All rights reserved.
+              © 2024 DashDine. All rights reserved.
             </p>
             <div className="flex gap-6 text-sm">
               {["Privacy Policy", "Terms of Service", "Cookie Policy"].map((link, idx) => (

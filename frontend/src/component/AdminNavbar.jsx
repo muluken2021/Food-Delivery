@@ -25,7 +25,7 @@ const AdminNavbar = ({ menuOpen, setMenuOpen }) => {
         className="text-2xl font-bold cursor-pointer hover:opacity-80 transition"
         onClick={() => navigate("/")}
       >
-        BiteDash | <span className="text-lg">Admin</span>
+        DashDine | <span className="text-lg">Admin</span>
       </h1>
 
       {/* Desktop Buttons */}
