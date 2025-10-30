@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { Facebook, Twitter, Instagram, Mail, Phone, MapPin } from "lucide-react";
 import { ThemeContext } from "../context/ThemeContext";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   const { theme } = useContext(ThemeContext);
@@ -35,15 +36,24 @@ const Footer = () => {
 
           {/* Quick Links */}
           <div>
-            <h4 className="text-xl font-semibold mb-6 text-yellow-500">Quick Links</h4>
-            <ul className="space-y-3">
-              {["About Us", "Restaurants", "Become a Partner", "Delivery Areas", "Help & Support"].map((link, idx) => (
-                <li key={idx}>
-                  <a href="#" className={`hover:text-yellow-500 transition-colors ${subText}`}>{link}</a>
-                </li>
-              ))}
-            </ul>
-          </div>
+  <h4 className="text-xl font-semibold mb-6 text-yellow-500">Quick Links</h4>
+  <ul className="space-y-3">
+    {[
+      { name: "About Us", path: "/about" },
+      { name: "Menu", path: "/menu" },
+      { name: "Contact Us", path: "/contact" },
+    ].map((link, idx) => (
+      <li key={idx}>
+        <Link
+          to={link.path}
+          className={`hover:text-yellow-500 transition-colors ${subText}`}
+        >
+          {link.name}
+        </Link>
+      </li>
+    ))}
+  </ul>
+</div>
 
           {/* Contact Info */}
           <div>
@@ -65,7 +75,7 @@ const Footer = () => {
           </div>
 
           {/* Newsletter */}
-          <div>
+          {/* <div>
             <h4 className="text-xl font-semibold mb-6 text-yellow-500">Stay Updated</h4>
             <p className={subText + " mb-4"}>
               Subscribe to get special offers and updates
@@ -80,7 +90,7 @@ const Footer = () => {
                 Subscribe
               </button>
             </div>
-          </div>
+          </div> */}
         </div>
 
         {/* Bottom Bar */}

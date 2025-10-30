@@ -4,10 +4,10 @@ import { Clock, CheckCircle, XCircle, ShoppingCart, Trash2 } from "lucide-react"
 import { ThemeContext } from "../context/ThemeContext";
 
 const statusStyles = {
-  Pending: { text: "text-yellow-300", bg: "bg-yellow-900/30", icon: <Clock className="w-5 h-5 inline mr-1" /> },
-  Accepted: { text: "text-blue-300", bg: "bg-blue-900/30", icon: <ShoppingCart className="w-5 h-5 inline mr-1" /> },
-  Delivered: { text: "text-green-300", bg: "bg-green-900/30", icon: <CheckCircle className="w-5 h-5 inline mr-1" /> },
-  Canceled: { text: "text-red-300", bg: "bg-red-900/30", icon: <XCircle className="w-5 h-5 inline mr-1" /> },
+  Pending: { text: "text-yellow-500", bg: "bg-yellow-200/30", icon: <Clock className="w-5 h-5 inline mr-1" /> },
+  Accepted: { text: "text-blue-400", bg: "bg-blue-200/30", icon: <ShoppingCart className="w-5 h-5 inline mr-1" /> },
+  Delivered: { text: "text-green-500", bg: "bg-green-400/30", icon: <CheckCircle className="w-5 h-5 inline mr-1" /> },
+  Canceled: { text: "text-red-200", bg: "bg-red-100/30", icon: <XCircle className="w-5 h-5 inline mr-1" /> },
 };
 
 const OrderPage = () => {
@@ -95,7 +95,7 @@ const OrderPage = () => {
               }`}
             >
               <div className="flex justify-between items-center mb-3">
-                <span className="font-semibold">{theme === "dark" ? "text-gray-300" : "text-gray-700"}Order ID:</span>
+                <span className={theme === "dark" ? "text-gray-300" : "text-gray-700"}>Order ID:</span>
                 <span className="font-mono text-sm">{order._id}</span>
               </div>
 
@@ -118,7 +118,7 @@ const OrderPage = () => {
                 <span
                   className={`inline-flex items-center px-3 py-1 rounded-full font-medium ${
                     statusStyles[order.status]?.bg || "bg-gray-700"
-                  } ${statusStyles[order.status]?.text || "text-gray-200"}`}
+                  } ${statusStyles[order.status]?.text || "text-gray-00"}`}
                 >
                   {statusStyles[order.status]?.icon} {order.status}
                 </span>

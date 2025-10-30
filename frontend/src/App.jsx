@@ -32,6 +32,7 @@ import AdminPrivateRoute from "./component/PrivateRoute";
 import AdminNavbar from "./component/AdminNavbar";
 import Sidebar from "./component/Sidebar";
 import Dashboard from "./page/Dashboard";
+import ScrollToTop from "./component/scrolltotop";
 
 const App = () => {
   const { theme } = useContext(ThemeContext);
@@ -66,6 +67,7 @@ const App = () => {
       }`}
     >
       <ToastContainer />
+      <ScrollToTop />
 
       {/* Admin Layout */}
       {isAdminRoute ? (
@@ -153,7 +155,7 @@ const App = () => {
 
           {/* Routes */}
           <Routes>
-            <Route path="/" element={<Home setLogin={setLogin} menuRef={menuRef} scrollToMenu={scrollToMenu} />} />
+            <Route path="/" element={<Home  />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/menu" element={<FoodMenue />} />
             <Route path="/about" element={<About />} />

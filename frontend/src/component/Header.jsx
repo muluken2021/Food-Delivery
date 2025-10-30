@@ -4,7 +4,7 @@ import { ThemeContext } from "../context/ThemeContext";
 import { Star, ThumbsUp, Truck } from "lucide-react";
 import { Link } from "react-router-dom";
 
-const Header = ({setLogin}) => {
+const Header = () => {
   const { theme } = useContext(ThemeContext);
 
   return (
@@ -44,12 +44,14 @@ const Header = ({setLogin}) => {
           </p>
 
           <div className="flex flex-col gap-4 sm:flex-col lg:flex-row justify-center lg:justify-start">
+           <Link to="/menu" className="w-full lg:w-auto">
             <button
-              onClick={() => setLogin(true)}
+              
               className="bg-[#e58d00] hover:bg-yellow-500 text-white font-bold rounded-2xl px-8 sm:px-10 py-4 text-lg sm:text-xl transition-transform transform hover:scale-105 w-full lg:w-auto"
             >
               Order Now
             </button>
+            </Link>
 
             <Link to="/menu" className="w-full lg:w-auto">
               <button

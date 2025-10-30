@@ -10,12 +10,12 @@ import Testimonials from '../component/Testimonials'
 import MeetOurChefs from '../component/MeetOurChefs'
 import About from '../component/About'
 
-const Home = ({ setLogin }) => {
+const Home = () => {
  
 
   return (
     <div >
-      <Header setLogin={setLogin} /> {/* You can still pass scrollToMenu here if you want a button inside header */}
+      <Header/> {/* You can still pass scrollToMenu here if you want a button inside header */}
       <PopularDishes />
        <ExploreMenu />
       {/* Attach the menuRef here */}

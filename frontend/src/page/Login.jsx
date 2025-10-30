@@ -17,27 +17,36 @@ const Login = ({ login, setLogin }) => {
     setError("");
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const url = import.meta.env.VITE_APP_API_URL;
-      const endpoint = signup ? "/api/user/register" : "/api/user/login";
-      const res = await fetch(`${url}${endpoint}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-      const data = await res.json();
-      if (data.success) {
-        setLogin(false);
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("user", JSON.stringify(data.user));
-        navigate("/"); 
-      } else setError(data.message);
-    } catch {
-      setError("Something went wrong. Please try again.");
+const [loading, setLoading] = useState(false); // new state
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setLoading(true); // start loading
+  try {
+    const url = import.meta.env.VITE_APP_API_URL;
+    const endpoint = signup ? "/api/user/register" : "/api/user/login";
+    const res = await fetch(`${url}${endpoint}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    });
+    const data = await res.json();
+
+    if (data.success) {
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+      setLogin(false);
+      navigate("/");
+    } else {
+      setError(data.message);
     }
-  };
+  } catch {
+    setError("Something went wrong. Please try again.");
+  } finally {
+    setLoading(false); // stop loading
+  }
+};
+
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-[rgba(0,0,0,0.6)]">
@@ -104,9 +113,12 @@ const Login = ({ login, setLogin }) => {
 
           <button
             type="submit"
-            className="w-full bg-yellow-500 text-white py-2 rounded-lg hover:bg-yellow-600 transition"
+            className="w-full bg-yellow-500 text-white py-2 rounded-lg hover:bg-yellow-600 transition flex justify-center items-center"
+            disabled={loading} // disable button while loading
           >
-            {signup ? "Sign Up" : "Login"}
+            {loading ? (
+              <span className="animate-spin border-2 border-white border-t-transparent rounded-full w-5 h-5"></span>
+            ) : signup ? "Sign Up" : "Login"}
           </button>
 
           <p className="text-sm text-center">

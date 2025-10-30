@@ -35,14 +35,14 @@ const Navbar = ({ login, setLogin, scrollToMenu }) => {
     const handleClickOutside = (e) => {
       if (
         (desktopProfileRef.current && !desktopProfileRef.current.contains(e.target)) &&
-        (mobileProfileRef.current.current && !mobileProfileRef.current.contains(e.target))
+        (mobileProfileRef.current && !mobileProfileRef.current.contains(e.target))
       ) {
         setProfileOpen(false);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+    }, []);
 
   // Active nav link
   useEffect(() => {
@@ -147,20 +147,23 @@ const Navbar = ({ login, setLogin, scrollToMenu }) => {
                 >
                   {user.name.charAt(0).toUpperCase()}
                 </div>
-                {profileOpen && (
-                  <div
-                    className={` absolute right-0 mt-6 w-44 rounded-lg shadow-lg py-2 z-50 border ${
-                      theme === "dark" ? "bg-[#1a1a1a] border-gray-700" : "bg-white border-gray-300"
-                    }`}
+
+                {/* Dropdown */}
+                <div
+                  className={`absolute right-0 top-full mt-2 w-44 rounded-lg shadow-lg py-2 z-50 border transition-all duration-200 ${
+                    profileOpen
+                      ? "opacity-100 visible translate-y-0"
+                      : "opacity-0 invisible -translate-y-2"
+                  } ${theme === "dark" ? "bg-[#1a1a1a] border-gray-700" : "bg-white border-gray-300"}`}
+                >
+                  <button
+                   onClick={handleLogout}
+                   className={`cursor-pointer w-full text-left px-4 py-2 text-md text-red-500 transition 
+                    ${theme === "dark" ? "hover:bg-gray-900" : "hover:bg-gray-100"}`}
                   >
-                    <button
-                      onClick={handleLogout}
-                      className="cursor-pointer w-full text-left px-4 py-2 text-md text-red-500 hover:bg-gray-100 transition"
-                    >
-                      Logout
-                    </button>
-                  </div>
-                )}
+                    Logout
+                  </button>
+                </div>
               </div>
             )}
             {/* desktop Sign Up */}
@@ -174,7 +177,6 @@ const Navbar = ({ login, setLogin, scrollToMenu }) => {
               </button>
             )}
 
-            {/* Mobile Profile / Logout */}
             {user && (
               <div className="md:hidden flex relative" ref={mobileProfileRef}>
                 <div
@@ -183,20 +185,23 @@ const Navbar = ({ login, setLogin, scrollToMenu }) => {
                 >
                   {user.name.charAt(0).toUpperCase()}
                 </div>
-                {profileOpen && (
-                  <div
-                    className={`absolute right-0 mt-2 w-44 rounded-lg shadow-lg py-2 z-50 border ${
-                      theme === "dark" ? "bg-[#1a1a1a] border-gray-700" : "bg-white border-gray-300"
-                    }`}
+
+                {/* Dropdown */}
+                <div
+                  className={`absolute right-0 top-full mt-2 w-44 rounded-lg shadow-lg py-2 z-50 border transition-all duration-200 ${
+                    profileOpen
+                      ? "opacity-100 visible translate-y-0"
+                      : "opacity-0 invisible -translate-y-2"
+                  } ${theme === "dark" ? "bg-[#1a1a1a] border-gray-700" : "bg-white border-gray-300"}`}
+                >
+                  <button
+                   onClick={handleLogout}
+                   className={`cursor-pointer w-full text-left px-4 py-2 text-md text-red-500 transition 
+                    ${theme === "dark" ? "hover:bg-gray-900" : "hover:bg-gray-100"}`}
                   >
-                    <button
-                      onClick={handleLogout}
-                      className="cursor-pointer w-full text-left px-4 py-2 text-md text-red-500 hover:bg-gray-100 transition"
-                    >
-                      Logout
-                    </button>
-                  </div>
-                )}
+                    Logout
+                  </button>
+                </div>
               </div>
             )}
 
