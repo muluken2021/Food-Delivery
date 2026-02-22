@@ -1,12 +1,10 @@
-import React, { useEffect, useState, useContext } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { assets } from '../assets/assets';
 import { ArrowLeft } from 'lucide-react';
-import { ThemeContext2 } from '../context/ThemeContext2';
 
 const Edit = () => {
-  const { isDark } = useContext(ThemeContext2);
   const url = import.meta.env.VITE_APP_API_URL;
   const { id } = useParams();
   const navigate = useNavigate();
@@ -17,7 +15,7 @@ const Edit = () => {
     description: '',
     category: 'salad',
     price: '',
-    type: '',
+    type: 'normal',
   });
 
   useEffect(() => {
@@ -37,7 +35,7 @@ const Edit = () => {
               description: currentFood.description,
               category: currentFood.category,
               price: currentFood.price,
-              type: currentFood.type
+              type: currentFood.type || 'normal'
             });
             setImage(currentFood.image || null);
           }
@@ -97,145 +95,75 @@ const Edit = () => {
     setFood(prev => ({ ...prev, [name]: value }));
   };
 
+  const inputClass = `border border-gray-300 p-2 w-full rounded focus:outline-none focus:ring-2 focus:ring-brand-500 transition text-brand-500`;
+
   return (
-    <div
-      className={`p-4 sm:p-8 max-w-7xl mx-auto rounded-xl shadow-xl transition-colors ${
-        isDark ? 'bg-gray-900 text-gray-100' : 'bg-gray-50 text-gray-900'
-      }`}
-    >
-     <button
+    <div className="p-4 sm:p-8 max-w-7xl mx-auto rounded-xl shadow-xl bg-gray-50 text-gray-900 transition-colors">
+      <button
         onClick={() => navigate('/admin/list')}
-        className={`flex mb-5 items-center space-x-2 text-lg   font-medium ${
-          isDark ? 'text-gray-100' : 'text-gray-900'
-        }`}
+        className="flex mb-5 items-center space-x-2 text-lg font-medium text-brand-500 hover:text-brand-600 transition"
       >
-        <ArrowLeft size={20} /> {/* 20px size, you can adjust */}
+        <ArrowLeft size={20} />
         <span>Back to list</span>
       </button>
-      <form className="space-y-6" onSubmit={handleSubmit}>
 
+      <form className="space-y-6" onSubmit={handleSubmit}>
         {/* Image Upload */}
         <div className="text-left">
-          <h4 className="py-2 font-semibold">Upload Image</h4>
+          <h4 className="py-2 font-semibold text-brand-500">Upload Image</h4>
           <label htmlFor="image">
             <img
-              src={
-                image instanceof File
-                  ? URL.createObjectURL(image)
-                  : image
-                  ? `${url}${image}`
-                  : assets.upload
-              }
+              src={image instanceof File ? URL.createObjectURL(image) : image ? `${url}${image}` : assets.upload}
               className={`cursor-pointer w-40 h-32 border-2 rounded-lg object-cover transition ${
-                !image
-                  ? 'border-red-400'
-                  : isDark
-                  ? 'border-gray-600'
-                  : 'border-gray-300'
+                !image ? 'border-red-400' : 'border-gray-300'
               }`}
-              alt="upload"
+              alt={food.name || 'upload'}
             />
           </label>
-          <input
-            id="image"
-            type="file"
-            hidden
-            onChange={(e) => setImage(e.target.files[0])}
-          />
+          <input id="image" type="file" hidden onChange={e => setImage(e.target.files[0])} />
         </div>
 
-        {/* Food Name */}
+        {/* Product Fields */}
         <div>
-          <h4 className="py-2 font-medium">Product Name</h4>
-          <input
-            type="text"
-            name="name"
-            value={food.name}
-            onChange={handleChange}
-            className={`border p-2 w-full rounded focus:outline-none focus:ring-2 focus:ring-yellow-500 transition ${
-              isDark
-                ? 'border-gray-700 bg-gray-800 text-gray-100'
-                : 'border-gray-300 bg-white text-gray-900'
-            }`}
-          />
+          <h4 className="py-2 font-medium text-brand-500">Product Name</h4>
+          <input type="text" name="name" value={food.name} onChange={handleChange} className={inputClass} required />
         </div>
 
-        {/* Description */}
         <div>
-          <h4 className="py-2 font-medium">Product Description</h4>
-          <textarea
-            name="description"
-            value={food.description}
-            onChange={handleChange}
-            className={`border p-2 w-full h-20 rounded focus:outline-none focus:ring-2 focus:ring-yellow-500 transition ${
-              isDark
-                ? 'border-gray-700 bg-gray-800 text-gray-100'
-                : 'border-gray-300 bg-white text-gray-900'
-            }`}
-          />
+          <h4 className="py-2 font-medium text-brand-500">Product Description</h4>
+          <textarea name="description" value={food.description} onChange={handleChange} className={inputClass} rows={5} required />
         </div>
 
-        {/* Category, Type & Price */}
         <div className="flex flex-col sm:flex-row sm:gap-6">
           <div className="flex-1">
-            <h4 className="py-2 font-medium">Food Category</h4>
-            <select
-              name="category"
-              value={food.category}
-              onChange={handleChange}
-              className={`border p-2 w-full rounded focus:outline-none focus:ring-2 focus:ring-yellow-500 transition ${
-                isDark
-                  ? 'border-gray-700 bg-gray-800 text-gray-100'
-                  : 'border-gray-300 bg-white text-gray-900'
-              }`}
-            >
+            <h4 className="py-2 font-medium text-brand-500">Food Category</h4>
+            <select name="category" value={food.category} onChange={handleChange} className={inputClass} required>
               <option value="">Select</option>
               <option value="burgers_sandwiches">Burgers & Sandwiches</option>
               <option value="pizza">Pizza</option>
-              <option value="pasta">Pasta </option>
+              <option value="pasta">Pasta</option>
               <option value="drinks">Drinks</option>
               <option value="desserts">Desserts</option>
             </select>
           </div>
 
           <div className="flex-1 mt-4 sm:mt-0">
-            <h4 className="pb-1 font-medium">Type</h4>
-            <select
-              name="type"
-              value={food.type}
-              onChange={handleChange}
-              className={`border rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-yellow-500 transition ${
-                isDark
-                  ? 'border-gray-700 bg-gray-800 text-gray-100'
-                  : 'border-gray-300 bg-white text-gray-900'
-              }`}
-              required
-            >
+            <h4 className="pb-1 font-medium text-brand-500">Type</h4>
+            <select name="type" value={food.type} onChange={handleChange} className={inputClass} required>
               <option value="normal">Normal</option>
               <option value="popular">Popular</option>
             </select>
           </div>
 
           <div className="flex-1 mt-4 sm:mt-0">
-            <h4 className="py-2 font-medium">Price</h4>
-            <input
-              type="number"
-              name="price"
-              value={food.price}
-              onChange={handleChange}
-              className={`border p-2 w-full rounded focus:outline-none focus:ring-2 focus:ring-yellow-500 transition ${
-                isDark
-                  ? 'border-gray-700 bg-gray-800 text-gray-100'
-                  : 'border-gray-300 bg-white text-gray-900'
-              }`}
-            />
+            <h4 className="py-2 font-medium text-brand-500">Price</h4>
+            <input type="number" name="price" value={food.price} onChange={handleChange} className={inputClass} required />
           </div>
         </div>
 
-        {/* Submit */}
         <button
           type="submit"
-          className="w-full sm:w-60 py-2 px-4 bg-yellow-500 text-gray-900 font-semibold rounded-lg shadow-md hover:bg-yellow-400 transition"
+          className="w-full sm:w-60 py-2 px-4 bg-brand-500 text-white font-semibold rounded-lg shadow-md hover:bg-brand-600 transition disabled:opacity-50"
         >
           Update
         </button>

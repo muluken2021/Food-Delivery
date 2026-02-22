@@ -1,62 +1,49 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { StoreContext } from "../context/StoreContext";
-import { Sun, Moon, ShoppingCart } from "lucide-react";
-import { ThemeContext } from "../context/ThemeContext";
+import { ShoppingCart, User, LogOut, Menu, X, LayoutDashboard, User2 } from "lucide-react";
+import UserDropdown from "./UserDropdown";
 
-const Navbar = ({ login, setLogin, scrollToMenu }) => {
+const Navbar = ({ login, setLogin }) => {
   const location = useLocation();
   const [active, setActive] = useState("home");
   const [menuOpen, setMenuOpen] = useState(false);
   const [user, setUser] = useState(null);
   const [profileOpen, setProfileOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const profileRef = useRef(null);
 
-  const desktopProfileRef = useRef(null);
-  const mobileProfileRef = useRef(null);
   const { cartItems, clearCart } = useContext(StoreContext);
-  const { theme, toggleTheme } = useContext(ThemeContext);
 
-  // Load user from localStorage
+  // Authentication & Scroll Logic
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) setUser(JSON.parse(storedUser));
   }, [login]);
 
-  // Scroll effect
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 10);
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Click outside to close profile dropdown
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (
-        (desktopProfileRef.current && !desktopProfileRef.current.contains(e.target)) &&
-        (mobileProfileRef.current && !mobileProfileRef.current.contains(e.target))
-      ) {
+      if (profileRef.current && !profileRef.current.contains(e.target)) {
         setProfileOpen(false);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-    }, []);
+  }, []);
 
-  // Active nav link
   useEffect(() => {
-    switch (location.pathname) {
-      case "/": setActive("home"); break;
-      case "/menu": setActive("menu"); break;
-      case "/orderpage": setActive("orders"); break;
-      case "/contact": setActive("contactus"); break;
-      case "/about": setActive("aboutus"); break;
-      default: setActive(""); break;
-    }
+    const path = location.pathname;
+    if (path === "/") setActive("home");
+    else if (path.includes("menu")) setActive("menu");
+    else if (path.includes("about")) setActive("aboutus");
   }, [location.pathname]);
 
-  // Logout function
   const handleLogout = () => {
     localStorage.removeItem("user");
     localStorage.removeItem("token");
@@ -67,188 +54,116 @@ const Navbar = ({ login, setLogin, scrollToMenu }) => {
 
   const navLinks = [
     { name: "Home", path: "/", key: "home" },
-    { name: "Menu", path: "/menu", key: "menu" },
-    ...(user ? [{ name: "Orders", path: "/orderpage", key: "orders" }] : []),
+    { name: "Our Menu", path: "/menu", key: "menu" },
     { name: "About Us", path: "/about", key: "aboutus" },
-    { name: "Contact Us", path: "/contact", key: "contactus" },
-    ...(user && user.role == 'admin' ? [{ name: "Dashboard", path: "/admin/dashboard", key: "admin", target: '' }] : []),
   ];
 
   const totalItemsInCart = Object.values(cartItems).reduce((total, qty) => total + qty, 0);
-  console.log(totalItemsInCart)
 
   return (
-    <>
-      <nav
-        className={`px-5 xl:mx-20 lg:my-5 lg:rounded-full shadow-xl fixed top-0 left-0 right-0 z-50 transition-all duration-300 backdrop-blur-md ${
-          isScrolled
-            ? theme === "dark"
-              ? "bg-[#0c0c0c]/95 shadow-lg"
-              : "bg-white/95 shadow-lg"
-            : theme === "dark"
-            ? "bg-[#0c0c0c]/95"
-            : "bg-white/95"
-        }`}
-      >
-        <div className="max-w-full mx-auto lg:px-24 py-3 flex justify-between items-center">
-          {/* Logo */}
-          <Link to="/">
-            <h1
-              className={`text-2xl md:text-3xl font-extrabold hover:text-[#e58d00] transition ${
-                theme === "dark" ? "text-white" : "text-gray-600"
-              }`}
+    <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled ? "bg-white py-3 shadow-md" : "bg-transparent py-6"}  backdrop-blur-md`}>
+      
+      <div className="container mx-auto px-6 lg:px-24 flex items-center justify-between">
+
+        {/* Logo */}
+        <Link to="/" className="flex items-center gap-1 group">
+          <span className="text-2xl font-semibold tracking-tight">
+            <span className="text-brand-500">Dash Dine</span>
+
+          </span>
+        </Link>
+
+        {/* Desktop Links */}
+        <div className="hidden lg:flex items-center gap-10">
+          {navLinks.map((link) => (
+            <Link
+              key={link.key}
+              to={link.path}
+              className={`text-sm font-semibold transition-all duration-300 ${active === link.key ? "text-brand-500" : "text-gray-600 hover:text-brand-500"}`}
             >
-              Dash<span className="text-[#e58d00]">Dine</span>
-            </h1>
-          </Link>
-
-          {/* Desktop Menu */}
-          <ul className={`hidden md:flex gap-8 font-medium ${theme === "dark" ? "text-white" : "text-gray-900"}`}>
-            {navLinks.map((link) => (
-              <Link target={link.target} key={link.key} to={link.path}>
-                <li
-                  className={`relative pb-1 cursor-pointer transition duration-200 ${
-                    active === link.key
-                      ? "text-[#e58d00] after:absolute after:left-0 after:bottom-0 after:w-full after:h-[2px] after:bg-[#e58d00]"
-                      : "hover:text-[#e58d00]"
-                  }`}
-                >
-                  {link.name}
-                </li>
-              </Link>
-            ))}
-          </ul>
-
-          {/* Right Section */}
-          <div className="flex items-center gap-4">
-            {/* Theme Toggle */}
-            <button onClick={toggleTheme} className="p-2 rounded-full hover:bg-gray-200 transition">
-              {theme === "dark" ? <Sun size={20} color="#e58d00" /> : <Moon size={20} color="#e58d00" />}
-            </button>
-
-            {/* Cart */}
-            <div className="relative">
-              <Link to="/cart">
-                <ShoppingCart size={24} className="transition duration-200 text-[#e58d00]" />
-              </Link>
-              {totalItemsInCart > 0 && (
-                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-semibold px-2 py-0.5 rounded-full">
-                  {totalItemsInCart}
-                </span>
-              )}
-            </div>
-
-            {/* Desktop Profile / Logout */}
-            {user && (
-              <div className="hidden md:flex relative" ref={desktopProfileRef}>
-                <div
-                  onClick={() => setProfileOpen(!profileOpen)}
-                  className="w-10 h-10 flex items-center justify-center rounded-full bg-[#e58d00] text-white font-bold cursor-pointer hover:bg-[#ffb84d] transition"
-                >
-                  {user.name.charAt(0).toUpperCase()}
-                </div>
-
-                {/* Dropdown */}
-                <div
-                  className={`absolute right-0 top-full mt-2 w-44 rounded-lg shadow-lg py-2 z-50 border transition-all duration-200 ${
-                    profileOpen
-                      ? "opacity-100 visible translate-y-0"
-                      : "opacity-0 invisible -translate-y-2"
-                  } ${theme === "dark" ? "bg-[#1a1a1a] border-gray-700" : "bg-white border-gray-300"}`}
-                >
-                  <button
-                   onClick={handleLogout}
-                   className={`cursor-pointer w-full text-left px-4 py-2 text-md text-red-500 transition 
-                    ${theme === "dark" ? "hover:bg-gray-900" : "hover:bg-gray-100"}`}
-                  >
-                    Logout
-                  </button>
-                </div>
-              </div>
-            )}
-            {/* desktop Sign Up */}
-            {!user && (
-              <button
-                onClick={() => setLogin(true)}
-                className="hidden md:flex  text-white px-8 py-2 rounded-full transition w-full "
-                style={{ backgroundColor: "#e58d00" }}
-              >
-                Sign Up
-              </button>
-            )}
-
-            {user && (
-              <div className="md:hidden flex relative" ref={mobileProfileRef}>
-                <div
-                  onClick={() => setProfileOpen(!profileOpen)}
-                  className="w-10 h-10 flex items-center justify-center rounded-full bg-[#e58d00] text-white font-bold cursor-pointer hover:bg-[#ffb84d] transition"
-                >
-                  {user.name.charAt(0).toUpperCase()}
-                </div>
-
-                {/* Dropdown */}
-                <div
-                  className={`absolute right-0 top-full mt-2 w-44 rounded-lg shadow-lg py-2 z-50 border transition-all duration-200 ${
-                    profileOpen
-                      ? "opacity-100 visible translate-y-0"
-                      : "opacity-0 invisible -translate-y-2"
-                  } ${theme === "dark" ? "bg-[#1a1a1a] border-gray-700" : "bg-white border-gray-300"}`}
-                >
-                  <button
-                   onClick={handleLogout}
-                   className={`cursor-pointer w-full text-left px-4 py-2 text-md text-red-500 transition 
-                    ${theme === "dark" ? "hover:bg-gray-900" : "hover:bg-gray-100"}`}
-                  >
-                    Logout
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {/* Mobile Hamburger */}
-            <button
-              className={`md:hidden text-2xl font-bold ${theme === "dark" ? "text-white" : "text-gray-900"}`}
-              onClick={() => setMenuOpen(!menuOpen)}
-            >
-              {menuOpen ? "✕" : "☰"}
-            </button>
-          </div>
+              {link.name}
+            </Link>
+          ))}
         </div>
 
-        {/* Mobile Dropdown */}
-        {menuOpen && (
-          <div
-            className={`md:hidden py-5 px-6 border-t shadow-md transition-all duration-300 ${
-              theme === "dark" ? "bg-[#1a1a1a]" : "bg-white"
-            }`}
-          >
-            <ul className={`flex flex-col gap-4 py-4 font-medium ${theme === "dark" ? "text-white" : "text-gray-900"}`}>
-              {navLinks.map((link) => (
-                <Link key={link.key} to={link.path}>
-                  <li onClick={() => setMenuOpen(false)} className={`cursor-pointer ${active === link.key ? "text-[#e58d00] font-semibold" : ""}`}>
-                    {link.name}
-                  </li>
-                </Link>
-              ))}
-            </ul>
+        {/* Actions */}
+        <div className="flex items-center gap-4">
 
-            {/* Mobile Sign Up */}
-            {!user && (
+          {/* Cart */}
+          <Link to="/cart" className="relative p-2">
+            <ShoppingCart size={22} className="text-gray-700" />
+            {totalItemsInCart > 0 && (
+              <span className="absolute -top-1 -right-1 bg-brand-500 text-white text-[10px] font-bold h-5 w-5 flex items-center justify-center rounded-full border-2 border-white">
+                {totalItemsInCart}
+              </span>
+            )}
+          </Link>
+          
+          {/* User / Sign In */}
+          <div className="relative" ref={profileRef}>
+            {user ? (
+               <UserDropdown handleLogout={handleLogout}/>
+            ) : (
               <button
                 onClick={() => setLogin(true)}
-                className="text-white px-8 py-2 rounded-full transition w-full mt-2"
-                style={{ backgroundColor: "#e58d00" }}
+                className="hidden md:block px-8 py-2 rounded-full border-2 border-brand-500 text-brand-500 font-bold text-sm hover:bg-brand-500 hover:text-white transition-all duration-300"
               >
-                Sign Up
+                Get Started
               </button>
             )}
-          </div>
-        )}
-      </nav>
 
-      {/* Spacer */}
-      <div className="h-16"></div>
-    </>
+            {/* Profile Dropdown */}
+            {profileOpen && (
+              <div className="absolute right-0 top-full mt-4 w-48 rounded-2xl shadow-xl border p-2 bg-white border-gray-100">
+                {user?.role === 'admin' && (
+                  <Link
+                    to="/admin/dashboard"
+                    onClick={() => setProfileOpen(false)}
+                    className="flex items-center gap-3 px-4 py-3 rounded-xl transition text-sm hover:bg-brand-50 text-gray-700"
+                  >
+                    <LayoutDashboard size={16} /> Dashboard
+                  </Link>
+                )}
+                 <Link
+                    to="/profile"
+                    onClick={() => setProfileOpen(false)}
+                    className="flex items-center gap-3 px-4 py-3 rounded-xl transition text-sm hover:bg-brand-50 text-gray-700"
+                  >
+                    <User2 size={16} /> Profile
+                  </Link>
+                <button
+                  onClick={handleLogout}
+                  className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-red-500 hover:bg-red-50 transition"
+                >
+                  <LogOut size={16} /> Logout
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* Mobile Menu */}
+          <button className="lg:hidden p-2" onClick={() => setMenuOpen(!menuOpen)}>
+            {menuOpen ? <X className="text-gray-900" /> : <Menu className="text-gray-900" />}
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Links */}
+      {menuOpen && (
+        <div className="lg:hidden absolute top-full left-0 w-full p-6 space-y-4 shadow-xl border-t bg-brand-50 border-brand-100">
+          {navLinks.map((link) => (
+            <Link
+              key={link.key}
+              to={link.path}
+              onClick={() => setMenuOpen(false)}
+              className={`block text-lg font-medium ${active === link.key ? "text-brand-500" : "text-gray-600 hover:text-brand-500"}`}
+            >
+              {link.name}
+            </Link>
+          ))}
+        </div>
+      )}
+    </nav>
   );
 };
 

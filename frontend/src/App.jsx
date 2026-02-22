@@ -4,8 +4,8 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 // Context
-import { ThemeContext } from "./context/ThemeContext";
-import { ThemeContext2 } from './context/ThemeContext2';
+
+
 
 // User pages
 import Home from "./page/Home";
@@ -14,8 +14,6 @@ import Login from "./page/Login";
 import Placeorder from "./page/Placeorder";
 import Contact from "./page/Contact";
 import OrderSuccess from "./page/OrderSuccess";
-import OrderPage from "./page/OrderPage";
-import OrderHistory from "./component/OrderHistory";
 import UserNavbar from "./component/Navbar";
 import Footer from "./component/Footer";
 import FoodMenue from "./page/FoodMenue";
@@ -33,10 +31,11 @@ import AdminNavbar from "./component/AdminNavbar";
 import Sidebar from "./component/Sidebar";
 import Dashboard from "./page/Dashboard";
 import ScrollToTop from "./component/ScrollToTop";
+import ProfilePage from "./page/ProfilePage";
 
 const App = () => {
-  const { theme } = useContext(ThemeContext);
-  const { isDark } = useContext(ThemeContext2);
+
+
   const [login, setLogin] = useState(false); // controls login modal visibility
   const [menuOpen, setMenuOpen] = useState(false);
   const [role, setRole] = useState(null);
@@ -62,9 +61,7 @@ const App = () => {
 
   return (
     <div
-      className={`flex flex-col min-h-screen transition-colors duration-300 ${
-        theme === "dark" ? "bg-[#0c0c0c] text-white" : "bg-gray-50 text-gray-900"
-      }`}
+      className={`flex flex-col min-h-screen transition-colors duration-300 `}
     >
       <ToastContainer />
       <ScrollToTop />
@@ -73,9 +70,7 @@ const App = () => {
       {isAdminRoute ? (
         <>
           <AdminNavbar menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
-            <div className={`flex flex-1 ${
-              isDark ? 'bg-gray-900 text-gray-100' : 'bg-gray-50 text-gray-900'
-            }`}>
+            <div className={`flex flex-1 `}>
             
               <Sidebar menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
             
@@ -156,14 +151,16 @@ const App = () => {
           {/* Routes */}
           <Routes>
             <Route path="/" element={<Home  />} />
-            <Route path="/cart" element={<Cart />} />
+            <Route path="/cart" element={<Cart login={login} setLogin={setLogin}/>} />
             <Route path="/menu" element={<FoodMenue />} />
             <Route path="/about" element={<About />} />
-            <Route path="/orderpage" element={<OrderPage />} />
-            <Route path="/orderhistory" element={<OrderHistory />} />
             <Route path="/order" element={<Placeorder />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/ordersuccess" element={<OrderSuccess />} />
+            <Route path="/profile" element={<ProfilePage />} />
+
+            
+
           </Routes>
 
           <Footer />

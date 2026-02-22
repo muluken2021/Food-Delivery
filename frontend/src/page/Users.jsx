@@ -1,11 +1,9 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import { FiTrash2 } from "react-icons/fi";
 import { toast } from "react-toastify";
 import SearchBar from "../component/Searchbar";
-import { ThemeContext2 } from "../context/ThemeContext2";
 
 const Users = () => {
-  const { isDark } = useContext(ThemeContext2);
   const [users, setUsers] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const url = import.meta.env.VITE_APP_API_URL;
@@ -66,14 +64,10 @@ const Users = () => {
   );
 
   return (
-    <div
-      className={`p-4 sm:p-6 md:p-10 rounded-xl shadow-md flex flex-col space-y-4 h-[calc(100vh-80px)] transition-colors ${
-        isDark ? "bg-gray-900 text-white" : "bg-gray-50 text-gray-900"
-      }`}
-    >
+    <div className="p-4 sm:p-6 md:p-10 rounded-xl shadow-md flex flex-col space-y-4 h-[calc(100vh-80px)] bg-gray-50 text-gray-900 transition-colors">
       {/* Header + Search */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <h4 className="text-2xl sm:text-3xl font-bold text-yellow-600">Users</h4>
+        <h4 className="text-2xl sm:text-3xl font-bold text-brand-500">Users</h4>
         <SearchBar
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
@@ -87,17 +81,13 @@ const Users = () => {
           filteredUsers.map((user) => (
             <div
               key={user._id}
-              className={`flex flex-col sm:grid sm:grid-cols-6 gap-4 items-start sm:items-center p-4 rounded-lg shadow hover:shadow-lg transition-colors ${
-                isDark ? "bg-gray-800" : "bg-white"
-              }`}
+              className="flex flex-col sm:grid sm:grid-cols-6 gap-4 items-start sm:items-center p-4 rounded-lg shadow hover:shadow-lg transition-colors bg-white"
             >
               {/* Name */}
-              <p className={`${isDark ? "text-gray-200" : "text-gray-700"} font-medium`}>
-                {user.name}
-              </p>
+              <p className="text-gray-700 font-medium">{user.name}</p>
 
               {/* Email */}
-              <p className={`${isDark ? "text-gray-400" : "text-gray-500"}`}>{user.email}</p>
+              <p className="text-gray-500">{user.email}</p>
 
               {/* Empty space for alignment */}
               <div className="hidden sm:block col-span-3"></div>
@@ -116,9 +106,7 @@ const Users = () => {
             </div>
           ))
         ) : (
-          <p className={`${isDark ? "text-gray-400" : "text-gray-500"} text-center py-4`}>
-            No users found.
-          </p>
+          <p className="text-gray-500 text-center py-4">No users found.</p>
         )}
       </div>
     </div>

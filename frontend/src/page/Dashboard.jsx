@@ -1,19 +1,16 @@
-import React, { useContext } from "react";
+import React from "react";
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   BarChart, Bar, PieChart, Pie, Cell, Legend,
 } from "recharts";
 import { TrendingUp, Users, Package, RefreshCcw, DollarSign } from "lucide-react";
-import { ThemeContext2 } from "../context/ThemeContext2";
 
 const Dashboard = () => {
-  const { isDark } = useContext(ThemeContext2);
-
   const summary = [
-    { title: "Total Orders", value: 1245, icon: <Package className="text-blue-500" />, change: "+8%" },
-    { title: "Total Revenue", value: "152,000 ETB", icon: <DollarSign className="text-green-500" />, change: "+12%" },
-    { title: "Active Users", value: 384, icon: <Users className="text-purple-500" />, change: "+5%" },
-    { title: "Refund Requests", value: 12, icon: <RefreshCcw className="text-red-500" />, change: "-2%" },
+    { title: "Total Orders", value: 1245, icon: <Package className="text-brand-500" />, change: "+8%" },
+    { title: "Total Revenue", value: "152,000 ETB", icon: <DollarSign className="text-brand-500" />, change: "+12%" },
+    { title: "Active Users", value: 384, icon: <Users className="text-brand-500" />, change: "+5%" },
+    { title: "Refund Requests", value: 12, icon: <RefreshCcw className="text-brand-500" />, change: "-2%" },
   ];
 
   const orderTrend = [
@@ -32,7 +29,7 @@ const Dashboard = () => {
     { name: "Completed", value: 78 }, { name: "Pending", value: 15 }, { name: "Canceled", value: 7 },
   ];
 
-  const COLORS = ["#00C49F", "#FFBB28", "#FF4E4E"];
+  const COLORS = ["#10B981", "#F59E0B", "#EF4444"]; // brand-green, brand-yellow, brand-red
 
   const recentOrders = [
     { id: "#1001", customer: "Eleni M.", total: "380 ETB", status: "Completed", date: "Oct 24, 2025" },
@@ -42,34 +39,35 @@ const Dashboard = () => {
   ];
 
   return (
-    <div className={`p-0 sm:p-4 md:p-8 space-y-6 md:space-y-8 transition-colors ${isDark ? "bg-gray-900 text-white" : "bg-gray-50 text-gray-900"}`}>
+    <div className="p-4 sm:p-6 md:p-8 space-y-6 md:space-y-8 bg-gray-50 text-gray-900">
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {summary.map((item, index) => (
-          <div key={index} className={`shadow-md rounded-2xl p-3 sm:p-4 flex justify-between items-center transition-colors ${isDark ? "bg-gray-800" : "bg-white"}`}>
+          <div key={index} className="shadow-md rounded-2xl p-4 flex justify-between items-center bg-white transition-transform hover:scale-105">
             <div>
-              <h3 className={`text-sm ${isDark ? "text-gray-400" : "text-gray-500"}`}>{item.title}</h3>
-              <p className={`text-xl sm:text-2xl font-bold ${isDark ? "text-white" : "text-gray-900"}`}>{item.value}</p>
-              <span className={`text-sm font-medium ${item.change.includes("-") ? "text-red-500" : "text-green-500"}`}>
+              <h3 className="text-sm text-gray-500">{item.title}</h3>
+              <p className="text-xl sm:text-2xl font-bold text-gray-900">{item.value}</p>
+              <span className={`text-sm font-medium ${item.change.includes("-") ? "text-brand-red" : "text-brand-green"}`}>
                 {item.change}
               </span>
             </div>
-            <div className={`p-3 rounded-full ${isDark ? "bg-gray-700" : "bg-gray-100"}`}>{item.icon}</div>
+            <div className="p-3 rounded-full bg-gray-100">{item.icon}</div>
           </div>
         ))}
       </div>
 
       {/* Charts */}
       <div className="flex flex-col gap-4 w-full">
+
         {/* Orders Trend */}
-        <div className={`w-full h-64 md:h-72 p-2 md:p-4 rounded-2xl shadow-md transition-colors ${isDark ? "bg-gray-800" : "bg-white"}`}>
-          <h2 className={`font-semibold text-lg mb-2 md:mb-3 ${isDark ? "text-white" : "text-gray-900"}`}>Orders Trend</h2>
+        <div className="w-full h-64 md:h-72 p-4 rounded-2xl shadow-md bg-white">
+          <h2 className="font-semibold text-lg mb-3 text-gray-900">Orders Trend</h2>
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={orderTrend}>
-              <CartesianGrid strokeDasharray="3 3" stroke={isDark ? "#374151" : "#e5e7eb"} />
-              <XAxis dataKey="month" stroke={isDark ? "#9ca3af" : "#6b7280"} />
-              <YAxis stroke={isDark ? "#9ca3af" : "#6b7280"} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+              <XAxis dataKey="month" stroke="#6b7280" />
+              <YAxis stroke="#6b7280" />
               <Tooltip />
               <Line type="monotone" dataKey="orders" stroke="#4F46E5" strokeWidth={3} />
             </LineChart>
@@ -77,13 +75,13 @@ const Dashboard = () => {
         </div>
 
         {/* Revenue by Category */}
-        <div className={`w-full h-64 md:h-72 p-2 md:p-4 rounded-2xl shadow-md transition-colors ${isDark ? "bg-gray-800" : "bg-white"}`}>
-          <h2 className={`font-semibold text-lg mb-2 md:mb-3 ${isDark ? "text-white" : "text-gray-900"}`}>Revenue by Category</h2>
+        <div className="w-full h-64 md:h-72 p-4 rounded-2xl shadow-md bg-white">
+          <h2 className="font-semibold text-lg mb-3 text-gray-900">Revenue by Category</h2>
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={categoryRevenue}>
-              <CartesianGrid strokeDasharray="3 3" stroke={isDark ? "#374151" : "#e5e7eb"} />
-              <XAxis dataKey="name" stroke={isDark ? "#9ca3af" : "#6b7280"} />
-              <YAxis stroke={isDark ? "#9ca3af" : "#6b7280"} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+              <XAxis dataKey="name" stroke="#6b7280" />
+              <YAxis stroke="#6b7280" />
               <Tooltip />
               <Bar dataKey="revenue" fill="#10B981" radius={[10, 10, 0, 0]} />
             </BarChart>
@@ -91,11 +89,11 @@ const Dashboard = () => {
         </div>
 
         {/* Delivery Status */}
-        <div className={`w-full h-64 md:h-72 p-2 md:p-4 rounded-2xl shadow-md transition-colors ${isDark ? "bg-gray-800" : "bg-white"}`}>
-          <h2 className={`font-semibold text-lg mb-2 md:mb-3 ${isDark ? "text-white" : "text-gray-900"}`}>Delivery Status</h2>
+        <div className="w-full h-64 md:h-72 p-4 rounded-2xl shadow-md bg-white">
+          <h2 className="font-semibold text-lg mb-3 text-gray-900">Delivery Status</h2>
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
-              <Pie data={deliveryStatus} cx="50%" cy="50%" outerRadius={80} fill="#8884d8" dataKey="value" label>
+              <Pie data={deliveryStatus} cx="50%" cy="50%" outerRadius={80} dataKey="value" label>
                 {deliveryStatus.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index]} />)}
               </Pie>
               <Tooltip />
@@ -106,32 +104,32 @@ const Dashboard = () => {
       </div>
 
       {/* Recent Orders Table */}
-      <div className={`w-full p-2 sm:p-4 rounded-2xl shadow-md transition-colors ${isDark ? "bg-gray-800" : "bg-white"} overflow-x-auto`}>
-        <h2 className={`font-semibold text-lg mb-2 md:mb-3 ${isDark ? "text-white" : "text-gray-900"}`}>Recent Orders</h2>
+      <div className="w-full p-4 rounded-2xl shadow-md bg-white overflow-x-auto">
+        <h2 className="font-semibold text-lg mb-3 text-gray-900">Recent Orders</h2>
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className={`border-b ${isDark ? "border-gray-700" : "border-gray-200"}`}>
-              <th className="p-2 sm:p-3">Order ID</th>
-              <th className="p-2 sm:p-3">Customer</th>
-              <th className="p-2 sm:p-3">Total</th>
-              <th className="p-2 sm:p-3">Status</th>
-              <th className="p-2 sm:p-3">Date</th>
+            <tr className="border-b border-gray-200">
+              <th className="p-3">Order ID</th>
+              <th className="p-3">Customer</th>
+              <th className="p-3">Total</th>
+              <th className="p-3">Status</th>
+              <th className="p-3">Date</th>
             </tr>
           </thead>
           <tbody>
             {recentOrders.map((order, index) => (
-              <tr key={index} className={`border-b ${isDark ? "border-gray-700" : "border-gray-100"} hover:bg-gray-50 dark:hover:bg-gray-700`}>
-                <td className="p-2 sm:p-3">{order.id}</td>
-                <td className="p-2 sm:p-3">{order.customer}</td>
-                <td className="p-2 sm:p-3">{order.total}</td>
-                <td className="p-2 sm:p-3">
-                  <span className={`px-2 sm:px-3 py-1 rounded-full text-sm font-medium ${
-                    order.status === "Completed" ? "bg-green-100 text-green-700" :
-                    order.status === "Pending" ? "bg-yellow-100 text-yellow-700" :
-                    "bg-red-100 text-red-700"
+              <tr key={index} className="border-b border-gray-100 hover:bg-gray-50">
+                <td className="p-3">{order.id}</td>
+                <td className="p-3">{order.customer}</td>
+                <td className="p-3">{order.total}</td>
+                <td className="p-3">
+                  <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                    order.status === "Completed" ? "bg-brand-green/20 text-brand-green" :
+                    order.status === "Pending" ? "bg-brand-yellow/20 text-brand-yellow" :
+                    "bg-brand-red/20 text-brand-red"
                   }`}>{order.status}</span>
                 </td>
-                <td className="p-2 sm:p-3">{order.date}</td>
+                <td className="p-3">{order.date}</td>
               </tr>
             ))}
           </tbody>

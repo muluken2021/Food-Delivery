@@ -9,6 +9,7 @@ import ExploreMenu from '../component/ExploreMenu'
 import Testimonials from '../component/Testimonials'
 import MeetOurChefs from '../component/MeetOurChefs'
 import About from '../component/About'
+import Features from '../component/Features'
 
 const Home = () => {
  
@@ -16,14 +17,15 @@ const Home = () => {
   return (
     <div >
       <Header/> {/* You can still pass scrollToMenu here if you want a button inside header */}
-      <PopularDishes />
+        <HowItWorks />
+         <PopularDishes />
        <ExploreMenu />
       {/* Attach the menuRef here */}
-      
+      <Features />
      
-      <MeetOurChefs />
+      {/* <MeetOurChefs /> */}
       
-      <HowItWorks />
+   
       <Testimonials />
     </div>
   )

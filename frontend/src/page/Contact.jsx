@@ -1,11 +1,11 @@
-import React, { useContext } from "react";
+import React from "react";
 import { MapPin, Mail, Phone, Clock } from "lucide-react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { ThemeContext } from "../context/ThemeContext";
+// import { assets } from "../assets/assets"; // optional if needed
+// import { url } from "../config"; // Or keep your env URL
 
 const Contact = () => {
-  const { theme } = useContext(ThemeContext);
   const url = import.meta.env.VITE_APP_API_URL;
 
   const handleSubmit = async (e) => {
@@ -37,27 +37,17 @@ const Contact = () => {
     }
   };
 
-  const inputClass = `w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-[#e58d00] transition-colors duration-300 ${
-    theme === "dark"
-      ? "bg-[#1a1a1a] border-gray-700 text-white placeholder-gray-400"
-      : "bg-gray-100 border-gray-300 text-gray-900 placeholder-gray-500"
-  }`;
+  const inputClass =
+    "w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-brand-500 transition duration-300 text-gray-900 placeholder-gray-500 bg-white";
 
-  const cardClass = `bg-${
-    theme === "dark" ? "#1a1a1a" : "white"
-  } shadow-lg rounded-xl p-5 flex items-start gap-4 border ${
-    theme === "dark" ? "border-gray-700" : "border-gray-200"
-  } transition-transform duration-300 hover:scale-105`;
+  const cardClass =
+    "bg-white shadow-md rounded-2xl p-5 flex items-start gap-4 border border-gray-200 transition-transform duration-300 hover:scale-105";
 
   return (
-    <div
-      className={`mx-4 sm:mx-8 lg:mx-32 my-12 grid grid-cols-1 lg:grid-cols-2 gap-8 transition-colors duration-300 ${
-        theme === "dark" ? "bg-[#0c0c0c] text-white" : "bg-white text-gray-900"
-      }`}
-    >
+    <div className="mx-4 sm:mx-8 lg:mx-32 my-12 grid grid-cols-1 lg:grid-cols-2 gap-8 bg-gray-50 text-gray-900">
       {/* Contact Form */}
       <div className="w-full">
-        <h1 className="text-3xl sm:text-4xl font-bold py-4 text-[#e58d00]">
+        <h1 className="text-3xl sm:text-4xl font-bold py-4 text-brand-500">
           Get in Touch
         </h1>
         <form className="space-y-4" onSubmit={handleSubmit}>
@@ -69,7 +59,7 @@ const Contact = () => {
           <textarea placeholder="Your Message" rows="5" className={inputClass} required />
           <button
             type="submit"
-            className="w-full mt-4 border-2 border-orange-500 rounded-lg py-3 px-4 uppercase font-semibold cursor-pointer bg-[#e58d00] hover:bg-yellow-500 text-white transition-all duration-300"
+            className="w-full mt-4 border-2 border-brand-500 rounded-xl py-3 px-4 uppercase font-semibold cursor-pointer bg-brand-500 hover:bg-brand-600 text-white transition-all duration-300"
           >
             Send Message
           </button>
@@ -78,7 +68,7 @@ const Contact = () => {
 
       {/* Contact Info */}
       <div className="w-full">
-        <h1 className="text-3xl sm:text-4xl font-bold py-4 text-[#e58d00]">
+        <h1 className="text-3xl sm:text-4xl font-bold py-4 text-brand-500">
           Contact Information
         </h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -89,9 +79,9 @@ const Contact = () => {
             { icon: Clock, title: "Working Hours", text: "Mon - Sat, 9:00 AM - 8:00 PM" },
           ].map((item, i) => (
             <div key={i} className={cardClass}>
-              <item.icon className="text-[#e58d00] w-6 h-6 mt-1" />
+              <item.icon className="text-brand-500 w-6 h-6 mt-1" />
               <div>
-                <p className="font-semibold">{item.title}</p>
+                <p className="font-semibold text-gray-900">{item.title}</p>
                 <p className="text-gray-400">{item.text}</p>
               </div>
             </div>

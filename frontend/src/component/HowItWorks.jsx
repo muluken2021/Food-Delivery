@@ -1,86 +1,67 @@
-import React, { useContext } from "react";
-import { User, ShoppingCart, Truck } from "lucide-react";
-import { ThemeContext } from "../context/ThemeContext";
+import React from 'react';
+import { assets } from '../assets/assets';
 
-const steps = [
-  {
-    icon: User,
-    title: "Sign In / Login",
-    description: "Create an account to start ordering your favorite food",
-    step: "01",
-  },
-  {
-    icon: ShoppingCart,
-    title: "Select & Order",
-    description: "Pick your favorite dishes and add them to your cart",
-    step: "02",
-  },
-  {
-    icon: Truck,
-    title: "Fast Delivery",
-    description: "Get your fresh, hot food delivered straight to your door",
-    step: "03",
-  },
-];
+
+const ServiceCard = ({ title, description, img }) => (
+  <div className="flex flex-col items-center text-center p-8 rounded-xl transition-all duration-300 hover:scale-105">
+    {/* Image/Icon Container */}
+    <div className="w-64 h-64 mb-8 flex items-center justify-center ">
+      <img src={img} alt="img" />
+      {/* If using custom images, use: <img src={src} alt={title} className="w-full h-full object-contain" /> */}
+    </div>
+    
+    <h3 className="text-3xl font-bold text-gray-900 mb-4">
+      {title}
+    </h3>
+    
+    <p className="text-gray-500 leading-relaxed max-w-xs">
+      {description}
+    </p>
+  </div>
+);
 
 const HowItWorks = () => {
-  const { theme } = useContext(ThemeContext);
-
-  const sectionBg = theme === "dark" ? "bg-[#0c0c0c]" : "bg-gray-50";
-  const cardBg = theme === "dark" ? "bg-white/5 backdrop-blur-md" : "bg-white/70 backdrop-blur-sm";
-  const textColor = theme === "dark" ? "text-white" : "text-gray-900";
-  const subTextColor = theme === "dark" ? "text-gray-300" : "text-gray-700";
+  const services = [
+    {
+      title: "Online Order",
+      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.",
+      img: assets.service1,
+    },
+    {
+      title: "Fast delivery",
+      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.",
+       img: assets.service2,
+    },
+    {
+      title: "Takeaway",
+      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.",
+       img: assets.service3,
+    }
+  ];
 
   return (
-    <section className={`py-20 ${sectionBg} transition-colors duration-300`}>
-      <div className="container mx-auto px-6 text-center">
-        <div className="text-center mb-12">
-  <h2
-    className={`text-3xl sm:text-4xl font-extrabold mb-4 relative inline-block ${
-      theme === "dark" ? "text-white" : "text-gray-700"
-    }`}
-  >
-   How It Works
-  </h2>
-  {/* Decorative lines with circle */}
-  <div className="flex items-center justify-center gap-2 mb-4">
-    <span className={`h-[4px] w-36 ${theme === "dark" ? "bg-[#e58d00]" : "bg-[#e58d00]"}`}></span>
-    <span className={`h-5 w-5 rounded-full ${theme === "dark" ? "bg-[#e58d00]" : "bg-[#e58d00]"}`}></span>
-    <span className={`h-[4px] w-36 ${theme === "dark" ? "bg-[#e58d00]" : "bg-[#e58d00]"}`}></span>
-  </div>
-  <p
-    className={`text-base sm:text-lg ${
-      theme === "dark" ? "text-white/80" : "text-gray-600"
-    }`}
-  >
-     Three simple steps to get your favorite food delivered
-  </p>
-</div>
-       
+    <section className="py-0 bg-white font-sans">
+      <div className="container mx-auto px-4">
+        {/* Header Section */}
+        <div className="text-center mb-5">
+          <span className="uppercase tracking-[0.3em] text-gray-500 text-sm font-medium">
+            FEATURES
+          </span>
+          <h2 className="text-4xl font-bold mt-4 mb-2">
+            <span className="text-brand-600">Our</span> Services
+          </h2>
+          <p className="text-gray-600 italic">Your favourite food partner</p>
+        </div>
 
-        {/* Steps */}
-        <div className="max-w-6xl mx-auto grid sm:grid-cols-1 md:grid-cols-3 gap-8">
-          {steps.map((step, idx) => (
-            <div
-              key={idx}
-              className={`group relative p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-transform transform hover:scale-105 ${cardBg}`}
-            >
-              {/* Icon */}
-              <div className="w-16 h-16 bg-yellow-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                <step.icon className="w-8 h-8 text-black" />
-              </div>
-
-              {/* Step number */}
-              <div className="text-yellow-400 font-bold mb-2 text-lg">{step.step}</div>
-
-              {/* Title */}
-              <h3 className={`text-xl font-semibold mb-3 ${textColor}`}>{step.title}</h3>
-
-              {/* Description */}
-              <p className={`text-sm sm:text-base leading-relaxed ${subTextColor}`}>
-                {step.description}
-              </p>
-            </div>
+        {/* Services Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 sm:gap-12 max-w-7xl mx-auto">
+          {services.map((service, index) => (
+            <ServiceCard 
+              key={index}
+              title={service.title}
+              description={service.description}
+              img={service.img}
+            />
           ))}
         </div>
       </div>

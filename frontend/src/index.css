@@ -1,23 +1,30 @@
+
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap")
+layer(base);
+
 @import "tailwindcss";
 
+@custom-variant dark (&:is(.dark *));
 
-/* index.css */
-body.light {
-  --bg-color: #ffffff;
-  --text-color: #000000;
-  --accent-color: #e58d00;
+@theme {
+  --font-*: initial;
+  --font-outfit: Outfit, sans-serif;
+--color-brand-25:  #eefbf3;
+--color-brand-50:  #d6f5e2;
+--color-brand-100: #adebc6;
+--color-brand-200: #7fdea6;
+--color-brand-300: #4fce84;
+--color-brand-400: #26ba66;
+--color-brand-500: #0fa94f;
+--color-brand-600: #00A63E; /* your color */
+--color-brand-700: #008733;
+--color-brand-800: #006b28;
+--color-brand-900: #004a1b;
+--color-brand-950: #00280f;
+
+
 }
 
-body.dark {
-  --bg-color: #0c0c0c;
-  --text-color: #ffffff;
-  --accent-color: #e58d00;
-}
-
-/* Optional for buttons, cards, etc. */
-.bg-theme { background-color: var(--bg-color); }
-.text-theme { color: var(--text-color); }
-.accent-theme { color: var(--accent-color); }
 
 .homehomeHeader {
   background-image: url(assets/header_img.png);
@@ -43,4 +50,12 @@ body.dark {
   right: -16px;
   padding: 0 4px;
   border: 2px solid white; /* optional for better contrast */
+}
+
+@keyframes custom-blink {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.1); }
+}
+.animate-blink {
+  animation: custom-blink 1.5s ease-in-out infinite;
 }

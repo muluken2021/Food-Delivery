@@ -1,52 +1,61 @@
-import React, { useContext } from "react";
-import { Facebook, Twitter, Instagram, Mail, Phone, MapPin } from "lucide-react";
-import { ThemeContext } from "../context/ThemeContext";
+import React from "react";
+import { Facebook, Twitter, Instagram, Mail, Phone, MapPin, Send, Youtube } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Footer = () => {
-  const { theme } = useContext(ThemeContext);
-
-  const footerBg = theme === "dark" ? "bg-[#0c0c0c]" : "bg-gray-100";
-  const mainText = theme === "dark" ? "text-gray-200" : "text-gray-900";
-  const subText = theme === "dark" ? "text-gray-400" : "text-gray-700";
-  const inputBg = theme === "dark" ? "bg-gray-800 border-gray-700 text-gray-100 placeholder:text-gray-500" : "bg-white border-gray-300 text-gray-900 placeholder:text-gray-400";
-
   return (
-    <footer className={`${footerBg} mt-10 px-5 transition-colors duration-300`}>
-      <div className="container mx-auto px-6">
+    <footer className="relative mt-20 overflow-hidden bg-white transition-all">
+      
+      {/* Decorative Top Border */}
+      <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-brand-500 to-transparent opacity-30"></div>
+
+      <div className="container mx-auto px-6 sm:px-12 lg:px-24">
+        
         {/* Main Footer Content */}
-        <div className="py-16 grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="py-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
+
           {/* Company Info */}
-          <div>
-            <h3 className="text-2xl font-bold text-yellow-500 mb-6">DashDine</h3>
-            <p className={`mb-6 leading-relaxed ${subText}`}>
-              Your favorite food delivered fresh and fast. Order from the best restaurants in your area.
+          <div className="space-y-6">
+            <Link to="/" className="flex items-center gap-2 group">
+              <div className="bg-brand-500 p-1.5 rounded-lg">
+                <Send size={18} color="white" fill="white" className="-rotate-45" />
+              </div>
+              <h3 className="text-2xl font-semibold tracking-tight text-brand-700">
+                Dash Dine
+              </h3>
+            </Link>
+
+            <p className="leading-relaxed text-sm md:text-base text-gray-600">
+              Bringing the world's best flavors to your doorstep. Hot, fresh, and delivered with a smile. Your meal is just a dash away.
             </p>
-            <div className="flex gap-4">
-              {[Facebook, Twitter, Instagram].map((Icon, idx) => (
-                <button
+
+            <div className="flex gap-3">
+              {[Facebook, Twitter, Instagram, Youtube].map((Icon, idx) => (
+                <a
                   key={idx}
-                  className={`hover:text-yellow-500 hover:bg-gray-800/20 p-2 rounded-full transition ${mainText}`}
+                  href="#"
+                  className="p-2.5 rounded-xl bg-white text-gray-500 shadow-sm hover:bg-brand-500 hover:text-white transition-all duration-300 transform hover:-translate-y-1"
                 >
                   <Icon className="h-5 w-5" />
-                </button>
+                </a>
               ))}
             </div>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h4 className="text-xl font-semibold mb-6 text-yellow-500">Quick Links</h4>
-            <ul className="space-y-3">
+            <h4 className="text-lg font-bold mb-8 text-gray-700">Service</h4>
+            <ul className="space-y-4">
               {[
                 { name: "About Us", path: "/about" },
-                { name: "Menu", path: "/menu" },
+                { name: "Our Menu", path: "/menu" },
+                { name: "Track Order", path: "/orderpage" },
                 { name: "Contact Us", path: "/contact" },
               ].map((link, idx) => (
                 <li key={idx}>
                   <Link
                     to={link.path}
-                    className={`hover:text-yellow-500 transition-colors ${subText}`}
+                    className="text-sm font-medium text-gray-600 hover:text-gray-500 transition-colors"
                   >
                     {link.name}
                   </Link>
@@ -57,53 +66,66 @@ const Footer = () => {
 
           {/* Contact Info */}
           <div>
-            <h4 className="text-xl font-semibold mb-6 text-yellow-500">Contact Us</h4>
-            <div className="space-y-4">
-              <div className="flex items-center gap-3">
-                <Phone className="h-5 w-5 text-yellow-500" />
-                <span className={subText}>+1 (555) 123-4567</span>
+            <h4 className="text-lg font-bold mb-8 text-gray-700">Get in Touch</h4>
+            <div className="space-y-5">
+              <div className="flex items-start gap-3">
+                <div className="p-2 rounded-lg bg-brand-500/10 text-gray-500">
+                  <Phone size={18} />
+                </div>
+                <span className="text-sm font-medium text-gray-600">+1 (555) 123-4567</span>
               </div>
-              <div className="flex items-center gap-3">
-                <Mail className="h-5 w-5 text-yellow-500" />
-                <span className={subText}>info@bitedish.com</span>
+              <div className="flex items-start gap-3">
+                <div className="p-2 rounded-lg bg-brand-500/10 text-gray-500">
+                  <Mail size={18} />
+                </div>
+                <span className="text-sm font-medium text-gray-600">hello@dashdine.com</span>
               </div>
-              <div className="flex items-center gap-3">
-                <MapPin className="h-5 w-5 text-yellow-500" />
-                <span className={subText}>123 Food Street, City</span>
+              <div className="flex items-start gap-3">
+                <div className="p-2 rounded-lg bg-brand-500/10 text-gray-500">
+                  <MapPin size={18} />
+                </div>
+                <span className="text-sm font-medium text-gray-600">
+                  123 Gourmet Way,<br />Foodie City, FC 90210
+                </span>
               </div>
             </div>
           </div>
 
           {/* Newsletter */}
-          {/* <div>
-            <h4 className="text-xl font-semibold mb-6 text-yellow-500">Stay Updated</h4>
-            <p className={subText + " mb-4"}>
-              Subscribe to get special offers and updates
+          <div className="p-6 rounded-3xl border bg-white border-gray-100 shadow-xl shadow-gray-200/50">
+            <h4 className="text-lg font-bold mb-4 text-gray-700">Stay Hungry</h4>
+            <p className="text-xs mb-6 leading-relaxed text-gray-600">
+              Subscribe for exclusive discounts and new menu alerts.
             </p>
-            <div className="space-y-3">
+            <div className="relative group">
               <input 
                 type="email"
-                placeholder="Enter your email"
-                className={`w-full px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 ${inputBg}`}
+                placeholder="Your email"
+                className="w-full pl-4 pr-12 py-3.5 rounded-2xl text-sm bg-brand-25 text-gray-700 border border-brand-100 focus:outline-none focus:ring-2 focus:ring-brand-500 transition-all"
               />
-              <button className="w-full px-4 py-2 bg-yellow-500 text-black font-semibold rounded-lg hover:bg-yellow-600 transition">
-                Subscribe
+              <button className="absolute right-2 top-2 bottom-2 aspect-square bg-brand-500 hover:bg-brand-600 text-white rounded-xl flex items-center justify-center transition-colors shadow-lg shadow-brand-500/20">
+                <Send size={16} fill="white" className="-rotate-45" />
               </button>
             </div>
-          </div> */}
+          </div>
+
         </div>
 
         {/* Bottom Bar */}
-        <div className={`border-t ${theme === "dark" ? "border-gray-700" : "border-gray-300"} py-8`}>
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className={`${subText} text-sm`}>
-              © 2024 DashDine. All rights reserved.
-            </p>
-            <div className="flex gap-6 text-sm">
-              {["Privacy Policy", "Terms of Service", "Cookie Policy"].map((link, idx) => (
-                <a key={idx} href="#" className={`hover:text-yellow-500 transition ${subText}`}>{link}</a>
-              ))}
-            </div>
+        <div className="border-t border-gray-200 py-8 flex flex-col md:flex-row justify-between items-center gap-6">
+          <p className="text-xs font-medium tracking-wide text-gray-400">
+            © 2025 DashDine. Built for the future of food.
+          </p>
+          <div className="flex gap-8">
+            {["Privacy", "Terms", "Cookies"].map((link, idx) => (
+              <a 
+                key={idx} 
+                href="#" 
+                className="text-xs font-bold uppercase tracking-widest text-gray-400 hover:text-gray-500 transition"
+              >
+                {link}
+              </a>
+            ))}
           </div>
         </div>
       </div>
