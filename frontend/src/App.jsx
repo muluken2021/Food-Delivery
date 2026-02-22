@@ -11,7 +11,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Home from "./page/Home";
 import Cart from "./page/Cart";
 import Login from "./page/Login";
-import Placeorder from "./page/Placeorder";
+import Checkout from "./page/Checkout";
 import Contact from "./page/Contact";
 import OrderSuccess from "./page/OrderSuccess";
 import UserNavbar from "./component/Navbar";
@@ -32,6 +32,7 @@ import Sidebar from "./component/Sidebar";
 import Dashboard from "./page/Dashboard";
 import ScrollToTop from "./component/ScrollToTop";
 import ProfilePage from "./page/ProfilePage";
+import Verify from "./page/Verify";
 
 const App = () => {
 
@@ -154,10 +155,12 @@ const App = () => {
             <Route path="/cart" element={<Cart login={login} setLogin={setLogin}/>} />
             <Route path="/menu" element={<FoodMenue />} />
             <Route path="/about" element={<About />} />
-            <Route path="/order" element={<Placeorder />} />
+            <Route path="/order" element={<Checkout />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/ordersuccess" element={<OrderSuccess />} />
             <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/verify" element={<Verify />} />
+
 
             
 

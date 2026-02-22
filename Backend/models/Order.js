@@ -1,8 +1,8 @@
-// models/Order.js
 import mongoose from "mongoose";
 
 const orderSchema = new mongoose.Schema(
   {
+    // Schema matches the 'user' and 'food' requirements from your error log
     user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
     items: [
       {
@@ -11,9 +11,13 @@ const orderSchema = new mongoose.Schema(
       },
     ],
     totalPrice: { type: Number, required: true },
-    status: { type: String, default: "Pending" }, // Pending, Accepted, Delivered, Cancelled
+    address: { type: Object, required: true }, 
+    status: { type: String, default: "Food Processing" },
+    payment: { type: Boolean, default: false }, 
   },
   { timestamps: true }
 );
 
-export default mongoose.model("Order", orderSchema);
+// This ensures we don't overwrite the model if it already exists
+const orderModel = mongoose.models.Order || mongoose.model("Order", orderSchema);
+export default orderModel;

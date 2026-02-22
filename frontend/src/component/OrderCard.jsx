@@ -1,14 +1,20 @@
 import React from "react";
-import { Clock, CheckCircle, XCircle, ShoppingCart, Trash2, Package } from "lucide-react";
+import { Clock, CheckCircle, XCircle, ShoppingCart, Trash2, Package, UtensilsCrossed } from "lucide-react";
 
 const statusStyles = {
+  // Added "Food Processing" to match your Order Schema default
+  "Food Processing": { color: "text-orange-600", bg: "bg-orange-50", icon: UtensilsCrossed },
   Pending: { color: "text-amber-600", bg: "bg-amber-50", icon: Clock },
   Accepted: { color: "text-blue-600", bg: "bg-blue-50", icon: ShoppingCart },
   Delivered: { color: "text-emerald-600", bg: "bg-emerald-50", icon: CheckCircle },
+  // Your backend uses "Cancelled" (double 'l') or "Canceled"? 
+  // Added both to be safe.
+  Cancelled: { color: "text-rose-600", bg: "bg-rose-50", icon: XCircle },
   Canceled: { color: "text-rose-600", bg: "bg-rose-50", icon: XCircle },
 };
 
 const OrderCard = ({ order, onRemove }) => {
+  // Use statusStyles, or default to a generic Package icon if status is unknown
   const status = statusStyles[order.status] || { color: "text-gray-600", bg: "bg-gray-50", icon: Package };
   const StatusIcon = status.icon;
 
@@ -35,6 +41,7 @@ const OrderCard = ({ order, onRemove }) => {
                 <span className="flex items-center justify-center w-6 h-6 rounded bg-gray-100 text-gray-600 text-xs font-bold">
                   {item.quantity}
                 </span>
+                {/* Because we used .populate('items.food'), item.food is an object */}
                 <span className="font-medium text-gray-800">{item.food?.name || "Deleted Item"}</span>
               </div>
               <span className="text-gray-500 font-medium">
@@ -51,10 +58,11 @@ const OrderCard = ({ order, onRemove }) => {
             <p className="text-2xl font-bold text-gray-900">${order.totalPrice.toFixed(2)}</p>
           </div>
           
-          {order.status === "Delivered" && (
+          {/* Archive button only shows for final statuses */}
+          {(order.status === "Delivered" || order.status === "Cancelled" || order.status === "Canceled") && (
             <button
               onClick={() => onRemove(order._id)}
-              className="flex items-center gap-2 px-4 py-2 bg-gray-50 text-gray-400 hover:bg-rose-50 hover:text-rose-600 rounded-xl transition-colors duration-200 group-hover:opacity-100"
+              className="flex items-center gap-2 px-4 py-2 bg-gray-50 text-gray-400 hover:bg-rose-50 hover:text-rose-600 rounded-xl transition-colors duration-200"
             >
               <Trash2 size={18} />
               <span className="text-sm font-semibold">Archive</span>

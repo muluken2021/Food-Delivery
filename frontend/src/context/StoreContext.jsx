@@ -80,8 +80,19 @@ const StoreContextProvider = (props) => {
     return totalPrice;
   };
 
-  const clearCart = () => {
+    const clearCart = () => {
+    // 1. Clear the React State
     setCartItems({});
+    
+    // 2. Clear Local Storage
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user && user._id) {
+      localStorage.removeItem(`cart_${user._id}`);
+      // Also clear a generic cart if you use one
+      localStorage.removeItem("cartItems"); 
+    }
+    
+    console.log("Cart cleared from state and storage");
   };
 
   const ContextValue = {

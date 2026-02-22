@@ -22,7 +22,7 @@ const ProfilePage = () => {
   useEffect(() => {
     if (user?._id) {
       const token = localStorage.getItem("token");
-      fetch(`${url}/api/orders/user/${user._id}`, {
+      fetch(`${url}/api/order/user/${user._id}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
         .then((res) => res.json())

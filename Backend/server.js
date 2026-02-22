@@ -6,6 +6,8 @@ import FoodRouter from './routes/FoodRouter.js';
 import UserRouter from './routes/User.js'; // import user routes
 import OrderRouter from "./routes/OrderRouter.js";
 import ContactRouter from "./routes/ContactRouter.js";
+import Payment from "./routes/Payment.js";
+
 import path from 'path';
 
 
@@ -46,14 +48,16 @@ connectDB();
 // API Endpoints
 app.use('/api/food', FoodRouter);
 app.use('/api/user', UserRouter); // add user routes
-app.use("/api/orders", OrderRouter);
+app.use("/api/order", OrderRouter);
 app.use("/api/admin/", admin);
 app.use("/api/contact", ContactRouter);
+app.use("/api/payment", Payment);
+
 
 
 app.use('/images', express.static('uploads')); // make sure folder is "uploads"
 
-// ✅ Serve "uploads" folder as static
+// Serve "uploads" folder as static
 app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 
 // Test Route

@@ -10,6 +10,8 @@ import Testimonials from '../component/Testimonials'
 import MeetOurChefs from '../component/MeetOurChefs'
 import About from '../component/About'
 import Features from '../component/Features'
+import StripeSimulation from '../component/StripeSimulation'
+
 
 const Home = () => {
  
@@ -25,7 +27,7 @@ const Home = () => {
      
       {/* <MeetOurChefs /> */}
       
-   
+      <StripeSimulation />
       <Testimonials />
     </div>
   )
