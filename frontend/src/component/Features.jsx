@@ -41,7 +41,7 @@ const features = [
 
         {/* Right: Feature Cards */}
         <div className="flex-1 space-y-6">
-          <h2 className="text-4xl md:text-4xl font-semibold text-gray-700 mb-8">
+          <h2 className="text-center md:text-left text-4xl md:text-4xl font-semibold text-gray-700 mb-8">
             Why People Choose us?
           </h2>
 

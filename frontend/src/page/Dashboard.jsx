@@ -1,142 +1,181 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import {
-  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  BarChart, Bar, PieChart, Pie, Cell, Legend,
-} from "recharts";
-import { TrendingUp, Users, Package, RefreshCcw, DollarSign } from "lucide-react";
+  Package, Users, RefreshCcw, DollarSign, 
+  ChevronDown, Calendar, Filter, MoreHorizontal, User, ShoppingBag, Clock
+} from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Dashboard = () => {
+  const [orders, setOrders] = useState([]);
+  const [usersCount, setUsersCount] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const url = import.meta.env.VITE_APP_API_URL;
+
+  const fetchData = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const headers = { Authorization: `Bearer ${token}` };
+
+      const [orderRes, userRes] = await Promise.all([
+        fetch(`${url}/api/order/all`, { headers }),
+        fetch(`${url}/api/user`, { headers })
+      ]);
+
+      const orderData = await orderRes.json();
+      const userData = await userRes.json();
+
+      if (orderData.success) setOrders(orderData.data);
+      if (userData.success) setUsersCount(userData.users.length);
+      
+    } catch (err) {
+      toast.error("Failed to sync dashboard data");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const totalRevenue = orders.reduce((acc, curr) => acc + (curr.totalPrice || 0), 0);
+  const canceledOrders = orders.filter(o => o.status === "Cancelled").length;
+
   const summary = [
-    { title: "Total Orders", value: 1245, icon: <Package className="text-brand-500" />, change: "+8%" },
-    { title: "Total Revenue", value: "152,000 ETB", icon: <DollarSign className="text-brand-500" />, change: "+12%" },
-    { title: "Active Users", value: 384, icon: <Users className="text-brand-500" />, change: "+5%" },
-    { title: "Refund Requests", value: 12, icon: <RefreshCcw className="text-brand-500" />, change: "-2%" },
+    { title: "Total Orders", value: orders.length, icon: <Package size={24} />, change: "+8%", color: "text-blue-500", bg: "bg-blue-50" },
+    { title: "Total Revenue", value: `${totalRevenue.toLocaleString()} ETB`, icon: <DollarSign size={24} />, change: "+12%", color: "text-brand-500", bg: "bg-brand-50" },
+    { title: "Active Users", value: usersCount, icon: <Users size={24} />, change: "+5%", color: "text-purple-500", bg: "bg-purple-50" },
+    { title: "Canceled", value: canceledOrders, icon: <RefreshCcw size={24} />, change: "-2%", color: "text-red-500", bg: "bg-red-50" },
   ];
 
-  const orderTrend = [
-    { month: "Jan", orders: 120 }, { month: "Feb", orders: 200 }, { month: "Mar", orders: 250 },
-    { month: "Apr", orders: 220 }, { month: "May", orders: 320 }, { month: "Jun", orders: 280 },
-    { month: "Jul", orders: 350 }, { month: "Aug", orders: 420 }, { month: "Sep", orders: 390 },
-    { month: "Oct", orders: 440 }, { month: "Nov", orders: 410 }, { month: "Dec", orders: 460 },
-  ];
-
-  const categoryRevenue = [
-    { name: "Pizza", revenue: 48000 }, { name: "Burger", revenue: 36000 },
-    { name: "Drinks", revenue: 18000 }, { name: "Pasta", revenue: 26000 },
-  ];
-
-  const deliveryStatus = [
-    { name: "Completed", value: 78 }, { name: "Pending", value: 15 }, { name: "Canceled", value: 7 },
-  ];
-
-  const COLORS = ["#10B981", "#F59E0B", "#EF4444"]; // brand-green, brand-yellow, brand-red
-
-  const recentOrders = [
-    { id: "#1001", customer: "Eleni M.", total: "380 ETB", status: "Completed", date: "Oct 24, 2025" },
-    { id: "#1002", customer: "Dawit A.", total: "220 ETB", status: "Pending", date: "Oct 25, 2025" },
-    { id: "#1003", customer: "Marta G.", total: "560 ETB", status: "Completed", date: "Oct 25, 2025" },
-    { id: "#1004", customer: "Abel T.", total: "420 ETB", status: "Canceled", date: "Oct 26, 2025" },
-  ];
+  if (loading) return <div className="p-10 text-center font-bold text-gray-400">Loading Analytics...</div>;
 
   return (
-    <div className="p-4 sm:p-6 md:p-8 space-y-6 md:space-y-8 bg-gray-50 text-gray-900">
+    <div className="space-y-8 pb-10">
+      {/* Header Section */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 px-2 sm:px-0">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-800">Business Overview</h1>
+          <p className="text-sm text-gray-400">Real-time performance metrics</p>
+        </div>
+        <div className="flex items-center gap-2">
+          <button className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-100 rounded-xl text-xs font-bold text-gray-600 shadow-sm">
+            <Calendar size={14} className="text-brand-500" />
+            Last 30 Days
+            <ChevronDown size={12} />
+          </button>
+        </div>
+      </div>
 
-      {/* Summary Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      {/* Summary Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         {summary.map((item, index) => (
-          <div key={index} className="shadow-md rounded-2xl p-4 flex justify-between items-center bg-white transition-transform hover:scale-105">
-            <div>
-              <h3 className="text-sm text-gray-500">{item.title}</h3>
-              <p className="text-xl sm:text-2xl font-bold text-gray-900">{item.value}</p>
-              <span className={`text-sm font-medium ${item.change.includes("-") ? "text-brand-red" : "text-brand-green"}`}>
+          <div key={index} className="bg-white p-5 rounded-2xl border border-gray-50 shadow-sm">
+            <div className="flex items-center justify-between mb-4">
+              <div className={`p-3 rounded-2xl ${item.bg} ${item.color}`}>{item.icon}</div>
+              <span className={`text-[10px] font-black px-2 py-1 rounded-lg ${item.change.includes("-") ? "bg-red-50 text-red-500" : "bg-green-50 text-green-500"}`}>
                 {item.change}
               </span>
             </div>
-            <div className="p-3 rounded-full bg-gray-100">{item.icon}</div>
+            <h3 className="text-gray-400 text-xs font-bold uppercase tracking-wider">{item.title}</h3>
+            <p className="text-xl font-black text-gray-800 mt-1">{item.value}</p>
           </div>
         ))}
       </div>
 
-      {/* Charts */}
-      <div className="flex flex-col gap-4 w-full">
-
-        {/* Orders Trend */}
-        <div className="w-full h-64 md:h-72 p-4 rounded-2xl shadow-md bg-white">
-          <h2 className="font-semibold text-lg mb-3 text-gray-900">Orders Trend</h2>
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={orderTrend}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-              <XAxis dataKey="month" stroke="#6b7280" />
-              <YAxis stroke="#6b7280" />
-              <Tooltip />
-              <Line type="monotone" dataKey="orders" stroke="#4F46E5" strokeWidth={3} />
-            </LineChart>
-          </ResponsiveContainer>
+      {/* Recent Transactions Section */}
+      <div className="bg-white md:rounded-xl md:border md:border-gray-50 md:shadow-sm overflow-hidden">
+        <div className="p-6 border-b border-gray-200  items-center">
+          <div className="flex justify-between">
+            <h2 className="text-xl font-semibold text-gray-800">Recent Transactions</h2>
+            <Link to="/admin/orders">
+               <button className="text-brand-500 text-sm font-bold hover:underline">View All</button>
+            </Link>
+          </div>
+          <p className="text-gray-400">Here is recent  oredr list data</p>
         </div>
+      
 
-        {/* Revenue by Category */}
-        <div className="w-full h-64 md:h-72 p-4 rounded-2xl shadow-md bg-white">
-          <h2 className="font-semibold text-lg mb-3 text-gray-900">Revenue by Category</h2>
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={categoryRevenue}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-              <XAxis dataKey="name" stroke="#6b7280" />
-              <YAxis stroke="#6b7280" />
-              <Tooltip />
-              <Bar dataKey="revenue" fill="#10B981" radius={[10, 10, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-
-        {/* Delivery Status */}
-        <div className="w-full h-64 md:h-72 p-4 rounded-2xl shadow-md bg-white">
-          <h2 className="font-semibold text-lg mb-3 text-gray-900">Delivery Status</h2>
-          <ResponsiveContainer width="100%" height="100%">
-            <PieChart>
-              <Pie data={deliveryStatus} cx="50%" cy="50%" outerRadius={80} dataKey="value" label>
-                {deliveryStatus.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index]} />)}
-              </Pie>
-              <Tooltip />
-              <Legend />
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
-      </div>
-
-      {/* Recent Orders Table */}
-      <div className="w-full p-4 rounded-2xl shadow-md bg-white overflow-x-auto">
-        <h2 className="font-semibold text-lg mb-3 text-gray-900">Recent Orders</h2>
-        <table className="w-full text-left border-collapse">
-          <thead>
-            <tr className="border-b border-gray-200">
-              <th className="p-3">Order ID</th>
-              <th className="p-3">Customer</th>
-              <th className="p-3">Total</th>
-              <th className="p-3">Status</th>
-              <th className="p-3">Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            {recentOrders.map((order, index) => (
-              <tr key={index} className="border-b border-gray-100 hover:bg-gray-50">
-                <td className="p-3">{order.id}</td>
-                <td className="p-3">{order.customer}</td>
-                <td className="p-3">{order.total}</td>
-                <td className="p-3">
-                  <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                    order.status === "Completed" ? "bg-brand-green/20 text-brand-green" :
-                    order.status === "Pending" ? "bg-brand-yellow/20 text-brand-yellow" :
-                    "bg-brand-red/20 text-brand-red"
-                  }`}>{order.status}</span>
-                </td>
-                <td className="p-3">{order.date}</td>
+        {/* DESKTOP TABLE */}
+        <div className="hidden md:block overflow-x-auto">
+          <table className="w-full text-left">
+            <thead>
+              <tr className=" text-gray-900 text-[13px] uppercase tracking-widest border-b border-gray-100">
+                <th className="px-6 py-4 font-bold">Order ID</th>
+                <th className="px-6 py-4 font-bold">Customer</th>
+                <th className="px-6 py-4 font-bold">Items</th>
+                <th className="px-6 py-4 font-bold">Amount</th>
+                <th className="px-6 py-4 font-bold">Status</th>
+                <th className="px-6 py-4 font-bold text-right">Action</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody className="divide-y divide-gray-50">
+              {orders.slice(0, 5).map((order) => (
+                <tr key={order._id} className="hover:bg-gray-50/50 transition-colors group">
+                  <td className="px-6 py-5 text-sm font-bold text-gray-400">#{order._id.slice(-6).toUpperCase()}</td>
+                  <td className="px-6 py-5">
+                    <p className="text-sm font-bold text-gray-800">{order.user?.name || "Guest"}</p>
+                    <p className="text-[11px] text-gray-400 uppercase font-medium">{new Date(order.createdAt).toLocaleDateString()}</p>
+                  </td>
+                  <td className="px-6 py-5 text-sm font-medium text-gray-500">{order.items.length} Items</td>
+                  <td className="px-6 py-5 text-sm font-black text-gray-900">{order.totalPrice} ETB</td>
+                  <td className="px-6 py-5"><StatusBadge status={order.status} /></td>
+                  <td className="px-6 py-5 text-right">
+                    <button className="p-2 text-gray-300 hover:text-brand-500 transition-colors"><MoreHorizontal size={18} /></button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
 
+        {/* MOBILE CARD VIEW */}
+        <div className="md:hidden divide-y divide-gray-100">
+          {orders.slice(0, 5).map((order) => (
+            <div key={order._id} className="p-5 space-y-4">
+              <div className="flex justify-between items-start">
+                <div className="flex items-center gap-3">
+                   <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-400">
+                    <User size={20} />
+                   </div>
+                   <div>
+                    <p className="font-bold text-gray-800">{order.user?.name || "Guest"}</p>
+                    <p className="text-[10px] text-gray-400 flex items-center gap-1 font-bold">
+                      <Clock size={10} /> {new Date(order.createdAt).toLocaleDateString()}
+                    </p>
+                   </div>
+                </div>
+                <StatusBadge status={order.status} />
+              </div>
+
+              <div className="flex justify-between items-center bg-gray-50 rounded-2xl p-3">
+                <div className="flex items-center gap-2">
+                  <ShoppingBag size={14} className="text-brand-500" />
+                  <span className="text-xs font-bold text-gray-600">{order.items.length} Items</span>
+                </div>
+                <p className="text-sm font-black text-gray-900">{order.totalPrice} ETB</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
+  );
+};
+
+const StatusBadge = ({ status }) => {
+  const styles = {
+    "Delivered": "bg-green-50 text-green-500",
+    "Food Processing": "bg-orange-50 text-orange-500",
+    "On Delivery": "bg-blue-50 text-blue-500",
+    "Cancelled": "bg-red-50 text-red-500",
+    "Pending": "bg-yellow-50 text-yellow-600",
+  };
+  return (
+    <span className={`px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-tight ${styles[status] || "bg-gray-50 text-gray-500"}`}>
+      {status || "Processing"}
+    </span>
   );
 };
 

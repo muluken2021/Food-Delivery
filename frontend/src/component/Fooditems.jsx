@@ -7,13 +7,13 @@ import "react-toastify/dist/ReactToastify.css";
 import FoodModal from "./FoodModal";
 
 const Fooditems = ({ category, searchQuery }) => {
-  const { foodList, addtocart } = useContext(StoreContext);
+  // ✅ Extract displayData (fallback-aware) from Context
+  const { foodList, displayData, addtocart } = useContext(StoreContext);
 
   const [selectedFood, setSelectedFood] = useState(null);
   const [modalQuantity, setModalQuantity] = useState(1);
   const [user, setUser] = useState(null);
   
-  // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
 
@@ -24,12 +24,12 @@ const Fooditems = ({ category, searchQuery }) => {
     if (stobrandUser) setUser(JSON.parse(stobrandUser));
   }, []);
 
-  // Reset to page 1 when category or search changes
   useEffect(() => {
     setCurrentPage(1);
   }, [category, searchQuery]);
 
-  if (!Array.isArray(foodList)) {
+  //  Updated loading check to handle both empty lists and initial load
+  if (!Array.isArray(displayData) || (foodList.length === 0 && displayData.length === 0)) {
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 py-10">
         {[...Array(8)].map((_, i) => (
@@ -39,7 +39,8 @@ const Fooditems = ({ category, searchQuery }) => {
     );
   }
 
-  const filtebrandFoods = foodList.filter((food) => {
+  //  Filter using displayData so fallbacks show up when backend is down
+  const filtebrandFoods = displayData.filter((food) => {
     const matchesCategory =
       category.toLowerCase() === "all" ||
       food.category.toLowerCase() === category.toLowerCase();
@@ -51,17 +52,12 @@ const Fooditems = ({ category, searchQuery }) => {
     return matchesCategory && matchesSearch;
   });
 
-  // Logic for pagination
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filtebrandFoods.slice(indexOfFirstItem, indexOfLastItem);
   const totalPages = Math.ceil(filtebrandFoods.length / itemsPerPage);
 
   const handleAddToCart = () => {
-    if (!user) {
-      toast.warning("You must be signed in to add items to cart!");
-      return;
-    }
     addtocart(selectedFood._id, modalQuantity);
     toast.success(`${selectedFood.name} added to cart!`);
     setSelectedFood(null);
@@ -69,14 +65,12 @@ const Fooditems = ({ category, searchQuery }) => {
 
   return (
     <div className="w-full">
-      {/* 1. Results Count */}
       <div className="flex justify-between items-center mb-8">
         <p className="text-gray-500 font-medium">
           Showing <span className="text-gray-900 font-bold">{currentItems.length}</span> of <span className="text-gray-900 font-bold">{filtebrandFoods.length}</span> items
         </p>
       </div>
 
-      {/* 2. Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {currentItems.length > 0 ? (
           currentItems.map((food) => (
@@ -86,7 +80,8 @@ const Fooditems = ({ category, searchQuery }) => {
               >
                 <div className="relative w-full h-44 rounded-xl mb-8 overflow-hidden shadow-gray-200">
                   <img
-                    src={food.image ? `${url}${food.image}` : assets.altimg}
+                    // ✅ Smart Image Logic: Use full URL for fallback, prefixed URL for backend
+                    src={food.image?.startsWith('http') ? food.image : (food.image ? `${url}${food.image}` : assets.altimg)}
                     alt={food.name}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   />
@@ -179,7 +174,6 @@ const Fooditems = ({ category, searchQuery }) => {
         </div>
       )}
 
-      {/* 3. Modal & Toast */}
       {selectedFood && (
         <FoodModal
           selectedFood={selectedFood}
@@ -187,6 +181,7 @@ const Fooditems = ({ category, searchQuery }) => {
           setModalQuantity={setModalQuantity}
           onClose={() => setSelectedFood(null)}
           onAddToCart={handleAddToCart}
+          url={url} // Passing url to modal for its internal image rendering
         />
       )}
 

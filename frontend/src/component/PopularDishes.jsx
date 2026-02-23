@@ -6,6 +6,7 @@ import FoodModal from "./FoodModal";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import altimg from '../assets/heropasta.png';
+import { food_list as fallbackData } from "../assets/foodData"; // Import your fallback data
 
 const PopularDishes = () => {
   const { addtocart, foodList } = useContext(StoreContext);
@@ -22,7 +23,10 @@ const PopularDishes = () => {
     if (storedUser) setUser(JSON.parse(storedUser));
   }, []);
 
-  const popularFoods = foodList.filter(
+  // --- LOGIC: Use Context data if available, otherwise use fallback ---
+  const displayData = foodList && foodList.length > 0 ? foodList : fallbackData;
+
+  const popularFoods = displayData.filter(
     (item) => item.type && item.type.toLowerCase() === "popular"
   );
 
@@ -34,31 +38,39 @@ const PopularDishes = () => {
     }
   };
 
+  // Helper to resolve image paths
+  const getImageUrl = (imagePath) => {
+    if (!imagePath) return altimg;
+    // If it's a full URL (like from Unsplash fallback), return as is
+    if (imagePath.startsWith('http')) return imagePath;
+    // Otherwise, append the backend URL
+    return `${url}${imagePath}`;
+  };
+
   return (
     <section className="py-20 bg-white transition-all duration-300">
-      {/* 1. Header Section */}
       <div className="text-center mb-16 px-6">
           <h2 className="text-4xl font-bold mt-4 mb-2">
-             Our <span className="text-brand-600">Popular</span> Dishes
+              Our <span className="text-brand-600">Popular</span> Dishes
           </h2>
           <p className="text-gray-600 italic">Your favourite food partner</p>
       </div>
 
-      {/* 2. Grid Container (4 Items per row + Circular Images) */}
       <div className="max-w-[1400px] mx-auto px-6 md:px-12">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {popularFoods.length > 0 ? (
             popularFoods.map((dish) => (
               <div 
                 key={dish._id}
-                className="bg-white  rounded-[2.5rem] p-8 shadow-xl shadow-gray-100/60 border border-gray-200 flex flex-col items-center text-center group transition-all duration-500 hover:-translate-y-3 hover:shadow-2xl"
+                className="bg-white rounded-[2.5rem] p-8 shadow-xl shadow-gray-100/60 border border-gray-100 flex flex-col items-center text-center group transition-all duration-500 hover:-translate-y-3 hover:shadow-2xl hover:border-brand-100"
               >
                 {/* Perfect Circle Image Container */}
-                <div className="relative w-44 h-44 mb-8 rounded-full overflow-hidden ">
+                <div className="relative w-44 h-44 mb-8 rounded-full overflow-hidden shadow-inner bg-gray-50">
                   <img
-                    src={dish.image ? `${url}${dish.image}` : altimg}
+                    src={getImageUrl(dish.image)}
                     alt={dish.name}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    onError={(e) => { e.target.src = altimg; }} // Final fallback if URL fails
                   />
                 </div>
 
@@ -68,7 +80,6 @@ const PopularDishes = () => {
                     <h3 className="text-xl font-bold text-gray-900 text-left leading-tight truncate">
                       {dish.name}
                     </h3>
-                    
                   </div>
 
                   {/* Rating */}
@@ -82,27 +93,23 @@ const PopularDishes = () => {
                       />
                     ))}
                   </div>
-                   <p className="text-gray-400 text-xs text-left line-clamp-2 max-w-[60%]">
-                      {dish.description || "The perfect blend of flavor and freshness."}
-                    </p>
 
-                  {/* Description & Price Footer */}
-                  <div className="flex justify-between items-end mt-4">
-                      <button 
-                        onClick={() => {
-                          setSelectedFood(dish);
-                          setModalQuantity(1);
-                        }}
-                        className="flex items-center justify-center gap-2 shrink-0 border
-                                  border-brand-400 hover:bg-brand-600
-                                  text-brand-800 hover:text-white text-xs uppercase tracking-wide font-bold
-                                  py-2 px-4 rounded-full
-                                  transition-all duration-200 active:scale-95"
-                      >
-                        <ShoppingCart size={22} />
-                        <span>Buy</span>
-                      </button>          
-                    <span className="text-2xl font-semibold text-gray-800 tracking-tight">
+                  <p className="text-gray-400 text-xs text-left line-clamp-2 min-h-[32px]">
+                    {dish.description || "The perfect blend of flavor and freshness."}
+                  </p>
+
+                  <div className="flex justify-between items-center mt-6">
+                    <button 
+                      onClick={() => {
+                        setSelectedFood(dish);
+                        setModalQuantity(1);
+                      }}
+                      className="flex items-center justify-center gap-2 border border-brand-500 hover:bg-brand-500 text-brand-600 hover:text-white text-xs uppercase tracking-widest font-bold py-2.5 px-5 rounded-full transition-all duration-300 active:scale-90"
+                    >
+                      <ShoppingCart size={18} />
+                      <span>Buy</span>
+                    </button>          
+                    <span className="text-2xl font-bold text-gray-900">
                       ${dish.price}
                     </span>
                   </div>
@@ -111,23 +118,21 @@ const PopularDishes = () => {
             ))
           ) : (
             <div className="col-span-full py-20 text-center opacity-50">
-              <p className="text-xl font-medium italic italic">Looking for your favorites...</p>
+              <p className="text-xl font-medium italic">Fetching the best dishes for you...</p>
             </div>
           )}
         </div>
       </div>
 
-      {/* 3. Explore Full Menu Button */}
       <div className="flex justify-center mt-20">
         <button
           onClick={() => navigate("/menu")}
-          className="px-10 py-4 bg-gray-900 text-white font-black rounded-2xl transition-all hover:bg-black hover:px-12 active:scale-95 shadow-2xl"
+          className="px-10 py-4 bg-gray-900 text-white font-black rounded-2xl transition-all hover:bg-brand-600 hover:px-12 active:scale-95 shadow-xl shadow-gray-200"
         >
           Explore Full Menu
         </button>
       </div>
 
-      {/* 4. Functional Components */}
       {selectedFood && (
         <FoodModal
           selectedFood={selectedFood}

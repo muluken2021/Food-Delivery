@@ -34,12 +34,12 @@ const Testimonials = () => {
       <div className="container mx-auto px-6 lg:px-24 relative z-10">
         {/* Header */}
         <div className="flex flex-col md:flex-row items-end justify-between mb-16 gap-6">
-          <div className="max-w-xl text-left">
-            <div className="flex items-center gap-2 mb-4">
+          <div className="max-w-xl">
+            <div className="md:flex text-center lg:text-left gap-2 mb-4">
               <span className="w-8 h-[2px] bg-brand-500"></span>
               <span className="text-brand-500 font-bold tracking-widest uppercase text-xs">Testimonials</span>
             </div>
-            <h2 className="text-4xl md:text-5xl font-semibold tracking-tight text-gray-900">
+            <h2 className=" text-center md:text-left text-4xl md:text-5xl font-semibold tracking-tight text-gray-900">
               What Our <span className=" bg-clip-text bg-gradient-to-r text-brand-500 ">Foodies</span> Are Saying
             </h2>
           </div>

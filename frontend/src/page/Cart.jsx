@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { assets } from "../assets/assets";
 import { toast } from "react-toastify";
 import { ArrowLeft, ShoppingBasket } from "lucide-react"; // optional icon (recommended)
+import { food_list as fallbackData } from "../assets/foodData"; // Added fallback import
 
 const Cart = ({login, setLogin}) => {
   const { cartItems, removeFromCart, addtocart, TotalCartPrice, foodList } =
@@ -14,7 +15,10 @@ const Cart = ({login, setLogin}) => {
 
   const DeliveryFee = 2;
 
-  // ✅ Check if cart is empty
+  //  Use Context data if available, otherwise use fallback
+  const displayData = foodList && foodList.length > 0 ? foodList : fallbackData;
+
+  //  Check if cart is empty
   const isCartEmpty = Object.values(cartItems).every((qty) => qty === 0);
 
   const handleCheckout = () => {
@@ -30,9 +34,16 @@ const Cart = ({login, setLogin}) => {
     toast.warning("Add food to place an order!");
   };
 
+  // ✅ Helper to resolve image paths
+  const getImageUrl = (food) => {
+    if (!food.image) return assets.upload;
+    if (food.image.startsWith('http')) return food.image;
+    return `${url}${food.image}`;
+  };
+
   return (
     <div className="mx-2 sm:mx-6 lg:mx-24 p-4 my-20 min-h-screen bg-white transition ">
-     
+      
       {isCartEmpty ? (
         <Link to='/' >
           <div className="flex gap-2 text-gray-800 hover:text-brand-700 hover:scale-101"> 
@@ -91,7 +102,8 @@ const Cart = ({login, setLogin}) => {
           <div className="space-y-4">
             {Object.keys(cartItems).map((id) => {
               if (cartItems[id] > 0) {
-                const food = foodList.find(
+                // Modified to use displayData (fallback logic)
+                const food = displayData.find(
                   (f) => String(f._id) === String(id)
                 );
                 if (!food) return null;
@@ -105,7 +117,7 @@ const Cart = ({login, setLogin}) => {
                     <div className="hidden sm:contents">
                       <img
                         className="w-20 h-20 object-cover rounded-xl"
-                        src={food.image ? `${url}${food.image}` : assets.upload}
+                        src={getImageUrl(food)}
                         alt={food.name}
                       />
 
@@ -152,9 +164,7 @@ const Cart = ({login, setLogin}) => {
                       <div className="flex gap-10">
                         <img
                           className="w-24 h-24 object-cover rounded-xl mb-2"
-                          src={
-                            food.image ? `${url}${food.image}` : assets.upload
-                          }
+                          src={getImageUrl(food)}
                           alt={food.name}
                         />
 
@@ -211,7 +221,7 @@ const Cart = ({login, setLogin}) => {
           {/* ================= CART TOTALS ================= */}
           <div className="mt-12 sm:mt-16 w-full sm:w-1/2 lg:w-1/3 mx-auto sm:mx-0">
             <h2 className="text-2xl sm:text-3xl font-bold py-4 text-gray-700">
-              Cart Totals
+               Cart Totals
             </h2>
 
             <div className="flex justify-between py-1">

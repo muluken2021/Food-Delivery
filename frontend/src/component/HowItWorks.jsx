@@ -10,7 +10,7 @@ const ServiceCard = ({ title, description, img }) => (
       {/* If using custom images, use: <img src={src} alt={title} className="w-full h-full object-contain" /> */}
     </div>
     
-    <h3 className="text-3xl font-bold text-gray-900 mb-4">
+    <h3 className="text-2xl font-semibold text-gray-700 mb-4">
       {title}
     </h3>
     

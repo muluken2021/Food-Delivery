@@ -41,7 +41,7 @@ const About = () => {
       <div className="container mx-auto px-6 lg:px-24">
         
         {/* Top Section: Story & Image */}
-        <div className="flex flex-col lg:flex-row items-center gap-16 mb-24">
+        <div className="flex flex-col lg:flex-row justify-between gap-16 mb-24">
           {/* Text Content */}
           <div className="flex-1">
           <div className="max-w-xl text-left mb-10">
@@ -100,7 +100,7 @@ const About = () => {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 py-16 border-y border-slate-100 mb-24">
           {stats.map((stat, index) => (
             <div key={index} className="text-center">
-              <h3 className="text-4xl font-black text-gray-700 mb-2">{stat.value}</h3>
+              <h3 className="text-4xl font-semibold text-gray-700 mb-2">{stat.value}</h3>
               <p className="text-sm font-bold text-slate-400 uppercase tracking-widest">{stat.label}</p>
             </div>
           ))}

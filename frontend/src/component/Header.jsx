@@ -22,17 +22,17 @@ const Header = () => {
   }, [sliderImages.length]);
 
   return (
-    <section className="relative w-full min-h-screen flex items-center bg-white overflow-hidden sm:pt-0 pt-20">
+    <section className="relative w-full min-h-screen flex items-center bg-white overflow-hidden sm:pt-0 py-20">
       <div className="container mx-auto px-6 sm:px-12 lg:px-24 flex flex-col lg:flex-row items-center gap-16">
         
         {/* Left: Content Area */}
         <div className="flex-1 text-center lg:text-left z-10">
-          <div className="max-w-xl text-left mb-10">
-            <div className="flex items-center gap-2 mb-4">
+          <div className="max-w-xl text-center md:text-left mb-10">
+            <div className="md:flex items-center gap-2 mb-4">
               <span className="w-8 h-[2px] bg-brand-500"></span>
-              <span className="text-brand-500 font-bold tracking-widest uppercase text-xs">Dashdine</span>
+              <span className=" text-brand-500 font-bold uppercase text-xs">የኛ Byte</span>
             </div>
-            <h2 className="text-4xl md:text-5xl font-semibold tracking-tight text-gray-900 leading-tight">
+            <h2 className=" text-4xl md:text-5xl font-semibold tracking-tight text-gray-900 leading-tight">
               Order Our Foods For <br /> 
               <span className="bg-clip-text text-brand-500">Your Family</span>  
             </h2>

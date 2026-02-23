@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { FiTrash2 } from "react-icons/fi";
+import { FiTrash2, FiSearch, FiUser, FiMail, FiShield } from "react-icons/fi";
 import { toast } from "react-toastify";
-import SearchBar from "../component/Searchbar";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
@@ -18,13 +17,11 @@ const Users = () => {
 
       if (data.success) setUsers(data.users);
       else if (data.message === "Unauthorized") {
-        localStorage.removeItem("user");
-        localStorage.removeItem("token");
-        toast.error("Session expired. Please login again.");
-      } else toast.error("Failed to fetch users");
+        localStorage.clear();
+        window.location.href = "/login";
+      }
     } catch (err) {
-      console.error(err);
-      toast.error("Something went wrong!");
+      toast.error("Failed to sync user data");
     }
   };
 
@@ -33,8 +30,7 @@ const Users = () => {
   }, []);
 
   const deleteUser = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this user?")) return;
-
+    if (!window.confirm("Are you sure you want to remove this account?")) return;
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(`${url}/api/user/${id}`, {
@@ -42,18 +38,12 @@ const Users = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await response.json();
-
       if (data.success) {
-        toast.success(data.message);
+        toast.success("User removed successfully");
         fetchUsers();
-      } else if (data.message === "Unauthorized") {
-        localStorage.removeItem("user");
-        localStorage.removeItem("token");
-        toast.error("Session expired. Please login again.");
-      } else toast.error(data.message);
+      }
     } catch (err) {
-      console.error(err);
-      toast.error("Something went wrong!");
+      toast.error("Error deleting user");
     }
   };
 
@@ -64,50 +54,110 @@ const Users = () => {
   );
 
   return (
-    <div className="p-4 sm:p-6 md:p-10 rounded-xl shadow-md flex flex-col space-y-4 h-[calc(100vh-80px)] bg-gray-50 text-gray-900 transition-colors">
-      {/* Header + Search */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <h4 className="text-2xl sm:text-3xl font-bold text-brand-500">Users</h4>
-        <SearchBar
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Search by name or email..."
-        />
+    <div className="space-y-8">
+      {/* Header Section */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h2 className="text-2xl font-bold text-gray-800">User Management</h2>
+          <p className="text-sm text-gray-400">View and manage registered customer accounts</p>
+        </div>
+
+        <div className="relative group">
+          <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-brand-500 transition-colors" size={18} />
+          <input 
+            type="text"
+            placeholder="Search by name or email..."
+            className="bg-white border border-gray-100 rounded-xl py-2.5 pl-10 pr-4 text-sm focus:ring-2 focus:ring-brand-500/20 transition-all outline-none shadow-sm w-full sm:w-80"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
       </div>
 
-      {/* Users Scrollable */}
-      <div className="flex-1 overflow-y-auto scrollbar-hide space-y-3">
-        {filteredUsers.length > 0 ? (
-          filteredUsers.map((user) => (
-            <div
-              key={user._id}
-              className="flex flex-col sm:grid sm:grid-cols-6 gap-4 items-start sm:items-center p-4 rounded-lg shadow hover:shadow-lg transition-colors bg-white"
-            >
-              {/* Name */}
-              <p className="text-gray-700 font-medium">{user.name}</p>
+      {/* Table Container */}
+      <div className="bg-white rounded-[2rem] border border-gray-50 shadow-sm overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left border-collapse">
+            <thead>
+              <tr className="text-gray-400 text-[13px] uppercase tracking-wider border-b border-gray-50">
+                <th className="px-8 py-6 font-bold">User</th>
+                <th className="px-6 py-6 font-bold">Contact Information</th>
+                <th className="px-6 py-6 font-bold">Role</th>
+                <th className="px-6 py-6 font-bold">Joined Date</th>
+                <th className="px-8 py-6 font-bold text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-50">
+              {filteredUsers.length > 0 ? (
+                filteredUsers.map((user) => (
+                  <tr key={user._id} className="hover:bg-gray-50/50 transition-all group">
+                    {/* User Identity */}
+                    <td className="px-8 py-5">
+                      <div className="flex items-center gap-4">
+                        <div className="w-11 h-11 rounded-full bg-brand-50 flex items-center justify-center text-brand-500 font-bold text-lg shadow-sm">
+                          {user.name.charAt(0).toUpperCase()}
+                        </div>
+                        <div>
+                          <p className="font-bold text-gray-800">{user.name}</p>
+                          <p className="text-xs text-gray-400 font-medium capitalize">{user.role || 'Customer'}</p>
+                        </div>
+                      </div>
+                    </td>
 
-              {/* Email */}
-              <p className="text-gray-500">{user.email}</p>
+                    {/* Email */}
+                    <td className="px-6 py-5">
+                      <div className="flex items-center gap-2 text-sm text-gray-600 font-medium">
+                        <FiMail className="text-gray-300" size={14} />
+                        {user.email}
+                      </div>
+                    </td>
 
-              {/* Empty space for alignment */}
-              <div className="hidden sm:block col-span-3"></div>
+                    {/* Role Badge */}
+                    <td className="px-6 py-5">
+                      <span className={`px-4 py-1 rounded-xl text-[11px] font-extrabold uppercase tracking-tight ${
+                        user.role === 'admin' 
+                          ? 'bg-purple-50 text-purple-600' 
+                          : 'bg-blue-50 text-blue-600'
+                      }`}>
+                        {user.role || 'User'}
+                      </span>
+                    </td>
 
-              {/* Actions: Delete */}
-              <div className="flex gap-4 mt-2 sm:mt-0">
-                {user.role !== "admin" && (
-                  <button
-                    onClick={() => deleteUser(user._id)}
-                    className="flex justify-center items-center text-red-500 hover:text-red-700 transition"
-                  >
-                    <FiTrash2 size={20} />
-                  </button>
-                )}
-              </div>
-            </div>
-          ))
-        ) : (
-          <p className="text-gray-500 text-center py-4">No users found.</p>
-        )}
+                    {/* Join Date (Mock/Real) */}
+                    <td className="px-6 py-5 text-sm text-gray-500 font-medium">
+                      {user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'Oct 12, 2025'}
+                    </td>
+
+                    {/* Actions */}
+                    <td className="px-8 py-5">
+                      <div className="flex items-center justify-end opacity-0 group-hover:opacity-100 transition-opacity">
+                        {user.role !== "admin" ? (
+                          <button
+                            onClick={() => deleteUser(user._id)}
+                            className="p-3 bg-red-50 text-red-500 rounded-2xl hover:bg-red-500 hover:text-white transition-all shadow-sm active:scale-90"
+                            title="Delete User"
+                          >
+                            <FiTrash2 size={16} />
+                          </button>
+                        ) : (
+                          <div className="p-3 text-gray-200">
+                            <FiShield size={16} title="Admin Account Protected" />
+                          </div>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="5" className="py-24 text-center text-gray-400 italic font-medium">
+                    No users found matching your search.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

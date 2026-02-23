@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect } from 'react';
+import { food_list as fallbackData } from "../assets/foodData"; // Import your fallback data
 
 export const StoreContext = createContext(null);
 
@@ -6,7 +7,10 @@ const StoreContextProvider = (props) => {
   const [cartItems, setCartItems] = useState({});
   const [foodList, setFoodList] = useState([]); 
   const url = import.meta.env.VITE_APP_API_URL;
-  
+
+  // ✅ Determine which data to use (Backend vs Fallback)
+  // We define this at the top level so it can be used in helper functions
+  const displayData = foodList && foodList.length > 0 ? foodList : fallbackData;
 
   // Fetch food list from backend
   const fetchFoodList = async () => {
@@ -68,35 +72,32 @@ const StoreContextProvider = (props) => {
     saveCart(newCart);
   };
 
-  // Calculate total price
+  // ✅ Calculate total price using displayData (fallback aware)
   const TotalCartPrice = () => {
     let totalPrice = 0;
     for (let item in cartItems) {
       if (cartItems[item] > 0) {
-        const itemInfo = foodList.find((food) => String(food._id) === String(item));
+        // Look in displayData so it finds the item even if backend is down
+        const itemInfo = displayData.find((food) => String(food._id) === String(item));
         if (itemInfo) totalPrice += itemInfo.price * cartItems[item];
       }
     }
     return totalPrice;
   };
 
-    const clearCart = () => {
-    // 1. Clear the React State
+  const clearCart = () => {
     setCartItems({});
-    
-    // 2. Clear Local Storage
     const user = JSON.parse(localStorage.getItem('user'));
     if (user && user._id) {
       localStorage.removeItem(`cart_${user._id}`);
-      // Also clear a generic cart if you use one
       localStorage.removeItem("cartItems"); 
     }
-    
     console.log("Cart cleared from state and storage");
   };
 
   const ContextValue = {
     foodList,
+    displayData, // Optional: You can export this so components don't have to define fallback themselves
     cartItems,
     addtocart,
     removeFromCart,

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { assets } from '../assets/assets';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, DollarSign, UploadCloud, FileInputIcon, Tag, Layers } from 'lucide-react';
 
 const Edit = () => {
   const url = import.meta.env.VITE_APP_API_URL;
@@ -13,11 +13,12 @@ const Edit = () => {
   const [food, setFood] = useState({
     name: '',
     description: '',
-    category: 'salad',
+    category: '',
     price: '',
     type: 'normal',
   });
 
+  // Fetch initial data
   useEffect(() => {
     const fetchFood = async () => {
       try {
@@ -40,31 +41,29 @@ const Edit = () => {
             setImage(currentFood.image || null);
           }
         } else if (data.message === 'Unauthorized') {
-          localStorage.removeItem('user');
-          localStorage.removeItem('token');
-          toast.error('Session expired. Please login again.');
-        } else {
-          toast.error('Failed to fetch food data');
+          localStorage.clear();
+          navigate('/login');
         }
       } catch {
-        toast.error('Failed to fetch food data');
+        toast.error('Failed to load dish details');
       }
     };
-
     fetchFood();
-  }, [id]);
+  }, [id, url, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!image) return toast.error('Please upload an image.');
-
     const formData = new FormData();
     formData.append('name', food.name);
     formData.append('description', food.description);
     formData.append('category', food.category);
     formData.append('price', food.price);
     formData.append('type', food.type);
-    if (image instanceof File) formData.append('image', image);
+    
+    // Only append if it's a new file upload
+    if (image instanceof File) {
+      formData.append('image', image);
+    }
 
     try {
       const token = localStorage.getItem('token');
@@ -76,17 +75,13 @@ const Edit = () => {
       const data = await res.json();
 
       if (data.success) {
-        toast.success('Food updated successfully');
+        toast.success('Dish updated successfully');
         navigate('/admin/list');
-      } else if (data.message === 'Unauthorized') {
-        localStorage.removeItem('user');
-        localStorage.removeItem('token');
-        toast.error('Session expired. Please login again.');
       } else {
         toast.error(data.message);
       }
     } catch {
-      toast.error('Something went wrong!');
+      toast.error('Update failed. Please try again.');
     }
   };
 
@@ -95,50 +90,66 @@ const Edit = () => {
     setFood(prev => ({ ...prev, [name]: value }));
   };
 
-  const inputClass = `border border-gray-300 p-2 w-full rounded focus:outline-none focus:ring-2 focus:ring-brand-500 transition text-brand-500`;
+  const labelClass = "flex items-center gap-2 text-sm font-bold text-gray-700 mb-2";
+  const inputClass = "w-full bg-gray-50 border border-gray-100 rounded-2xl py-3 px-4 text-sm focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 outline-none transition-all placeholder:text-gray-300";
 
   return (
-    <div className="p-4 sm:p-8 max-w-7xl mx-auto rounded-xl shadow-xl bg-gray-50 text-gray-900 transition-colors">
-      <button
-        onClick={() => navigate('/admin/list')}
-        className="flex mb-5 items-center space-x-2 text-lg font-medium text-brand-500 hover:text-brand-600 transition"
-      >
-        <ArrowLeft size={20} />
-        <span>Back to list</span>
-      </button>
+    <div className="max-w-4xl mx-auto space-y-6">
+      {/* Header & Navigation */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <button
+            onClick={() => navigate('/admin/list')}
+            className="group flex items-center gap-2 text-sm font-bold text-brand-500 hover:text-brand-600 transition-colors mb-2"
+          >
+            <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
+            Back to Menu List
+          </button>
+          <h2 className="text-2xl font-bold text-gray-800">Edit Dish Details</h2>
+          <p className="text-sm text-gray-400">Modify the information for {food.name || 'this item'}</p>
+        </div>
+      </div>
 
-      <form className="space-y-6" onSubmit={handleSubmit}>
-        {/* Image Upload */}
-        <div className="text-left">
-          <h4 className="py-2 font-semibold text-brand-500">Upload Image</h4>
-          <label htmlFor="image">
-            <img
-              src={image instanceof File ? URL.createObjectURL(image) : image ? `${url}${image}` : assets.upload}
-              className={`cursor-pointer w-40 h-32 border-2 rounded-lg object-cover transition ${
-                !image ? 'border-red-400' : 'border-gray-300'
-              }`}
-              alt={food.name || 'upload'}
-            />
+      <form onSubmit={handleSubmit} className="bg-white rounded-[2rem] border border-gray-50 shadow-sm p-8 space-y-8">
+        
+        {/* Image Edit Section */}
+        <div className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-gray-100 rounded-[2rem] bg-gray-50/50 hover:bg-gray-50 transition-colors group">
+          <label className={labelClass}>
+            <UploadCloud className="text-brand-500" /> Replace Food Image
+          </label>
+          <label htmlFor="image" className="cursor-pointer mt-2 text-center">
+            <div className="relative">
+              <img
+                src={image instanceof File ? URL.createObjectURL(image) : image ? `${url}${image}` : assets.upload}
+                className="w-64 h-48 rounded-2xl object-cover shadow-lg border border-white group-hover:scale-[1.02] transition-transform"
+                alt="Food preview"
+              />
+              <div className="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 group-hover:opacity-100 rounded-2xl transition-opacity">
+                <span className="text-white text-xs font-bold bg-brand-500 px-4 py-1.5 rounded-full">Upload New</span>
+              </div>
+            </div>
           </label>
           <input id="image" type="file" hidden onChange={e => setImage(e.target.files[0])} />
         </div>
 
-        {/* Product Fields */}
-        <div>
-          <h4 className="py-2 font-medium text-brand-500">Product Name</h4>
-          <input type="text" name="name" value={food.name} onChange={handleChange} className={inputClass} required />
-        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {/* Product Name */}
+          <div className="md:col-span-2">
+            <label className={labelClass}><FileInputIcon size={16} /> Dish Name</label>
+            <input type="text" name="name" value={food.name} onChange={handleChange} className={inputClass} required />
+          </div>
 
-        <div>
-          <h4 className="py-2 font-medium text-brand-500">Product Description</h4>
-          <textarea name="description" value={food.description} onChange={handleChange} className={inputClass} rows={5} required />
-        </div>
+          {/* Product Description */}
+          <div className="md:col-span-2">
+            <label className={labelClass}><Layers size={16} /> Description</label>
+            <textarea name="description" value={food.description} onChange={handleChange} className={`${inputClass} h-32 resize-none`} required />
+          </div>
 
-        <div className="flex flex-col sm:flex-row sm:gap-6">
-          <div className="flex-1">
-            <h4 className="py-2 font-medium text-brand-500">Food Category</h4>
+          {/* Category */}
+          <div>
+            <label className={labelClass}><Tag size={16} /> Category</label>
             <select name="category" value={food.category} onChange={handleChange} className={inputClass} required>
-              <option value="">Select</option>
+              <option value="">Select Category</option>
               <option value="burgers_sandwiches">Burgers & Sandwiches</option>
               <option value="pizza">Pizza</option>
               <option value="pasta">Pasta</option>
@@ -147,26 +158,38 @@ const Edit = () => {
             </select>
           </div>
 
-          <div className="flex-1 mt-4 sm:mt-0">
-            <h4 className="pb-1 font-medium text-brand-500">Type</h4>
+          {/* Type */}
+          <div>
+            <label className={labelClass}><FileInputIcon size={16} /> Status / Type</label>
             <select name="type" value={food.type} onChange={handleChange} className={inputClass} required>
-              <option value="normal">Normal</option>
-              <option value="popular">Popular</option>
+              <option value="normal">Standard Item</option>
+              <option value="popular">Popular Choice</option>
             </select>
           </div>
 
-          <div className="flex-1 mt-4 sm:mt-0">
-            <h4 className="py-2 font-medium text-brand-500">Price</h4>
+          {/* Price */}
+          <div>
+            <label className={labelClass}><DollarSign size={16} /> Price (ETB)</label>
             <input type="number" name="price" value={food.price} onChange={handleChange} className={inputClass} required />
           </div>
         </div>
 
-        <button
-          type="submit"
-          className="w-full sm:w-60 py-2 px-4 bg-brand-500 text-white font-semibold rounded-lg shadow-md hover:bg-brand-600 transition disabled:opacity-50"
-        >
-          Update
-        </button>
+        {/* Footer Actions */}
+        <div className="flex items-center justify-end gap-4 pt-6 border-t border-gray-50">
+          <button 
+            type="button" 
+            onClick={() => navigate('/admin/list')} 
+            className="px-8 py-3 rounded-2xl font-bold text-gray-400 hover:text-gray-600 transition-colors text-sm"
+          >
+            Discard Changes
+          </button>
+          <button 
+            type="submit" 
+            className="px-10 py-3.5 rounded-2xl bg-brand-500 text-white font-bold text-sm shadow-lg shadow-brand-100 hover:bg-brand-600 transition-all active:scale-95"
+          >
+            Update Dish
+          </button>
+        </div>
       </form>
     </div>
   );

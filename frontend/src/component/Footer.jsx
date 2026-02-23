@@ -1,8 +1,31 @@
-import React from "react";
+import React, { useState, useEffect } from "react"; // Added useEffect
 import { Facebook, Twitter, Instagram, Mail, Phone, MapPin, Send, Youtube } from "lucide-react";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Footer = () => {
+  const [email, setEmail] = useState("");
+  const [error, setError] = useState(false); // Track validation error
+
+  // Clear error status when user types
+  useEffect(() => {
+    if (error) setError(false);
+  }, [email]);
+
+  const handleSubscribe = () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(email)) {
+      setError(true); // Show visual error instead of toast
+      return;
+    }
+
+    // If valid, proceed with success
+    toast.success("Subscribed successfully 🎉");
+    setEmail("");
+    setError(false);
+  };
+
   return (
     <footer className="relative mt-20 overflow-hidden bg-white transition-all">
       
@@ -17,12 +40,7 @@ const Footer = () => {
           {/* Company Info */}
           <div className="space-y-6">
             <Link to="/" className="flex items-center gap-2 group">
-              <div className="bg-brand-500 p-1.5 rounded-lg">
-                <Send size={18} color="white" fill="white" className="-rotate-45" />
-              </div>
-              <h3 className="text-2xl font-semibold tracking-tight text-brand-700">
-                Dash Dine
-              </h3>
+               <img src="/full_logo.png" className="w-25 md:w-30" alt="Logo" />
             </Link>
 
             <p className="leading-relaxed text-sm md:text-base text-gray-600">
@@ -49,7 +67,7 @@ const Footer = () => {
               {[
                 { name: "About Us", path: "/about" },
                 { name: "Our Menu", path: "/menu" },
-                { name: "Track Order", path: "/orderpage" },
+                { name: "Track Order", path: "/profile" },
                 { name: "Contact Us", path: "/contact" },
               ].map((link, idx) => (
                 <li key={idx}>
@@ -92,29 +110,45 @@ const Footer = () => {
           </div>
 
           {/* Newsletter */}
-          <div className="p-6 rounded-3xl border bg-white border-gray-100 shadow-xl shadow-gray-200/50">
+          <div className="p-6 rounded-3xl border bg-white border-gray-100">
             <h4 className="text-lg font-bold mb-4 text-gray-700">Stay Hungry</h4>
             <p className="text-xs mb-6 leading-relaxed text-gray-600">
               Subscribe for exclusive discounts and new menu alerts.
             </p>
-            <div className="relative group">
-              <input 
-                type="email"
-                placeholder="Your email"
-                className="w-full pl-4 pr-12 py-3.5 rounded-2xl text-sm bg-brand-25 text-gray-700 border border-brand-100 focus:outline-none focus:ring-2 focus:ring-brand-500 transition-all"
-              />
-              <button className="absolute right-2 top-2 bottom-2 aspect-square bg-brand-500 hover:bg-brand-600 text-white rounded-xl flex items-center justify-center transition-colors shadow-lg shadow-brand-500/20">
-                <Send size={16} fill="white" className="-rotate-45" />
-              </button>
-            </div>
-          </div>
 
+            <div className="relative">
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Your email"
+                className={`w-full pl-4 pr-12 py-3.5 rounded-2xl text-sm transition-all focus:outline-none focus:ring-2 
+                  ${error 
+                    ? "border-red-500 bg-red-50 focus:ring-red-200" 
+                    : "bg-brand-25 text-gray-700 border-brand-100 focus:ring-brand-500"
+                  }`}
+              />
+
+              <div
+                onClick={handleSubscribe}
+                className="absolute right-2 top-2 bottom-2 aspect-square bg-brand-500 hover:bg-brand-600 text-white rounded-xl flex items-center justify-center cursor-pointer transition-colors"
+              >
+                <Send size={16} className="-rotate-45" />
+              </div>
+            </div>
+            {/* Inline validation message */}
+            {error && (
+              <p className="text-[10px] text-red-500 mt-2 ml-2 animate-pulse">
+                Please enter a valid email address
+              </p>
+            )}
+          </div>
         </div>
 
         {/* Bottom Bar */}
         <div className="border-t border-gray-200 py-8 flex flex-col md:flex-row justify-between items-center gap-6">
           <p className="text-xs font-medium tracking-wide text-gray-400">
-            © 2025 DashDine. Built for the future of food.
+            © 2025 Yegna byte. Built for the future of food.
           </p>
           <div className="flex gap-8">
             {["Privacy", "Terms", "Cookies"].map((link, idx) => (
