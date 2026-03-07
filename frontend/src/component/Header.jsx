@@ -6,8 +6,8 @@ import { assets } from "../assets/assets";
 const Header = () => {
   // Array of images for the slider
   const sliderImages = [
-    { id: 0, img: assets.foodhero2, orders: "850" },
-    { id: 1, img: assets.herofood0, orders: "1290" },
+    { id: 0, img: assets.herofood2, orders: "850" },
+    { id: 1, img: assets.foodhero, orders: "1290" },
     { id: 2, img: assets.foodhero3, orders: "940" },
   ];
 
