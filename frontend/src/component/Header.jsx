@@ -6,8 +6,8 @@ import { assets } from "../assets/assets";
 const Header = () => {
   // Array of images for the slider
   const sliderImages = [
-    { id: 0, img: assets.foodhero, orders: "850" },
-    { id: 1, img: assets.herofood2, orders: "1290" },
+    { id: 0, img: assets.foodhero2, orders: "850" },
+    { id: 1, img: assets.herofood0, orders: "1290" },
     { id: 2, img: assets.foodhero3, orders: "940" },
   ];
 
@@ -50,9 +50,9 @@ const Header = () => {
               </button>
             </Link>
             
-            <Link to="/reseller">
+            <Link to="/menu">
               <button className="cursor-pointer bg-brand-25 text-brand-500 font-bold py-4 px-10 rounded-full transition-all hover:bg-brand-50 active:scale-95">
-                Join reseller
+                View Menu
               </button>
             </Link>
           </div>

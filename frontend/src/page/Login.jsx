@@ -63,19 +63,16 @@ const Login = ({ login, setLogin }) => {
           {/* Background Image/Overlay */}
           <div 
             className="absolute inset-0 bg-cover bg-center transition-transform duration-1000 hover:scale-110"
-            style={{ backgroundImage: `url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80')` }}
+            style={{  backgroundImage: `url('https://images.unsplash.com/photo-1671994582646-ad6d7f62b02a?q=80&w=735&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')` }}
           />
           <div className="absolute inset-0 bg-gradient-to-b from-brand-900/40 to-black/80" />
           
           {/* Welcome Text */}
           <div className="relative z-10 text-center space-y-4">
             <h2 className="text-4xl font-bold text-white tracking-tight">Welcome</h2>
-            <p className="text-gray-200 text-sm leading-relaxed max-w-xs mx-auto">
-              Join our community to explore fresh flavors and exclusive recipes tailored just for you.
+           <p className="text-gray-200 text-sm leading-relaxed max-w-xs mx-auto">
+              Discover delicious meals delivered to your door and enjoy exclusive dishes crafted just for you.
             </p>
-            <button className="text-brand-300 text-xs font-semibold hover:underline">
-              Learn more
-            </button>
           </div>
         </div>
 

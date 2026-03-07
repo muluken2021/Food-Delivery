@@ -127,7 +127,7 @@ const PopularDishes = () => {
       <div className="flex justify-center mt-20">
         <button
           onClick={() => navigate("/menu")}
-          className="px-10 py-4 bg-gray-900 text-white font-black rounded-2xl transition-all hover:bg-brand-600 hover:px-12 active:scale-95 shadow-xl shadow-gray-200"
+          className="px-10 py-4 bg-brand-500 text-white font-black rounded-2xl transition-all hover:bg-brand-600 hover:px-12 active:scale-95 shadow-xl shadow-gray-200"
         >
           Explore Full Menu
         </button>

@@ -148,7 +148,7 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="border-t border-gray-200 py-8 flex flex-col md:flex-row justify-between items-center gap-6">
           <p className="text-xs font-medium tracking-wide text-gray-400">
-            © 2025 Yegna byte. Built for the future of food.
+            © 2024 Yegna byte. Built for the future of food.
           </p>
           <div className="flex gap-8">
             {["Privacy", "Terms", "Cookies"].map((link, idx) => (

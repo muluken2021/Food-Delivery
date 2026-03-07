@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { StoreContext } from "../context/StoreContext";
 import { ShoppingCart, LogOut, Menu, X, LayoutDashboard, User2, ChevronRight } from "lucide-react";
 import UserDropdown from "./UserDropdown";
@@ -33,13 +33,18 @@ const Navbar = ({ login, setLogin }) => {
     else if (path.includes("about")) setActive("aboutus");
   }, [location.pathname]);
 
-  const handleLogout = () => {
-    localStorage.removeItem("user");
-    localStorage.removeItem("token");
-    clearCart();
-    setUser(null);
-    setMenuOpen(false);
-  };
+const navigate = useNavigate();
+
+const handleLogout = () => {
+  localStorage.removeItem("user");
+  localStorage.removeItem("token");
+  clearCart();
+  setUser(null);
+  setMenuOpen(false);
+
+  // Redirect to home page
+  navigate("/");
+};
 
   const navLinks = [
     { name: "Home", path: "/", key: "home" },

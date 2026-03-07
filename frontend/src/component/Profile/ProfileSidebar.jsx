@@ -1,53 +1,73 @@
-// Sidebar.jsx
-import React from "react";
-import { Camera, LogOut, User, ShoppingBag , Settings } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Camera, LogOut, User, ShoppingBag, Settings } from "lucide-react";
 
 // Map string names to actual icons
 const icons = {
   User: User,
   Orders: ShoppingBag,
-  setting: Settings,
+  Setting: Settings,
 };
 
 const ProfileSidebar = ({
-  user,
   profileImg,
   onImageChange,
   activeTab,
   setActiveTab,
   activeOrderCount,
 }) => {
+  const [user, setUser] = useState({});
+
+  // Load real user data from localStorage on component mount
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
+
   const sidebarItems = [
     { icon: "User", label: "Personal" },
     { icon: "Orders", label: "Orders" },
-    { icon: "setting", label: "Setting" },
+    { icon: "Setting", label: "Setting" },
   ];
 
   return (
     <aside className="w-full md:w-72 flex-shrink-0 rounded-3xl bg-gray-50 p-4 md:p-6 shadow-sm">
       {/* Profile */}
-      
       <div className="flex flex-col items-center border-b border-gray-300 pb-6 md:pb-8 text-center">
         <div className="relative mb-3 md:mb-4">
-          <div className="h-20 w-20 md:h-24 md:w-24 overflow-hidden rounded-full border-4 border-white shadow-sm">
+        <div className="h-20 w-20 md:h-24 md:w-24 overflow-hidden rounded-full border-4 border-white shadow-sm">
+          {user.photo ? (
+            <img src={user.photo} alt="User Photo" className="h-full w-full object-cover" />
+          ) : profileImg ? (
             <img src={profileImg} alt="Profile" className="h-full w-full object-cover" />
-          </div>
-
-          {/* Upload */}
-          <label className="absolute bottom-0 right-0 flex h-7 md:h-8 items-center gap-1 rounded-full bg-white px-2 py-1 text-[10px] font-bold shadow-md hover:bg-gray-50 cursor-pointer">
-            <Camera size={12} />
-            <input type="file" accept="image/*" className="hidden" onChange={onImageChange} />
-          </label>
+          ) : (
+            <div className="w-full h-full bg-brand-600 flex items-center justify-center">
+              <span className="text-white font-semibold text-lg uppercase">
+                {user.name ? user.name.charAt(0) : "U"}
+               
+              </span>
+            </div>
+          )}
         </div>
 
-        <h2 className="text-lg md:text-xl font-bold">{user.firstName}</h2>
+        {/* Upload button */}
+        <label className="absolute bottom-0 right-0 flex h-7 md:h-8 items-center gap-1 rounded-full bg-white px-2 py-1 text-[10px] font-bold shadow-md hover:bg-gray-50 cursor-pointer">
+          <Camera size={12} />
+          <input type="file" accept="image/*" className="hidden" onChange={onImageChange} />
+        </label>
+      </div>
+
+        <h2 className="text-lg md:text-xl font-bold">
+          {user.first_name || user.name || "User"}
+        </h2>
         <p className="text-xs text-gray-400 break-all">{user.email}</p>
       </div>
 
       {/* Navigation */}
       <nav className="mt-6 md:mt-8 flex md:block gap-2 overflow-x-auto md:space-y-2">
         {sidebarItems.map((item) => {
-          const IconComponent = icons[item.icon]; // get the actual icon
+          const IconComponent = icons[item.icon];
           return (
             <button
               key={item.label}
@@ -58,11 +78,8 @@ const ProfileSidebar = ({
                   : "text-gray-500 hover:bg-white/50 hover:text-gray-800"
               }`}
             >
-              <div className="flex items-center gap-3">
-                {IconComponent && <IconComponent size={18} />}
-                {item.label}
-              </div>
-
+              {IconComponent && <IconComponent size={18} />}
+              {item.label}
               {item.label === "Orders" && activeOrderCount > 0 && (
                 <span className="bg-red-500 text-white text-[10px] h-5 w-5 flex items-center justify-center rounded-full animate-blink font-bold shadow-sm">
                   {activeOrderCount}
