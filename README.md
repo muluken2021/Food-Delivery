@@ -6,9 +6,6 @@ A modern **Food Delivery Platform** where users can browse menus, add items to a
 Check out the live website:  
 [View Live Website](https://yegnabyte.vercel.app)
 
-### Figma Design
-See the design prototype:  
-[Figma Link](https://www.figma.com/file/YourFigmaLink/Food-Delivery-App)
 
 ![Website Screenshot](frontend/food_delivery.png)
 
