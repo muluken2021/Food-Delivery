@@ -1,12 +1,57 @@
-# React + Vite
+# Food Delivery Website
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern **Food Delivery Platform** where users can browse menus, add items to a cart, place orders, and securely pay online using Stripe.
 
-Currently, two official plugins are available:
+### Live Preview
+Check out the live website:  
+[View Live Website](https://yegnabyte.vercel.app)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Figma Design
+See the design prototype:  
+[Figma Link](https://www.figma.com/file/YourFigmaLink/Food-Delivery-App)
 
-## Expanding the ESLint configuration
+![Website Screenshot](Frontend/assets/food_delivery.png)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## Project Overview
+
+The Food Delivery Website enables users to order food and drinks online with ease. It features a smooth user experience, responsive design for both mobile and desktop, and secure payment integration using Stripe.  
+
+This project demonstrates my skills in **full-stack development, payment integration, and responsive web design**.
+
+---
+
+## Features
+
+- Browse food and drink menus with categories  
+- Add items to a shopping cart and update quantities  
+- Place orders online with a secure checkout  
+- Stripe payment integration for fast and safe payments  
+- Order history and tracking for users  
+- Responsive design for mobile and desktop  
+
+---
+
+## Technologies Used
+
+- React.js  
+- Node.js  
+- Express.js  
+- MongoDB  
+- Stripe API  
+- Tailwind CSS  
+
+---
+
+## Purpose of the Project
+
+This project was built to:  
+
+- Showcase full-stack web development skills  
+- Implement secure payment processing with Stripe  
+- Practice responsive UI/UX design for modern applications  
+- Build a real-world project suitable for portfolio demonstration  
+
+---
+
