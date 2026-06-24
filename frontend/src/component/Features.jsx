@@ -1,24 +1,27 @@
 import React from 'react';
 import { assets } from '../assets/assets';
 import { Bike, BookOpen, Sandwich } from "lucide-react";
+import { useTranslation } from '../context/LanguageContext';
 
 const Features = () => {
+  const { t } = useTranslation();
+
 const features = [
   {
-    title: "Convenient and Reliable",
-    desc: "Whether you dine in, take out, or order delivery, our service is convenient, fast, and reliable, making mealtime hassle-free.",
+    title: t('feature1_title'),
+    desc: t('feature1_desc'),
     icon: Bike,
     iconBg: "bg-orange-50",
   },
   {
-    title: "Variety of Options",
-    desc: "From hearty meals to light snacks, we offer a wide range of options to suit every taste and craving.",
+    title: t('feature2_title'),
+    desc: t('feature2_desc'),
     icon: BookOpen,
     iconBg: "bg-yellow-50",
   },
   {
-    title: "Eat Burger",
-    desc: "Our burgers are grilled to perfection, with juicy patties and flavorful toppings that make every bite a delicious experience.",
+    title: t('feature3_title'),
+    desc: t('feature3_desc'),
     icon: Sandwich,
     iconBg: "bg-red-50",
   }
@@ -42,7 +45,7 @@ const features = [
         {/* Right: Feature Cards */}
         <div className="flex-1 space-y-6">
           <h2 className="text-center md:text-left text-4xl md:text-4xl font-semibold text-gray-700 mb-8">
-            Why People Choose us?
+            {t('features_heading')}
           </h2>
 
           <div className="space-y-4">

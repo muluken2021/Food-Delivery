@@ -5,10 +5,10 @@ import { LayoutGrid } from "lucide-react";
 
 const Menu = ({ searchQuery, setSearchQuery, category, setcatagory }) => {
   return (
-    <section className="w-full">
+    <section className="overflow-hidden ">
       <div className="container mx-auto px-6 py-6 lg:py-8">
         <div className="flex flex-col lg:flex-row items-center justify-between gap-8">
-          
+         
           {/* Left: Search Bar */}
           <div className="w-full lg:max-w-md order-2 lg:order-1">
             <FoodSearch searchQuery={searchQuery} setSearchQuery={setSearchQuery} />

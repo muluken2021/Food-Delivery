@@ -3,38 +3,32 @@ import { StoreContext } from "../context/StoreContext";
 import { Link, useNavigate } from "react-router-dom";
 import { assets } from "../assets/assets";
 import { toast } from "react-toastify";
-import { ArrowLeft, ShoppingBasket } from "lucide-react"; // optional icon (recommended)
-import { food_list as fallbackData } from "../assets/foodData"; // Added fallback import
+import { ArrowLeft } from "lucide-react";
+import { food_list as fallbackData } from "../assets/foodData";
+import { useTranslation } from "../context/LanguageContext";
+import { useCurrency } from "../context/CurrencyContext";
 
-const Cart = ({login, setLogin}) => {
-  const { cartItems, removeFromCart, addtocart, TotalCartPrice, foodList } =
-    useContext(StoreContext);
-
+const Cart = ({ login, setLogin }) => {
+  const { cartItems, removeFromCart, addtocart, TotalCartPrice, foodList } = useContext(StoreContext);
+  const { t } = useTranslation();
+  const { formatPrice, convertPrice } = useCurrency();
   const navigate = useNavigate();
   const url = import.meta.env.VITE_APP_API_URL;
-
   const DeliveryFee = 2;
 
-  //  Use Context data if available, otherwise use fallback
   const displayData = foodList && foodList.length > 0 ? foodList : fallbackData;
-
-  //  Check if cart is empty
   const isCartEmpty = Object.values(cartItems).every((qty) => qty === 0);
 
   const handleCheckout = () => {
     const user = JSON.parse(localStorage.getItem("user"));
-    if (!user) {
-      setLogin(true)
-      return;
-    }
+    if (!user) { setLogin(true); return; }
     navigate("/order");
   };
 
   const handleNofood = () => {
-    toast.warning("Add food to place an order!");
+    toast.warning(t('cart_add_food_warning'));
   };
 
-  // ✅ Helper to resolve image paths
   const getImageUrl = (food) => {
     if (!food.image) return assets.upload;
     if (food.image.startsWith('http')) return food.image;
@@ -42,210 +36,116 @@ const Cart = ({login, setLogin}) => {
   };
 
   return (
-    <div className="mx-2 sm:mx-6 lg:mx-24 p-4 my-20 min-h-screen bg-white transition ">
-      
-      {isCartEmpty ? (
-        <Link to='/' >
-          <div className="flex gap-2 text-gray-800 hover:text-brand-700 hover:scale-101"> 
+    <div className="mx-2 sm:mx-6 lg:mx-24 p-4 my-20 min-h-screen bg-white transition">
+
+      {isCartEmpty && (
+        <Link to="/">
+          <div className="flex gap-2 text-gray-800 hover:text-brand-700 hover:scale-101">
             <ArrowLeft />
-            <h1>Back to home </h1>
+            <h1>{t('cart_back_home')}</h1>
           </div>
         </Link>
-      )   
-      : 
-      "" }
+      )}
 
-      {/* ================= EMPTY CART ================= */}
+      {/* ===== EMPTY CART ===== */}
       {isCartEmpty ? (
         <div className="flex flex-col items-center justify-center py-20 text-center">
-          
-          
-          <img
-            src={assets.empitycart}
-            alt="empty cart"
-            className="w-62 h-62 mb-6 opacity-80"
-          />
-
-          <h2 className="text-2xl font-semibold text-gray-700 mb-3">
-            Your Cart is Empty
-          </h2>
-
-          <p className="text-gray-500 mb-6">
-            Looks like you haven't added anything yet
-          </p>
-
+          <img src={assets.empitycart} alt="empty cart" className="w-62 h-62 mb-6 opacity-80" />
+          <h2 className="text-2xl font-semibold text-gray-700 mb-3">{t('cart_empty_title')}</h2>
+          <p className="text-gray-500 mb-6">{t('cart_empty_desc')}</p>
           <button
             onClick={() => navigate("/menu")}
             className="px-8 py-3 rounded-xl bg-brand-500 text-white hover:bg-brand-600 transition"
           >
-            Go To Menu
+            {t('cart_go_to_menu')}
           </button>
         </div>
       ) : (
         <>
-          <h1 className="text-2xl sm:text-3xl font-bold mb-6 text-gray-700">
-            Your Cart
-          </h1>
-          {/* ================= DESKTOP HEADER ================= */}
-          <div className="hidden sm:grid grid-cols-6 gap-2 font-semibold text-sm sm:text-base mb-2 text-gray-700">
-            <p>Item</p>
-            <p>Name</p>
-            <p>Price</p>
-            <p>Quantity</p>
-            <p>Total</p>
-            <p>Actions</p>
-          </div>
+          <h1 className="text-2xl sm:text-3xl font-bold mb-6 text-gray-700">{t('cart_heading')}</h1>
 
+          {/* ===== DESKTOP HEADER ===== */}
+          <div className="hidden sm:grid grid-cols-6 gap-2 font-semibold text-sm sm:text-base mb-2 text-gray-700">
+            <p>{t('cart_col_item')}</p>
+            <p>{t('cart_col_name')}</p>
+            <p>{t('cart_col_price')}</p>
+            <p>{t('cart_col_quantity')}</p>
+            <p>{t('cart_col_total')}</p>
+            <p>{t('cart_col_actions')}</p>
+          </div>
           <hr className="hidden sm:block border-brand-500 mb-4" />
 
-          {/* ================= CART ITEMS ================= */}
+          {/* ===== CART ITEMS ===== */}
           <div className="space-y-4">
             {Object.keys(cartItems).map((id) => {
-              if (cartItems[id] > 0) {
-                // Modified to use displayData (fallback logic)
-                const food = displayData.find(
-                  (f) => String(f._id) === String(id)
-                );
-                if (!food) return null;
+              if (cartItems[id] <= 0) return null;
+              const food = displayData.find((f) => String(f._id) === String(id));
+              if (!food) return null;
 
-                return (
-                  <div
-                    key={food._id}
-                    className="bg-white shadow-md rounded-2xl p-4 sm:p-3 flex flex-col sm:grid sm:grid-cols-6 gap-4 sm:gap-2 items-start"
-                  >
-                    {/* DESKTOP LAYOUT */}
-                    <div className="hidden sm:contents">
-                      <img
-                        className="w-20 h-20 object-cover rounded-xl"
-                        src={getImageUrl(food)}
-                        alt={food.name}
-                      />
-
-                      <p className="font-medium text-gray-900">
-                        {food.name}
-                      </p>
-
-                      <p className="text-gray-600">${food.price}</p>
-
-                      <div className="flex items-center gap-2">
-                        <button
-                          onClick={() => removeFromCart(food._id)}
-                          className="w-8 h-8 flex items-center justify-center rounded-full bg-brand-500 text-white hover:bg-brand-600 transition"
-                        >
-                          -
-                        </button>
-
-                        <span className="font-medium w-6 text-center">
-                          {cartItems[id]}
-                        </span>
-
-                        <button
-                          onClick={() => addtocart(food._id)}
-                          className="w-8 h-8 flex items-center justify-center rounded-full bg-brand-500 text-white hover:bg-brand-600 transition"
-                        >
-                          +
-                        </button>
-                      </div>
-
-                      <p className="font-semibold text-gray-900">
-                        ${(food.price * cartItems[id]).toFixed(2)}
-                      </p>
-
-                      <button
-                        onClick={() => removeFromCart(food._id, true)}
-                        className="text-gray-700 border border-brand-500 px-3 py-1 rounded-xl hover:bg-brand-500 hover:text-white transition text-sm"
-                      >
-                        Remove
-                      </button>
+              return (
+                <div key={food._id} className="bg-white shadow-md rounded-2xl p-4 sm:p-3 flex flex-col sm:grid sm:grid-cols-6 gap-4 sm:gap-2 items-start">
+                  {/* DESKTOP */}
+                  <div className="hidden sm:contents">
+                    <img className="w-20 h-20 object-cover rounded-xl" src={getImageUrl(food)} alt={food.name} />
+                    <p className="font-medium text-gray-900">{food.name}</p>
+                    <p className="text-gray-600">{formatPrice(food.price)}</p>
+                    <div className="flex items-center gap-2">
+                      <button onClick={() => removeFromCart(food._id)} className="w-8 h-8 flex items-center justify-center rounded-full bg-brand-500 text-white hover:bg-brand-600 transition">-</button>
+                      <span className="font-medium w-6 text-center">{cartItems[id]}</span>
+                      <button onClick={() => addtocart(food._id)} className="w-8 h-8 flex items-center justify-center rounded-full bg-brand-500 text-white hover:bg-brand-600 transition">+</button>
                     </div>
+                    <p className="font-semibold text-gray-900">{formatPrice(food.price * cartItems[id])}</p>
+                    <button onClick={() => removeFromCart(food._id, true)} className="text-gray-700 border border-brand-500 px-3 py-1 rounded-xl hover:bg-brand-500 hover:text-white transition text-sm">
+                      {t('cart_remove')}
+                    </button>
+                  </div>
 
-                    {/* MOBILE LAYOUT */}
-                    <div className="sm:hidden w-full">
-                      <div className="flex gap-10">
-                        <img
-                          className="w-24 h-24 object-cover rounded-xl mb-2"
-                          src={getImageUrl(food)}
-                          alt={food.name}
-                        />
-
-                        <div className="space-y-3">
-                          <p className="font-semibold text-gray-900 text-base mb-1">
-                            {food.name}
-                          </p>
-
-                          <p className="text-gray-600">${food.price}</p>
-
-                          <div className="flex items-center gap-2">
-                            <button
-                              onClick={() => removeFromCart(food._id)}
-                              className="w-8 h-8 flex items-center justify-center rounded-full bg-brand-500 text-white hover:bg-brand-600 transition"
-                            >
-                              -
-                            </button>
-
-                            <span className="font-medium w-6 text-center">
-                              {cartItems[id]}
-                            </span>
-
-                            <button
-                              onClick={() => addtocart(food._id)}
-                              className="w-8 h-8 flex items-center justify-center rounded-full bg-brand-500 text-white hover:bg-brand-600 transition"
-                            >
-                              +
-                            </button>
-                          </div>
+                  {/* MOBILE */}
+                  <div className="sm:hidden w-full">
+                    <div className="flex gap-10">
+                      <img className="w-24 h-24 object-cover rounded-xl mb-2" src={getImageUrl(food)} alt={food.name} />
+                      <div className="space-y-3">
+                        <p className="font-semibold text-gray-900 text-base mb-1">{food.name}</p>
+                        <p className="text-gray-600">{formatPrice(food.price)}</p>
+                        <div className="flex items-center gap-2">
+                          <button onClick={() => removeFromCart(food._id)} className="w-8 h-8 flex items-center justify-center rounded-full bg-brand-500 text-white hover:bg-brand-600 transition">-</button>
+                          <span className="font-medium w-6 text-center">{cartItems[id]}</span>
+                          <button onClick={() => addtocart(food._id)} className="w-8 h-8 flex items-center justify-center rounded-full bg-brand-500 text-white hover:bg-brand-600 transition">+</button>
                         </div>
                       </div>
-
-                      <div className="flex justify-between mt-4">
-                        <p className="font-semibold text-gray-900 mb-2">
-                          Total: $
-                          {(food.price * cartItems[id]).toFixed(2)}
-                        </p>
-
-                        <button
-                          onClick={() => removeFromCart(food._id, true)}
-                          className="text-gray-700 border border-brand-500 px-4 py-2 rounded-xl text-sm font-medium hover:bg-brand-500 hover:text-white transition"
-                        >
-                          Remove
-                        </button>
-                      </div>
+                    </div>
+                    <div className="flex justify-between mt-4">
+                      <p className="font-semibold text-gray-900 mb-2">{t('cart_col_total')}: ${(food.price * cartItems[id]).toFixed(2)}</p>
+                      <button onClick={() => removeFromCart(food._id, true)} className="text-gray-700 border border-brand-500 px-4 py-2 rounded-xl text-sm font-medium hover:bg-brand-500 hover:text-white transition">
+                        {t('cart_remove')}
+                      </button>
                     </div>
                   </div>
-                );
-              }
-              return null;
+                </div>
+              );
             })}
           </div>
 
-          {/* ================= CART TOTALS ================= */}
+          {/* ===== CART TOTALS ===== */}
           <div className="mt-12 sm:mt-16 w-full sm:w-1/2 lg:w-1/3 mx-auto sm:mx-0">
-            <h2 className="text-2xl sm:text-3xl font-bold py-4 text-gray-700">
-               Cart Totals
-            </h2>
+            <h2 className="text-2xl sm:text-3xl font-bold py-4 text-gray-700">{t('cart_totals')}</h2>
 
             <div className="flex justify-between py-1">
-              <p className="text-gray-600">Subtotal</p>
-              <p className="font-medium">${TotalCartPrice()}</p>
+              <p className="text-gray-600">{t('cart_subtotal')}</p>
+              <p className="font-medium">{formatPrice(TotalCartPrice())}</p>
             </div>
-
             <hr className="border-gray-300 my-2" />
 
             <div className="flex justify-between py-1">
-              <p className="text-gray-600">Delivery Fee</p>
-              <p className="font-medium">
-                {TotalCartPrice() > 0 ? `$${DeliveryFee}` : "$0"}
-              </p>
+              <p className="text-gray-600">{t('cart_delivery_fee')}</p>
+              <p className="font-medium">{TotalCartPrice() > 0 ? formatPrice(DeliveryFee) : formatPrice(0)}</p>
             </div>
-
             <hr className="border-gray-300 my-2" />
 
             <div className="flex justify-between py-1">
-              <p className="font-medium text-gray-600">Total</p>
+              <p className="font-medium text-gray-600">{t('cart_total')}</p>
               <p className="font-semibold text-gray-700">
-                {TotalCartPrice() > 0
-                  ? `$${TotalCartPrice() + DeliveryFee}`
-                  : "$0"}
+                {TotalCartPrice() > 0 ? formatPrice(TotalCartPrice() + DeliveryFee) : formatPrice(0)}
               </p>
             </div>
 
@@ -253,7 +153,7 @@ const Cart = ({login, setLogin}) => {
               onClick={TotalCartPrice() > 0 ? handleCheckout : handleNofood}
               className="w-full mt-5 border-2 border-brand-500 rounded-xl py-3 uppercase cursor-pointer text-white bg-brand-500 hover:bg-brand-600 transition duration-300"
             >
-              Proceed To Checkout
+              {t('cart_proceed_checkout')}
             </button>
           </div>
         </>

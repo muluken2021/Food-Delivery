@@ -9,20 +9,19 @@ layer(base);
 @theme {
   --font-*: initial;
   --font-outfit: Outfit, sans-serif;
---color-brand-25:  #eefbf3;
---color-brand-50:  #d6f5e2;
---color-brand-100: #adebc6;
---color-brand-200: #7fdea6;
---color-brand-300: #4fce84;
---color-brand-400: #26ba66;
---color-brand-500: #0fa94f;
---color-brand-600: #00A63E; /* your color */
---color-brand-700: #008733;
---color-brand-800: #006b28;
---color-brand-900: #004a1b;
---color-brand-950: #00280f;
-
-
+ 
+ --color-brand-25: #eefbf3;
+ --color-brand-50: #d6f5e2;
+ --color-brand-100: #adebc6;
+ --color-brand-200: #7fdea6;
+ --color-brand-300: #4fce84;
+ --color-brand-400: #26ba66;
+ --color-brand-500: #143924; /* brand */
+ --color-brand-600: #00A63E; 
+ --color-brand-700: #008733;
+ --color-brand-800: #006b28;
+ --color-brand-900: #004a1b;
+ --color-brand-950: #00280f;
 }
 
 
@@ -33,6 +32,7 @@ layer(base);
 .cart {
   position: relative;
   display: inline-block;
+  color: #143924;
 }
 
 .dot {

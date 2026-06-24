@@ -8,10 +8,12 @@ import service3 from './service3.png'
 import food1 from './food1.png'
 import empitycart from './empitycart.png'
 import deliveryman from './deliveryman.png'
-import foodhero from './foodhero.png'
-import foodhero3 from './foodhero3.png'
-import herofood2 from './herofood2.png'
+import foodhero from './foodhero.jpg'
+import foodhero3 from './foodhero3.jpg'
+import herofood2 from './hero-food-1.jpg'
 import herofood4 from './herofood4.png'
+import cardfood1 from "./card-food-1.png"
+import cardfood2 from "./card-food-2.png"
 
 
 
@@ -30,7 +32,10 @@ export const assets = {
     foodhero,
     foodhero3,
     herofood2,
-    herofood4
+    herofood4,
+    cardfood1,
+    cardfood2,
+    
 
 
 

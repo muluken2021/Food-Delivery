@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { X } from "lucide-react"; // Optional: for a cleaner close icon
+import { X } from "lucide-react";
+import { useTranslation } from "../context/LanguageContext";
 
 const Login = ({ login, setLogin }) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const [signup, setSignup] = useState(true);
   const [formData, setFormData] = useState({ name: "", email: "", password: "" });
@@ -47,9 +49,8 @@ const Login = ({ login, setLogin }) => {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/60 backdrop-blur-sm p-4">
-      {/* Main Container: Split Screen */}
       <div className="relative flex flex-col md:flex-row w-full max-w-5xl min-h-[550px] bg-white rounded-xl overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-300">
-        
+
         {/* Close Button */}
         <button
           onClick={() => setLogin(false)}
@@ -58,33 +59,30 @@ const Login = ({ login, setLogin }) => {
           <X size={24} />
         </button>
 
-        {/* Left Section: Visual/Welcome */}
+        {/* Left: Visual Panel */}
         <div className="relative hidden md:flex flex-1 items-center justify-center p-12 overflow-hidden">
-          {/* Background Image/Overlay */}
-          <div 
+          <div
             className="absolute inset-0 bg-cover bg-center transition-transform duration-1000 hover:scale-110"
-            style={{  backgroundImage: `url('https://images.unsplash.com/photo-1671994582646-ad6d7f62b02a?q=80&w=735&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')` }}
+            style={{ backgroundImage: `url('https://images.unsplash.com/photo-1671994582646-ad6d7f62b02a?q=80&w=735&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')` }}
           />
           <div className="absolute inset-0 bg-gradient-to-b from-brand-900/40 to-black/80" />
-          
-          {/* Welcome Text */}
           <div className="relative z-10 text-center space-y-4">
-            <h2 className="text-4xl font-bold text-white tracking-tight">Welcome</h2>
-           <p className="text-gray-200 text-sm leading-relaxed max-w-xs mx-auto">
-              Discover delicious meals delivered to your door and enjoy exclusive dishes crafted just for you.
+            <h2 className="text-4xl font-bold text-white tracking-tight">{t('login_welcome')}</h2>
+            <p className="text-gray-200 text-sm leading-relaxed max-w-xs mx-auto">
+              {t('login_welcome_desc')}
             </p>
           </div>
         </div>
 
-        {/* Right Section: Form */}
+        {/* Right: Form Panel */}
         <div className="flex-1 p-8 md:p-12 flex flex-col justify-center">
           <div className="max-w-sm mx-auto w-full space-y-6">
             <div className="space-y-2">
               <h2 className="text-3xl font-bold text-gray-900">
-                {signup ? "Register" : "Login"}
+                {signup ? t('login_register_title') : t('login_login_title')}
               </h2>
               <p className="text-gray-500 text-sm">
-                {signup ? "Create your account. It's free and only takes a minute." : "Welcome back! Please enter your details."}
+                {signup ? t('login_register_desc') : t('login_login_desc')}
               </p>
             </div>
 
@@ -92,7 +90,7 @@ const Login = ({ login, setLogin }) => {
               {signup && (
                 <div className="space-y-1">
                   <label htmlFor="name" className="text-xs font-bold text-gray-500 uppercase tracking-wider pl-1">
-                    Full Name
+                    {t('login_full_name')}
                   </label>
                   <input
                     type="text"
@@ -108,7 +106,7 @@ const Login = ({ login, setLogin }) => {
 
               <div className="space-y-1">
                 <label htmlFor="email" className="text-xs font-bold text-gray-500 uppercase tracking-wider pl-1">
-                  Email Address
+                  {t('login_email')}
                 </label>
                 <input
                   type="email"
@@ -123,7 +121,7 @@ const Login = ({ login, setLogin }) => {
 
               <div className="space-y-1">
                 <label htmlFor="password" className="text-xs font-bold text-gray-500 uppercase tracking-wider pl-1">
-                  Password
+                  {t('login_password')}
                 </label>
                 <input
                   type="password"
@@ -150,18 +148,18 @@ const Login = ({ login, setLogin }) => {
                 >
                   {loading ? (
                     <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  ) : signup ? "Register Now" : "Sign In"}
+                  ) : signup ? t('login_register_btn') : t('login_signin_btn')}
                 </button>
               </div>
 
               <p className="text-sm text-center text-gray-500 pt-2">
-                {signup ? "Already have an account? " : "New to our platform? "}
+                {signup ? t('login_already_account') : t('login_new_platform')}{" "}
                 <button
                   type="button"
                   onClick={() => setSignup(!signup)}
                   className="text-brand-600 font-bold hover:text-brand-800 underline-offset-4 hover:underline transition-all"
                 >
-                  {signup ? "Login here" : "Create account"}
+                  {signup ? t('login_login_here') : t('login_create_account')}
                 </button>
               </p>
             </form>

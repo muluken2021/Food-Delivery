@@ -1,27 +1,25 @@
-import React, { useState, useEffect } from "react"; // Added useEffect
+import React, { useState, useEffect } from "react";
 import { Facebook, Twitter, Instagram, Mail, Phone, MapPin, Send, Youtube } from "lucide-react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useTranslation } from "../context/LanguageContext";
 
 const Footer = () => {
   const [email, setEmail] = useState("");
-  const [error, setError] = useState(false); // Track validation error
+  const [error, setError] = useState(false);
+  const { t } = useTranslation();
 
-  // Clear error status when user types
   useEffect(() => {
     if (error) setError(false);
   }, [email]);
 
   const handleSubscribe = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
     if (!emailRegex.test(email)) {
-      setError(true); // Show visual error instead of toast
+      setError(true);
       return;
     }
-
-    // If valid, proceed with success
-    toast.success("Subscribed successfully 🎉");
+    toast.success(t('footer_subscribed'));
     setEmail("");
     setError(false);
   };
@@ -44,7 +42,7 @@ const Footer = () => {
             </Link>
 
             <p className="leading-relaxed text-sm md:text-base text-gray-600">
-              Bringing the world's best flavors to your doorstep. Hot, fresh, and delivered with a smile. Your meal is just a dash away.
+              {t('footer_company_desc')}
             </p>
 
             <div className="flex gap-3">
@@ -62,20 +60,20 @@ const Footer = () => {
 
           {/* Quick Links */}
           <div>
-            <h4 className="text-lg font-bold mb-8 text-gray-700">Service</h4>
+            <h4 className="text-lg font-bold mb-8 text-gray-700">{t('footer_service')}</h4>
             <ul className="space-y-4">
               {[
-                { name: "About Us", path: "/about" },
-                { name: "Our Menu", path: "/menu" },
-                { name: "Track Order", path: "/profile" },
-                { name: "Contact Us", path: "/contact" },
+                { nameKey: "footer_about", path: "/about" },
+                { nameKey: "footer_menu", path: "/menu" },
+                { nameKey: "footer_track", path: "/profile" },
+                { nameKey: "footer_contact", path: "/contact" },
               ].map((link, idx) => (
                 <li key={idx}>
                   <Link
                     to={link.path}
                     className="text-sm font-medium text-gray-600 hover:text-gray-500 transition-colors"
                   >
-                    {link.name}
+                    {t(link.nameKey)}
                   </Link>
                 </li>
               ))}
@@ -84,7 +82,7 @@ const Footer = () => {
 
           {/* Contact Info */}
           <div>
-            <h4 className="text-lg font-bold mb-8 text-gray-700">Get in Touch</h4>
+            <h4 className="text-lg font-bold mb-8 text-gray-700">{t('footer_get_in_touch')}</h4>
             <div className="space-y-5">
               <div className="flex items-start gap-3">
                 <div className="p-2 rounded-lg bg-brand-500/10 text-gray-500">
@@ -111,9 +109,9 @@ const Footer = () => {
 
           {/* Newsletter */}
           <div className="p-6 rounded-3xl border bg-white border-gray-100">
-            <h4 className="text-lg font-bold mb-4 text-gray-700">Stay Hungry</h4>
+            <h4 className="text-lg font-bold mb-4 text-gray-700">{t('footer_newsletter_title')}</h4>
             <p className="text-xs mb-6 leading-relaxed text-gray-600">
-              Subscribe for exclusive discounts and new menu alerts.
+              {t('footer_newsletter_desc')}
             </p>
 
             <div className="relative">
@@ -121,7 +119,7 @@ const Footer = () => {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="Your email"
+                placeholder={t('footer_email_placeholder')}
                 className={`w-full pl-4 pr-12 py-3.5 rounded-2xl text-sm transition-all focus:outline-none focus:ring-2 
                   ${error 
                     ? "border-red-500 bg-red-50 focus:ring-red-200" 
@@ -136,10 +134,9 @@ const Footer = () => {
                 <Send size={16} className="-rotate-45" />
               </div>
             </div>
-            {/* Inline validation message */}
             {error && (
               <p className="text-[10px] text-red-500 mt-2 ml-2 animate-pulse">
-                Please enter a valid email address
+                {t('footer_invalid_email')}
               </p>
             )}
           </div>
@@ -148,10 +145,10 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="border-t border-gray-200 py-8 flex flex-col md:flex-row justify-between items-center gap-6">
           <p className="text-xs font-medium tracking-wide text-gray-400">
-            © 2024 Yegna byte. Built for the future of food.
+            {t('footer_copyright')}
           </p>
           <div className="flex gap-8">
-            {["Privacy", "Terms", "Cookies"].map((link, idx) => (
+            {[t('footer_privacy'), t('footer_terms'), t('footer_cookies')].map((link, idx) => (
               <a 
                 key={idx} 
                 href="#" 

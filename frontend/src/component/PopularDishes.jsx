@@ -1,16 +1,21 @@
 import React, { useContext, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { StoreContext } from "../context/StoreContext";
-import { ShoppingCart, Star } from "lucide-react";
+import { ArrowRight, ShoppingCart, Star } from "lucide-react";
 import FoodModal from "./FoodModal";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import altimg from '../assets/heropasta.png';
-import { food_list as fallbackData } from "../assets/foodData"; // Import your fallback data
+import { food_list as fallbackData } from "../assets/foodData";
+import { useTranslation } from "../context/LanguageContext";
+import { getFoodName, getFoodDescription } from "../utils/foodLocale";
+import { useCurrency } from "../context/CurrencyContext";
 
 const PopularDishes = () => {
   const { addtocart, foodList } = useContext(StoreContext);
   const navigate = useNavigate();
+  const { language, t } = useTranslation();
+  const { formatPrice } = useCurrency();
 
   const [selectedFood, setSelectedFood] = useState(null);
   const [modalQuantity, setModalQuantity] = useState(1);
@@ -33,7 +38,7 @@ const PopularDishes = () => {
   const handleAddToCart = () => {
     if (selectedFood && selectedFood._id) {
       addtocart(selectedFood._id, modalQuantity);
-      toast.success(`${selectedFood.name} added to cart!`);
+      toast.success(`${getFoodName(selectedFood, language)} added to cart!`);
       setSelectedFood(null);
     }
   };
@@ -48,24 +53,23 @@ const PopularDishes = () => {
   };
 
   return (
-    <section className="py-20 bg-white transition-all duration-300">
-      <div className="text-center mb-16 px-6">
-          <h2 className="text-4xl font-bold mt-4 mb-2">
-              Our <span className="text-brand-600">Popular</span> Dishes
-          </h2>
-          <p className="text-gray-600 italic">Your favourite food partner</p>
+    <section className="container mx-auto pb-20 bg-white transition-all duration-300 px-6  sm:px-12 lg:px-24">
+      <div className="text-start mb-7">
+         <h2 className=" text-center md:text-left text-4xl md:text-4xl font-semibold tracking-tight text-gray-900">
+              {t('popular_heading')} <span className=" bg-clip-text bg-gradient-to-r text-brand-500 ">{t('popular_heading_highlight')}</span> {t('popular_heading_rest')}         </h2>
+          <p className="text-gray-600 italic">{t('popular_subtitle')}</p>
       </div>
 
-      <div className="max-w-[1400px] mx-auto px-6 md:px-12">
+      <div className=" ">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {popularFoods.length > 0 ? (
             popularFoods.map((dish) => (
               <div 
                 key={dish._id}
-                className="bg-white rounded-[2.5rem] p-8 shadow-xl shadow-gray-100/60 border border-gray-100 flex flex-col items-center text-center group transition-all duration-500 hover:-translate-y-3 hover:shadow-2xl hover:border-brand-100"
+                className="bg-white rounded-2xl p-4 shadow-xl shadow-gray-100/60 border flex flex-col items-center text-center group transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl border-brand-100"
               >
                 {/* Perfect Circle Image Container */}
-                <div className="relative w-44 h-44 mb-8 rounded-full overflow-hidden shadow-inner bg-gray-50">
+                <div className="relative w-full h-50 mb-8 rounded-2xl overflow-hidden shadow-inner bg-gray-50">
                   <img
                     src={getImageUrl(dish.image)}
                     alt={dish.name}
@@ -78,7 +82,7 @@ const PopularDishes = () => {
                 <div className="w-full">
                   <div className="flex justify-between items-start mb-2 gap-2">
                     <h3 className="text-xl font-bold text-gray-900 text-left leading-tight truncate">
-                      {dish.name}
+                      {getFoodName(dish, language)}
                     </h3>
                   </div>
 
@@ -95,10 +99,13 @@ const PopularDishes = () => {
                   </div>
 
                   <p className="text-gray-400 text-xs text-left line-clamp-2 min-h-[32px]">
-                    {dish.description || "The perfect blend of flavor and freshness."}
+                    {getFoodDescription(dish, language) || "The perfect blend of flavor and freshness."}
                   </p>
 
                   <div className="flex justify-between items-center mt-6">
+                    <span className="text-2xl font-bold text-gray-900">
+                      {formatPrice(dish.price)}
+                    </span>
                     <button 
                       onClick={() => {
                         setSelectedFood(dish);
@@ -107,31 +114,28 @@ const PopularDishes = () => {
                       className="flex items-center justify-center gap-2 border border-brand-500 hover:bg-brand-500 text-brand-600 hover:text-white text-xs uppercase tracking-widest font-bold py-2.5 px-5 rounded-full transition-all duration-300 active:scale-90"
                     >
                       <ShoppingCart size={18} />
-                      <span>Buy</span>
+                      <span>{t('popular_buy')}</span>
                     </button>          
-                    <span className="text-2xl font-bold text-gray-900">
-                      ${dish.price}
-                    </span>
+                    
                   </div>
                 </div>
               </div>
             ))
           ) : (
             <div className="col-span-full py-20 text-center opacity-50">
-              <p className="text-xl font-medium italic">Fetching the best dishes for you...</p>
+              <p className="text-xl font-medium italic">{t('popular_fetching')}</p>
             </div>
           )}
         </div>
       </div>
 
-      <div className="flex justify-center mt-20">
-        <button
-          onClick={() => navigate("/menu")}
-          className="px-10 py-4 bg-brand-500 text-white font-black rounded-2xl transition-all hover:bg-brand-600 hover:px-12 active:scale-95 shadow-xl shadow-gray-200"
-        >
-          Explore Full Menu
-        </button>
-      </div>
+      
+       <div className="flex flex-wrap items-center justify-center lg:justify-start gap-6 pt-12 text-lg">
+          <Link to="/menu" className="text-gray-900 font-medium underline decoration-brand-500 decoration-2 underline-offset-4 flex items-center gap-1 group">
+            {t('popular_browse_menu')}
+            <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+          </Link>
+        </div>
 
       {selectedFood && (
         <FoodModal

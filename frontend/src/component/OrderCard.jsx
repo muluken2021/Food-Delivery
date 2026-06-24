@@ -1,30 +1,28 @@
 import React from "react";
 import { Clock, CheckCircle, XCircle, ShoppingCart, Trash2, Package, UtensilsCrossed } from "lucide-react";
+import { useTranslation } from "../context/LanguageContext";
 
 const statusStyles = {
-  // Added "Food Processing" to match your Order Schema default
   "Food Processing": { color: "text-orange-600", bg: "bg-orange-50", icon: UtensilsCrossed },
-  Pending: { color: "text-amber-600", bg: "bg-amber-50", icon: Clock },
-  Accepted: { color: "text-blue-600", bg: "bg-blue-50", icon: ShoppingCart },
-  Delivered: { color: "text-emerald-600", bg: "bg-emerald-50", icon: CheckCircle },
-  // Your backend uses "Cancelled" (double 'l') or "Canceled"? 
-  // Added both to be safe.
-  Cancelled: { color: "text-rose-600", bg: "bg-rose-50", icon: XCircle },
-  Canceled: { color: "text-rose-600", bg: "bg-rose-50", icon: XCircle },
+  Pending:   { color: "text-amber-600",   bg: "bg-amber-50",   icon: Clock          },
+  Accepted:  { color: "text-blue-600",    bg: "bg-blue-50",    icon: ShoppingCart   },
+  Delivered: { color: "text-emerald-600", bg: "bg-emerald-50", icon: CheckCircle    },
+  Cancelled: { color: "text-rose-600",    bg: "bg-rose-50",    icon: XCircle        },
+  Canceled:  { color: "text-rose-600",    bg: "bg-rose-50",    icon: XCircle        },
 };
 
 const OrderCard = ({ order, onRemove }) => {
-  // Use statusStyles, or default to a generic Package icon if status is unknown
+  const { t } = useTranslation();
   const status = statusStyles[order.status] || { color: "text-gray-600", bg: "bg-gray-50", icon: Package };
   const StatusIcon = status.icon;
 
   return (
     <div className="group bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden">
       <div className="p-5 sm:p-6">
-        {/* Header: ID and Status */}
+        {/* Header */}
         <div className="flex flex-wrap justify-between items-start gap-4 mb-6">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">Order Reference</p>
+            <p className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">{t('order_reference')}</p>
             <p className="font-mono text-sm text-gray-700 bg-gray-50 px-2 py-1 rounded">#{order._id.slice(-8)}</p>
           </div>
           <span className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wide ${status.bg} ${status.color}`}>
@@ -33,7 +31,7 @@ const OrderCard = ({ order, onRemove }) => {
           </span>
         </div>
 
-        {/* Items List */}
+        {/* Items */}
         <div className="space-y-3 mb-6">
           {order.items.map((item, idx) => (
             <div key={idx} className="flex justify-between items-center text-sm">
@@ -41,7 +39,6 @@ const OrderCard = ({ order, onRemove }) => {
                 <span className="flex items-center justify-center w-6 h-6 rounded bg-gray-100 text-gray-600 text-xs font-bold">
                   {item.quantity}
                 </span>
-                {/* Because we used .populate('items.food'), item.food is an object */}
                 <span className="font-medium text-gray-800">{item.food?.name || "Deleted Item"}</span>
               </div>
               <span className="text-gray-500 font-medium">
@@ -51,21 +48,19 @@ const OrderCard = ({ order, onRemove }) => {
           ))}
         </div>
 
-        {/* Footer: Total and Actions */}
+        {/* Footer */}
         <div className="pt-5 border-t border-gray-50 flex justify-between items-end">
           <div>
-            <p className="text-xs text-gray-400 mb-1">Total Amount</p>
+            <p className="text-xs text-gray-400 mb-1">{t('order_total_amount')}</p>
             <p className="text-2xl font-bold text-gray-900">${order.totalPrice.toFixed(2)}</p>
           </div>
-          
-          {/* Archive button only shows for final statuses */}
           {(order.status === "Delivered" || order.status === "Cancelled" || order.status === "Canceled") && (
             <button
               onClick={() => onRemove(order._id)}
               className="flex items-center gap-2 px-4 py-2 bg-gray-50 text-gray-400 hover:bg-rose-50 hover:text-rose-600 rounded-xl transition-colors duration-200"
             >
               <Trash2 size={18} />
-              <span className="text-sm font-semibold">Archive</span>
+              <span className="text-sm font-semibold">{t('order_archive')}</span>
             </button>
           )}
         </div>

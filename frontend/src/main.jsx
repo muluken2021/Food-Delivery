@@ -5,18 +5,21 @@ import App from './App.jsx'
 import { BrowserRouter } from 'react-router-dom'
 import StoreContextProvider from './context/StoreContext.jsx'
 import { ThemeProvider } from "./context/ThemeContext";
+import { LanguageProvider } from './context/LanguageContext.jsx';
+import { CurrencyProvider } from './context/CurrencyContext.jsx';
 
 
 
 createRoot(document.getElementById('root')).render(
  <BrowserRouter>
- 
-   <ThemeProvider>
-
-    <StoreContextProvider>
-        <App />
-    </StoreContextProvider>
-
-    </ThemeProvider>
+   <LanguageProvider>
+     <CurrencyProvider>
+       <ThemeProvider>
+         <StoreContextProvider>
+             <App />
+         </StoreContextProvider>
+       </ThemeProvider>
+     </CurrencyProvider>
+   </LanguageProvider>
   </BrowserRouter>
 )
