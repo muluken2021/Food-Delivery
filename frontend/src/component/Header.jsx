@@ -9,47 +9,47 @@ const Header = () => {
 
   // Static list of food items displayed as cards at the bottom
   const foodCards = [
-    {
-      id: 0,
-      img: assets.herofood2,
-      title: "Spicy Peri-Peri Chicken",
-      category: "Main Dish",
-      price: "$14.99",
-      rating: "4.9",
-    },
-    {
-      id: 1,
-      img: assets.foodhero,
-      title: "Premium Wagyu Burger",
-      category: "Burgers",
-      price: "$18.50",
-      rating: "5.0",
-    },
-    {
-      id: 2,
-      img: assets.foodhero3,
-      title: "Fresh Salmon Poke Bowl",
-      category: "Seafood",
-      price: "$16.00",
-      rating: "4.8",
-    },
-    {
-      id: 3,
-      img: assets.herofood2,
-      title: "Artisanal Woodfired Pizza",
-      category: "Italian",
-      price: "$15.20",
-      rating: "4.7",
-    },
-    {
-      id: 4,
-      img: assets.foodhero,
-      title: "Gourmet Pasta Supreme",
-      category: "Specialty",
-      price: "$17.00",
-      rating: "4.9",
-    },
-  ];
+  {
+    id: 0,
+    img: "https://static.spotapps.co/spots/c9/1576f30d884094a348bb132d956b4b/full",
+    title: "Doro Wot",
+    category: "Main Dish",
+    price: "$12.99",
+    rating: "4.9",
+  },
+  {
+    id: 1,
+    img: "https://ristorante-africa.it/assets/images/tibs.jpg",
+    title: "Tibs",
+    category: "Main Dish",
+    price: "$13.50",
+    rating: "4.8",
+  },
+  {
+    id: 2,
+    img: "https://images.sbs.com.au/dims4/default/2cd278b/2147483647/strip/true/crop/1500x844%2B0%2B93/resize/1280x720%21/quality/90/?imwidth=1280&url=http%3A%2F%2Fsbs-au-brightspot.s3.amazonaws.com%2Fdrupal%2Ffood%2Fpublic%2Frx084_vip_3_of_6.jpg",
+    title: "Shiro Wot",
+    category: "Vegetarian",
+    price: "$9.50",
+    rating: "4.7",
+  },
+  {
+    id: 3,
+    img: "https://images.ctfassets.net/qzslvo8u2q4l/6tucjh8P7G3EIi5tzdL9Jh/21415180cbcbebda5c7f1d2463c9a167/Addis_Ababa_LunchFood__16_.png",
+    title: "Beyaynetu",
+    category: "Traditional",
+    price: "$11.00",
+    rating: "5.0",
+  },
+  {
+    id: 4,
+    img: "https://static.takeaway.com/images/restaurants/ch/RO00O3QN/products/9446683_liyuethiopianrestaurant_food_tibs_1x1.png",
+    title: "Special Tibs",
+    category: "Specialty",
+    price: "$14.00",
+    rating: "4.9",
+  },
+];
 
   return (
     <section className="relative w-full bg-white text-neutral-900 pt-22 pb-20 overflow-hidden select-none">
