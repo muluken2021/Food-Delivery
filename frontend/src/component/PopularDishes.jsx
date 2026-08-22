@@ -53,7 +53,7 @@ const PopularDishes = () => {
   };
 
   return (
-    <section className="container mx-auto pb-20 bg-white transition-all duration-300 px-6  sm:px-12 lg:px-24">
+    <section className="max-w-7xl container mx-auto pb-20 bg-white transition-all duration-300 px-6  ">
       <div className="text-start mb-7">
          <h2 className=" text-center md:text-left text-4xl md:text-4xl font-semibold tracking-tight text-gray-900">
               {t('popular_heading')} <span className=" bg-clip-text bg-gradient-to-r text-brand-500 ">{t('popular_heading_highlight')}</span> {t('popular_heading_rest')}         </h2>
