@@ -4,7 +4,7 @@ import { StoreContext } from "../context/StoreContext";
 import { useTranslation } from "../context/LanguageContext";
 import { getFoodName, getFoodDescription } from "../utils/foodLocale";
 import { useCurrency } from "../context/CurrencyContext";
-import { ShoppingCart, Star, ChevronLeft, ChevronRight } from "lucide-react";
+import { Star, ChevronLeft, ChevronRight, Plus } from "lucide-react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import FoodModal from "./FoodModal";
@@ -27,9 +27,9 @@ const Fooditems = ({ category, searchQuery }) => {
 
   if (!Array.isArray(displayData) || (foodList.length === 0 && displayData.length === 0)) {
     return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 py-10">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 py-10">
         {[...Array(8)].map((_, i) => (
-          <div key={i} className="h-80 bg-gray-100 animate-pulse rounded-2xl" />
+          <div key={i} className="h-96 bg-gray-100 animate-pulse rounded-2xl" />
         ))}
       </div>
     );
@@ -40,9 +40,8 @@ const Fooditems = ({ category, searchQuery }) => {
       category.toLowerCase() === "all" ||
       food.category.toLowerCase() === category.toLowerCase();
 
-    // Search works across both languages
     const localName = getFoodName(food, language).toLowerCase();
-    const englishName = food.name.toLowerCase();
+    const englishName = food.name ? food.name.toLowerCase() : "";
     const query = searchQuery.trim().toLowerCase();
     const matchesSearch =
       query === "" || localName.includes(query) || englishName.includes(query);
@@ -63,24 +62,31 @@ const Fooditems = ({ category, searchQuery }) => {
 
   return (
     <div className="w-full">
-      <div className="flex justify-between items-center mb-8">
-        <p className="text-gray-500 font-medium">
+      {/* Items Counter Header */}
+      <div className="flex justify-between items-center mb-6">
+        <p className="text-sm text-gray-500 font-medium">
           Showing{" "}
-          <span className="text-gray-900 font-bold">{currentItems.length}</span>{" "}
+          <span className="text-black font-bold">{currentItems.length}</span>{" "}
           of{" "}
-          <span className="text-gray-900 font-bold">{filteredFoods.length}</span>{" "}
+          <span className="text-black font-bold">{filteredFoods.length}</span>{" "}
           items
         </p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      {/* Grid Display */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
         {currentItems.length > 0 ? (
           currentItems.map((food) => (
             <div
               key={food._id}
-              className="bg-white rounded-[2.5rem] p-8 shadow-xl shadow-gray-100/60 border border-gray-200 flex flex-col items-center text-center group transition-all duration-500 hover:-translate-y-3 hover:shadow-2xl"
+              onClick={() => {
+                setSelectedFood(food);
+                setModalQuantity(1);
+              }}
+              className="bg-black/3 rounded-2xl p-4 flex flex-col justify-between shadow-[0_4px_20px_rgba(0,0,0,0.05)] hover:shadow-lg transition-all duration-300 cursor-pointer group"
             >
-              <div className="relative w-full h-44 rounded-xl mb-8 overflow-hidden shadow-gray-200">
+              {/* Product Image Container */}
+              <div className="w-full h-52 rounded-xl overflow-hidden mb-5">
                 <img
                   src={
                     food.image?.startsWith("http")
@@ -90,70 +96,73 @@ const Fooditems = ({ category, searchQuery }) => {
                       : assets.altimg
                   }
                   alt={getFoodName(food, language)}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  onError={(e) => {
+                    e.target.src = assets.altimg;
+                  }}
                 />
               </div>
 
-              <div className="w-full">
-                <div className="flex justify-between items-start mb-2 gap-2">
-                  <h3 className="text-xl font-bold text-gray-900 text-left leading-tight truncate">
-                    {getFoodName(food, language)}
-                  </h3>
-                </div>
-
-                <div className="flex gap-0.5 mb-4 justify-start">
+              {/* Dish Name & Rating */}
+              <div className="flex items-start justify-between gap-2 mb-1">
+                <h3 className="text-lg font-bold text-gray-900 leading-tight truncate">
+                  {getFoodName(food, language)}
+                </h3>
+                <div className="flex items-center gap-0.5 shrink-0 mt-0.5">
                   {[...Array(5)].map((_, i) => (
                     <Star
                       key={i}
-                      size={14}
-                      fill={i < Math.round(food.rating || 5) ? "#FFB800" : "none"}
-                      className={
-                        i < Math.round(food.rating || 5)
-                          ? "text-[#FFB800]"
-                          : "text-gray-200"
-                      }
+                      size={15}
+                      className="fill-amber-400 text-amber-400"
                     />
                   ))}
                 </div>
+              </div>
 
-                <p className="text-gray-400 text-xs text-left line-clamp-2 max-w-[60%]">
-                  {getFoodDescription(food, language) || "The perfect blend of flavor and freshness."}
-                </p>
+              {/* Subtitle / Brand Info */}
+              <p className="text-xs text-gray-400 font-medium mb-4">
+                {food.category || "Al Karam"}
+              </p>
 
-                <div className="flex justify-between items-end mt-4">
-                  <span className="text-2xl font-semibold text-gray-800 tracking-tight">
-                    {formatPrice(food.price)}
-                  </span>
-                  <button
-                    onClick={() => {
-                      setSelectedFood(food);
-                      setModalQuantity(1);
-                    }}
-                    className="flex items-center justify-center gap-2 shrink-0 border border-brand-400 hover:bg-brand-600 text-brand-800 hover:text-white text-xs uppercase tracking-wide font-bold py-2 px-4 rounded-full transition-all duration-200 active:scale-95"
-                  >
-                    <ShoppingCart size={22} />
-                    <span>{t('popular_buy')}</span>
-                  </button>
-                </div>
+              {/* Reviews Count */}
+              <p className="text-xs text-gray-500 font-medium mb-4">
+                (4.1k) Customer Reviews
+              </p>
+
+              {/* Price & Status Tag */}
+              <div className="flex items-center justify-between mt-auto pt-2">
+                <span className="text-xl font-bold text-gray-900">
+                  {formatPrice(food.price)}
+                </span>
+                <button
+                  onClick={() => {
+                    setSelectedFood(dish);
+                    setModalQuantity(1);
+                  }}
+                  className="w-8 h-8 rounded-full bg-[#4B7318] hover:bg-[#3d5e13] text-white flex items-center justify-center transition-all cursor-pointer"
+                  aria-label="Add to cart"
+                >
+                  <Plus size={18} strokeWidth={2.5} />
+                </button>
               </div>
             </div>
           ))
         ) : (
-          <div className="col-span-full py-20 text-center bg-gray-50 rounded-3xl border-2 border-dashed border-gray-200">
-            <p className="text-xl text-gray-400 font-medium italic">
+          <div className="col-span-full py-20 text-center bg-white rounded-2xl border border-gray-100 shadow-sm">
+            <p className="text-base text-gray-500 font-medium italic">
               {t('popular_fetching')}
             </p>
           </div>
         )}
       </div>
 
-      {/* Pagination */}
+      {/* Pagination Controls */}
       {filteredFoods.length > itemsPerPage && (
         <div className="flex justify-center items-center mt-12 gap-2">
           <button
             onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
             disabled={currentPage === 1}
-            className="p-2 rounded-full border border-gray-200 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
+            className="p-2 rounded-full border border-gray-300 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-gray-100 transition-colors cursor-pointer"
           >
             <ChevronLeft size={20} />
           </button>
@@ -162,10 +171,10 @@ const Fooditems = ({ category, searchQuery }) => {
             <button
               key={i + 1}
               onClick={() => setCurrentPage(i + 1)}
-              className={`w-10 h-10 rounded-full font-bold transition-all ${
+              className={`w-9 h-9 rounded-full font-bold text-xs transition-all cursor-pointer ${
                 currentPage === i + 1
-                  ? "bg-brand-500 text-white"
-                  : "text-gray-500 hover:bg-gray-100"
+                  ? "bg-[#4B7318] text-white"
+                  : "text-gray-700 hover:bg-gray-200"
               }`}
             >
               {i + 1}
@@ -175,13 +184,14 @@ const Fooditems = ({ category, searchQuery }) => {
           <button
             onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
             disabled={currentPage === totalPages}
-            className="p-2 rounded-full border border-gray-200 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
+            className="p-2 rounded-full border border-gray-300 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-gray-100 transition-colors cursor-pointer"
           >
             <ChevronRight size={20} />
           </button>
         </div>
       )}
 
+      {/* Modal & Toasts */}
       {selectedFood && (
         <FoodModal
           selectedFood={selectedFood}
@@ -193,7 +203,7 @@ const Fooditems = ({ category, searchQuery }) => {
         />
       )}
 
-      <ToastContainer position="bottom-right" autoClose={2000} hideProgressBar />
+      <ToastContainer position="bottom-right" autoClose={2000} hideProgressBar theme="dark" />
     </div>
   );
 };

@@ -1,164 +1,153 @@
-import React, { useState, useEffect } from "react";
-import { Facebook, Twitter, Instagram, Mail, Phone, MapPin, Send, Youtube } from "lucide-react";
+import React from "react";
+import { Twitter, Linkedin, Globe } from "lucide-react";
 import { Link } from "react-router-dom";
-import { toast } from "react-toastify";
 import { useTranslation } from "../context/LanguageContext";
 
 const Footer = () => {
-  const [email, setEmail] = useState("");
-  const [error, setError] = useState(false);
   const { t } = useTranslation();
 
-  useEffect(() => {
-    if (error) setError(false);
-  }, [email]);
-
-  const handleSubscribe = () => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      setError(true);
-      return;
-    }
-    toast.success(t('footer_subscribed'));
-    setEmail("");
-    setError(false);
-  };
-
   return (
-    <footer className="relative mt-20 overflow-hidden bg-white transition-all">
-      
-      {/* Decorative Top Border */}
-      <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-brand-500 to-transparent opacity-30"></div>
-
-      <div className="container mx-auto px-6 sm:px-12 lg:px-24">
+    <footer className="w-full bg-white text-neutral-800 transition-all border-t border-gray-200 mt-20 select-none">
+      <div className="container mx-auto px-6 max-w-7xl">
         
-        {/* Main Footer Content */}
-        <div className="py-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
+        {/* Main Section */}
+        <div className="py-16 sm:py-20 grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-8">
 
-          {/* Company Info */}
-          <div className="space-y-6">
-            <Link to="/" className="flex items-center gap-2 group">
-               <img src="/full_logo.png" className="w-25 md:w-30" alt="Logo" />
-            </Link>
-
-            <p className="leading-relaxed text-sm md:text-base text-gray-600">
-              {t('footer_company_desc')}
-            </p>
-
-            <div className="flex gap-3">
-              {[Facebook, Twitter, Instagram, Youtube].map((Icon, idx) => (
-                <a
-                  key={idx}
-                  href="#"
-                  className="p-2.5 rounded-xl bg-white text-gray-500 shadow-sm hover:bg-brand-500 hover:text-white transition-all duration-300 transform hover:-translate-y-1"
-                >
-                  <Icon className="h-5 w-5" />
-                </a>
-              ))}
-            </div>
-          </div>
-
-          {/* Quick Links */}
-          <div>
-            <h4 className="text-lg font-bold mb-8 text-gray-700">{t('footer_service')}</h4>
-            <ul className="space-y-4">
-              {[
-                { nameKey: "footer_about", path: "/about" },
-                { nameKey: "footer_menu", path: "/menu" },
-                { nameKey: "footer_track", path: "/profile" },
-                { nameKey: "footer_contact", path: "/contact" },
-              ].map((link, idx) => (
-                <li key={idx}>
-                  <Link
-                    to={link.path}
-                    className="text-sm font-medium text-gray-600 hover:text-gray-500 transition-colors"
-                  >
-                    {t(link.nameKey)}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Contact Info */}
-          <div>
-            <h4 className="text-lg font-bold mb-8 text-gray-700">{t('footer_get_in_touch')}</h4>
-            <div className="space-y-5">
-              <div className="flex items-start gap-3">
-                <div className="p-2 rounded-lg bg-brand-500/10 text-gray-500">
-                  <Phone size={18} />
+          {/* Left Column: Brand Logo & Tagline */}
+          <div className="md:col-span-5 flex flex-col justify-between pr-0 md:pr-12">
+            <div>
+              <Link to="/" className="flex items-center gap-2 group mb-3">
+                {/* Brand Logo Container */}
+                <div className="w-9 h-9 bg-[#4B7318] rounded-tl-2xl rounded-br-2xl rounded-tr-sm rounded-bl-sm flex items-center justify-center text-white shadow-sm">
+                  <span className="font-bold text-xl leading-none">Y</span>
                 </div>
-                <span className="text-sm font-medium text-gray-600">+1 (555) 123-4567</span>
-              </div>
-              <div className="flex items-start gap-3">
-                <div className="p-2 rounded-lg bg-brand-500/10 text-gray-500">
-                  <Mail size={18} />
-                </div>
-                <span className="text-sm font-medium text-gray-600">hello@dashdine.com</span>
-              </div>
-              <div className="flex items-start gap-3">
-                <div className="p-2 rounded-lg bg-brand-500/10 text-gray-500">
-                  <MapPin size={18} />
-                </div>
-                <span className="text-sm font-medium text-gray-600">
-                  123 Gourmet Way,<br />Foodie City, FC 90210
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* Newsletter */}
-          <div className="p-6 rounded-3xl border bg-white border-gray-100">
-            <h4 className="text-lg font-bold mb-4 text-gray-700">{t('footer_newsletter_title')}</h4>
-            <p className="text-xs mb-6 leading-relaxed text-gray-600">
-              {t('footer_newsletter_desc')}
-            </p>
-
-            <div className="relative">
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder={t('footer_email_placeholder')}
-                className={`w-full pl-4 pr-12 py-3.5 rounded-2xl text-sm transition-all focus:outline-none focus:ring-2 
-                  ${error 
-                    ? "border-red-500 bg-red-50 focus:ring-red-200" 
-                    : "bg-brand-25 text-gray-700 border-brand-100 focus:ring-brand-500"
-                  }`}
-              />
-
-              <div
-                onClick={handleSubscribe}
-                className="absolute right-2 top-2 bottom-2 aspect-square bg-brand-500 hover:bg-brand-600 text-white rounded-xl flex items-center justify-center cursor-pointer transition-colors"
-              >
-                <Send size={16} className="-rotate-45" />
-              </div>
-            </div>
-            {error && (
-              <p className="text-[10px] text-red-500 mt-2 ml-2 animate-pulse">
-                {t('footer_invalid_email')}
+                <h1 className="text-neutral-900 text-xl font-bold tracking-tight">
+                  Yegna Byte
+                </h1>
+              </Link>
+              
+              <p className="text-neutral-500 text-sm sm:text-base font-normal max-w-sm leading-relaxed mb-8">
+                {t("footer_company_desc") || "Stunning and Flawless Cuisine Delivered to Your Doorstep."}
               </p>
-            )}
+            </div>
+
+            {/* Social Icons */}
+            <div className="flex items-center gap-4 text-neutral-600">
+              <a
+                href="#"
+                className="hover:text-[#4B7318] transition-colors p-1"
+                aria-label="Twitter"
+              >
+                <Twitter size={20} />
+              </a>
+              <a
+                href="#"
+                className="hover:text-[#4B7318] transition-colors p-1"
+                aria-label="LinkedIn"
+              >
+                <Linkedin size={20} />
+              </a>
+              <a
+                href="#"
+                className="hover:text-[#4B7318] transition-colors p-1"
+                aria-label="Website"
+              >
+                <Globe size={20} />
+              </a>
+            </div>
+          </div>
+
+          {/* Right Columns: Links Group */}
+          <div className="md:col-span-7 grid grid-cols-2 sm:grid-cols-3 gap-8">
+            
+            {/* Pages Column */}
+            <div>
+              <h4 className="text-sm font-bold uppercase tracking-wider text-neutral-900 mb-6">
+                Pages
+              </h4>
+              <ul className="space-y-3.5">
+                {[
+                  { nameKey: "footer_home", defaultText: "Home", path: "/" },
+                  { nameKey: "footer_menu", defaultText: "Menu", path: "/menu" },
+                  { nameKey: "footer_pricing", defaultText: "Pricing", path: "/pricing" },
+                  { nameKey: "footer_offers", defaultText: "Freebies", path: "/offers" },
+                  { nameKey: "footer_track", defaultText: "Tracking", path: "/profile" },
+                ].map((link, idx) => (
+                  <li key={idx}>
+                    <Link
+                      to={link.path}
+                      className="text-sm text-neutral-500 hover:text-[#4B7318] transition-colors font-medium"
+                    >
+                      {t(link.nameKey) !== link.nameKey ? t(link.nameKey) : link.defaultText}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Company Column */}
+            <div>
+              <h4 className="text-sm font-bold uppercase tracking-wider text-neutral-900 mb-6">
+                Company
+              </h4>
+              <ul className="space-y-3.5">
+                {[
+                  { nameKey: "footer_about", defaultText: "About", path: "/about" },
+                  { nameKey: "footer_articles", defaultText: "Articles", path: "/blog" },
+                  { nameKey: "footer_contact", defaultText: "Contact", path: "/contact" },
+                ].map((link, idx) => (
+                  <li key={idx}>
+                    <Link
+                      to={link.path}
+                      className="text-sm text-neutral-500 hover:text-[#4B7318] transition-colors font-medium"
+                    >
+                      {t(link.nameKey) !== link.nameKey ? t(link.nameKey) : link.defaultText}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Resources Column */}
+            <div>
+              <h4 className="text-sm font-bold uppercase tracking-wider text-neutral-900 mb-6">
+                Resources
+              </h4>
+              <ul className="space-y-3.5">
+                {[
+                  { nameKey: "footer_privacy", defaultText: "Privacy Policy", path: "/privacy" },
+                  { nameKey: "footer_licensing", defaultText: "Licensing", path: "/licensing" },
+                  { nameKey: "footer_terms", defaultText: "Terms of Use", path: "/terms" },
+                ].map((link, idx) => (
+                  <li key={idx}>
+                    <Link
+                      to={link.path}
+                      className="text-sm text-neutral-500 hover:text-[#4B7318] transition-colors font-medium"
+                    >
+                      {t(link.nameKey) !== link.nameKey ? t(link.nameKey) : link.defaultText}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
           </div>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="border-t border-gray-200 py-8 flex flex-col md:flex-row justify-between items-center gap-6">
-          <p className="text-xs font-medium tracking-wide text-gray-400">
-            {t('footer_copyright')}
+        {/* Bottom Bar Section */}
+        <div className="border-t border-gray-200 py-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs sm:text-sm text-neutral-500 font-normal">
+          <p>
+            {t("footer_copyright") || "© Yegna Byte | All Rights Reserved"}
           </p>
-          <div className="flex gap-8">
-            {[t('footer_privacy'), t('footer_terms'), t('footer_cookies')].map((link, idx) => (
-              <a 
-                key={idx} 
-                href="#" 
-                className="text-xs font-bold uppercase tracking-widest text-gray-400 hover:text-gray-500 transition"
-              >
-                {link}
-              </a>
-            ))}
+
+          <div className="flex items-center gap-2 text-neutral-700 font-medium">
+            <span className="w-5 h-5 rounded-md bg-[#4B7318] text-white flex items-center justify-center font-bold text-[10px]">
+              Y
+            </span>
+            <span>Powered by Muluken K.</span>
           </div>
         </div>
+
       </div>
     </footer>
   );

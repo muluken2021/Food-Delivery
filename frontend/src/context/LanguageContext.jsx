@@ -16,8 +16,8 @@ const en = {
   nav_logout: "Logout",
 
   // Header / Hero
-  hero_title: "Order our food for",
-  hero_subtitle: "your family",
+  hero_title: "Meet Yegna Byte, order our food and enjoy your meal",
+  hero_badge: "shop Better",
   hero_description: "Ditch the kitchen hassle. Get signature dishes and everyday local favorites cooked by top chefs, riding hot straight to you.",
   hero_shop_now: "Shop Now",
   hero_free_delivery: "Free Delivery",

@@ -36,62 +36,111 @@ const Contact = () => {
   };
 
   const inputClass =
-    "w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none transition-all duration-200 bg-white text-gray-800 placeholder:text-gray-400";
+    "w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-[#4B7318] focus:ring-1 focus:ring-[#4B7318] outline-none transition-all duration-200 bg-[#F4F4F4] text-black placeholder:text-gray-400 text-sm";
 
   const infoItems = [
-    { icon: MapPin, titleKey: "contact_visit",  text: "Debre Berhan, Ethiopia" },
-    { icon: Mail,   titleKey: "contact_email_us", text: "support@fooddelivery.com" },
-    { icon: Phone,  titleKey: "contact_call",   text: "+251 912 345 678" },
-    { icon: Clock,  titleKey: "contact_hours",  text: "Mon - Sat, 9AM - 8PM" },
+    { icon: MapPin, titleKey: "contact_visit", text: "Debre Berhan, Ethiopia" },
+    { icon: Mail, titleKey: "contact_email_us", text: "support@yegnabyte.com" },
+    { icon: Phone, titleKey: "contact_call", text: "+251 912 345 678" },
+    { icon: Clock, titleKey: "contact_hours", text: "Mon - Sat, 9AM - 8PM" },
   ];
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-16 lg:py-24 font-sans text-gray-900">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+    <div className="w-full bg-white select-none py-12 md:py-20">
+      <div className="container mx-auto px-6 max-w-7xl">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+          
+          {/* Left Column: Contact Form */}
+          <div className="space-y-6">
+            <div>
+              <div className="flex items-center gap-2 mb-2">
+                <span className="w-8 h-[2px] bg-[#4B7318]"></span>
+                <span className="text-[#4B7318] font-bold tracking-widest uppercase text-xs">
+                  {t("contact_label") || "Get In Touch"}
+                </span>
+              </div>
+              <h1 className="text-3xl md:text-5xl font-bold text-black tracking-tight mb-3">
+                {t("contact_heading") || "Have Questions?"}{" "}
+                <span className="text-[#4B7318]">
+                  {t("contact_heading_highlight") || "Contact Us"}
+                </span>
+              </h1>
+              <p className="text-gray-600 text-sm md:text-base leading-relaxed">
+                {t("contact_desc") || "We'd love to hear from you. Send us a message and we'll respond as soon as possible."}
+              </p>
+            </div>
 
-        {/* Left: Contact Form */}
-        <div className="space-y-8">
-          <div>
-            <h1 className="text-3xl md:text-5xl font-black/30 text-slate-900 tracking-tight mb-5">
-              {t('contact_heading')} <span className="text-brand-500">{t('contact_heading_highlight')}</span>
-            </h1>
-            <p className="mt-4 text-lg text-gray-600">{t('contact_desc')}</p>
+            <form className="space-y-4" onSubmit={handleSubmit}>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <input
+                  name="firstName"
+                  type="text"
+                  placeholder={t("contact_first_name") || "First Name"}
+                  className={inputClass}
+                  required
+                />
+                <input
+                  name="lastName"
+                  type="text"
+                  placeholder={t("contact_last_name") || "Last Name"}
+                  className={inputClass}
+                  required
+                />
+              </div>
+              <input
+                name="email"
+                type="email"
+                placeholder={t("contact_email") || "Email Address"}
+                className={inputClass}
+                required
+              />
+              <textarea
+                name="message"
+                placeholder={t("contact_message") || "Your Message..."}
+                rows="5"
+                className={inputClass}
+                required
+              />
+
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="group flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-3.5 bg-[#4B7318] hover:bg-[#3d5e13] text-white font-bold rounded-lg transition-all duration-200 cursor-pointer disabled:opacity-70 active:scale-95 shadow-md"
+              >
+                {isSubmitting
+                  ? t("contact_sending") || "Sending..."
+                  : t("contact_send") || "Send Message"}
+                <Send size={18} className="group-hover:translate-x-1 transition-transform" />
+              </button>
+            </form>
           </div>
 
-          <form className="space-y-4" onSubmit={handleSubmit}>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <input name="firstName" type="text" placeholder={t('contact_first_name')} className={inputClass} required />
-              <input name="lastName"  type="text" placeholder={t('contact_last_name')}  className={inputClass} required />
-            </div>
-            <input name="email"   type="email" placeholder={t('contact_email')}   className={inputClass} required />
-            <textarea name="message" placeholder={t('contact_message')} rows="5"  className={inputClass} required />
-
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="group flex items-center justify-center gap-2 w-full sm:w-max px-8 py-4 bg-brand-500 hover:bg-brand-600 text-white font-bold rounded-lg transition-all duration-200 disabled:opacity-70"
-            >
-              {isSubmitting ? t('contact_sending') : t('contact_send')}
-              <Send size={18} className="group-hover:translate-x-1 transition-transform" />
-            </button>
-          </form>
-        </div>
-
-        {/* Right: Info Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:pt-4">
-          {infoItems.map((item, i) => (
-            <div key={i} className="p-6 rounded-2xl border border-gray-100 bg-gray-50/50 hover:bg-white hover:shadow-xl hover:shadow-gray-200/50 transition-all duration-300">
-              <div className="w-10 h-10 flex items-center justify-center rounded-full bg-brand-50 text-brand-500 mb-4">
-                <item.icon size={20} />
+          {/* Right Column: Info Cards Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:pt-8">
+            {infoItems.map((item, i) => (
+              <div
+                key={i}
+                className="p-6 rounded-xl bg-[#EAEAEA] border border-gray-200/60 flex flex-col justify-between transition-all duration-300 hover:shadow-md"
+              >
+                <div>
+                  <div className="w-10 h-10 flex items-center justify-center rounded-full bg-white text-[#4B7318] mb-4 shadow-sm">
+                    <item.icon size={20} />
+                  </div>
+                  <h3 className="font-bold text-black text-base">
+                    {t(item.titleKey) || item.titleKey}
+                  </h3>
+                  <p className="text-gray-600 mt-1 text-xs sm:text-sm leading-relaxed">
+                    {item.text}
+                  </p>
+                </div>
               </div>
-              <h3 className="font-bold text-gray-900">{t(item.titleKey)}</h3>
-              <p className="text-gray-600 mt-1 text-sm leading-relaxed">{item.text}</p>
-            </div>
-          ))}
+            ))}
+          </div>
+
         </div>
       </div>
 
-      <ToastContainer position="bottom-right" hideProgressBar />
+      <ToastContainer position="bottom-right" autoClose={2000} hideProgressBar theme="dark" />
     </div>
   );
 };
